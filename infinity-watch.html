@@ -23,7 +23,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
 /* HEADER */
 .header{padding:48px 16px 12px;background:var(--surface);border-bottom:0.5px solid var(--border);position:sticky;top:0;z-index:10}
 .header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-.app-title{font-size:21px;font-weight:600;color:var(--text)}
+.app-title{font-size:21px;font-weight:600;color:var(--text);display:flex;align-items:center;}
 .app-title span{color:var(--purple2)}
 .sync-dot{width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block;margin-left:6px;animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
@@ -193,19 +193,26 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
   <div id="view-home" class="view active">
     <div class="header">
       <div class="header-top">
-        <div class="app-title">Infinity<span>Watch</span><span class="sync-dot" id="sync-dot" style="display:none"></span></div>
+        <div style="display:flex; align-items:center;">
+          <!-- NUOVO LOGO GUANTO DELL'INFINITO -->
+          <svg viewBox="0 0 24 24" fill="#d4af37" xmlns="http://www.w3.org/2000/svg" style="width:28px;height:28px;margin-right:10px;filter:drop-shadow(0 0 5px rgba(245,208,32,0.4))">
+            <path d="M18 11.5v-1a1.5 1.5 0 00-3 0v-4.5a1.5 1.5 0 00-3 0V4.5a1.5 1.5 0 00-3 0v1.5a1.5 1.5 0 00-3 0v4.5C4.5 11 4 12 4 13.5v3.8c0 1.5.5 2.5 1.5 3.2v1.5h11v-1.5c1-.7 1.5-1.7 1.5-3.2v-1.5c1.2 0 1.5-1.3 1.5-2.3 0-1-.5-2-1.5-2z" fill="#d4af37"/>
+            <circle cx="7.5" cy="13.5" r="1.2" fill="#9b30e0"/>
+            <circle cx="10.5" cy="13.5" r="1.2" fill="#2088e0"/>
+            <circle cx="13.5" cy="13.5" r="1.2" fill="#e03040"/>
+            <circle cx="16.5" cy="13.5" r="1.2" fill="#e87820"/>
+            <circle cx="6" cy="16.5" r="1.2" fill="#18c87a"/>
+            <ellipse cx="12" cy="17" rx="2" ry="2.5" fill="#f5d020"/>
+          </svg>
+          <div class="app-title">Infinity<span>Watch</span><span class="sync-dot" id="sync-dot" style="display:none"></span></div>
+        </div>
       </div>
       <div class="order-toggle">
         <button class="order-btn active" id="btn-release" onclick="setOrder('release')">🎬 Ordine Uscita</button>
         <button class="order-btn" id="btn-story" onclick="setOrder('story')">📅 Ordine Storia</button>
       </div>
-      <div class="heroes-strip">
-        <div class="hero-pip"><svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="18" stroke="#60aaff" stroke-width="1.8"/><circle cx="20" cy="20" r="12" stroke="#60aaff" stroke-width="1.2"/><circle cx="20" cy="20" r="6" stroke="#60aaff" stroke-width="1"/><polygon points="20,32 9.6,14 30.4,14" fill="#60aaff"/></svg></div>
-        <div class="hero-pip"><svg viewBox="0 0 44 44" fill="none"><rect x="11" y="33" width="18" height="9" rx="3" fill="#28b854"/><rect x="7" y="21" width="26" height="14" rx="3" fill="#2ecf60"/><rect x="8" y="13" width="5.5" height="10" rx="2.2" fill="#2ecf60"/><rect x="14.5" y="11" width="5.5" height="12" rx="2.2" fill="#2ecf60"/><rect x="21" y="11" width="5.5" height="12" rx="2.2" fill="#2ecf60"/><rect x="27.5" y="13" width="5.5" height="10" rx="2.2" fill="#2ecf60"/><rect x="3" y="23" width="6" height="9" rx="2.5" fill="#2ecf60"/><line x1="8" y1="21" x2="33" y2="21" stroke="#1aaa48" stroke-width="1.2"/></svg></div>
-        <div class="hero-pip"><svg viewBox="0 0 40 40" fill="none"><rect x="7.5" y="3" width="25" height="16" rx="2.5" fill="#8a8a8a" stroke="#aaaaaa" stroke-width="1"/><line x1="10" y1="8" x2="30" y2="8" stroke="#666" stroke-width="0.8"/><line x1="10" y1="13" x2="30" y2="13" stroke="#666" stroke-width="0.8"/><rect x="17" y="19" width="6" height="15" rx="2" fill="#7a4a20"/><rect x="14" y="31" width="12" height="3.5" rx="1.5" fill="#5a3410"/></svg></div>
-        <div class="hero-pip"><svg viewBox="0 0 40 40" fill="none"><polygon points="20,24 5,5 35,5" fill="#e03040"/><polygon points="20,16 5,35 35,35" fill="#e03040"/></svg></div>
-        <div class="hero-pip"><svg viewBox="0 0 40 40" fill="none"><path d="M5 35 Q6 6 35 5" stroke="#c8b060" stroke-width="2.2" fill="none" stroke-linecap="round"/><line x1="5" y1="35" x2="35" y2="5" stroke="#c8b060" stroke-width="0.8" stroke-dasharray="2,2.5"/><polygon points="35,5 29,8 32,13" fill="#c8b060"/></svg></div>
-        <div class="hero-pip"><svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="19" fill="#CC1111"/><circle cx="20" cy="20" r="15.25" fill="#EEEEEE"/><circle cx="20" cy="20" r="11.5" fill="#CC1111"/><circle cx="20" cy="20" r="7.75" fill="#1133BB"/><polygon points="20,12.25 21.74,17.61 27.37,17.61 22.81,20.91 24.56,26.27 20,22.96 15.44,26.27 17.19,20.91 12.63,17.61 18.26,17.61" fill="white"/></svg></div>
+      <div class="heroes-strip" id="heroes-strip-container">
+        <!-- Generato via script per includere il nuovo logo Avengers -->
       </div>
       <div class="progress-meta"><span id="prog-text">0 di 22 visti</span><span id="prog-pct">0%</span></div>
       <div class="progress-track"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
@@ -304,6 +311,18 @@ firebase.initializeApp({
 });
 const db=firebase.database();
 
+// ── NUOVO LOGO AVENGERS DINAMICO ──
+function getAvengersLogo(color) {
+  return `<svg viewBox="0 0 40 40" fill="none">
+    <!-- Cerchio Esterno (3/4) -->
+    <path d="M35 20 A 15 15 0 1 1 20 5" stroke="${color}" stroke-width="2.5" stroke-linecap="round"/>
+    <!-- Gambe della A -->
+    <path d="M20 5 L8 34 M20 5 L32 34" stroke="${color}" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Freccia / Barra centrale -->
+    <path d="M13 22 H36 L30 16 M36 22 L30 28" stroke="${color}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>`;
+}
+
 // ── SVG ICONS ──
 const SVG={
   ironman:`<svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="18" stroke="#60aaff" stroke-width="1.8"/><circle cx="20" cy="20" r="12" stroke="#60aaff" stroke-width="1.2"/><circle cx="20" cy="20" r="6" stroke="#60aaff" stroke-width="1"/><polygon points="20,32 9.6,14 30.4,14" fill="#60aaff"/></svg>`,
@@ -311,10 +330,29 @@ const SVG={
   thor:`<svg viewBox="0 0 40 40" fill="none"><rect x="7.5" y="3" width="25" height="16" rx="2.5" fill="#8a8a8a" stroke="#aaaaaa" stroke-width="1"/><line x1="10" y1="8" x2="30" y2="8" stroke="#666" stroke-width="0.8"/><line x1="10" y1="13" x2="30" y2="13" stroke="#666" stroke-width="0.8"/><rect x="17" y="19" width="6" height="15" rx="2" fill="#7a4a20"/><rect x="14" y="31" width="12" height="3.5" rx="1.5" fill="#5a3410"/></svg>`,
   blackwidow:`<svg viewBox="0 0 40 40" fill="none"><polygon points="20,24 5,5 35,5" fill="#e03040"/><polygon points="20,16 5,35 35,35" fill="#e03040"/></svg>`,
   hawkeye:`<svg viewBox="0 0 40 40" fill="none"><path d="M5 35 Q6 6 35 5" stroke="#c8b060" stroke-width="2.2" fill="none" stroke-linecap="round"/><line x1="5" y1="35" x2="35" y2="5" stroke="#c8b060" stroke-width="0.8" stroke-dasharray="2,2.5"/><polygon points="35,5 29,8 32,13" fill="#c8b060"/></svg>`,
-  cap:`<svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="19" fill="#CC1111"/><circle cx="20" cy="20" r="15.25" fill="#EEEEEE"/><circle cx="20" cy="20" r="11.5" fill="#CC1111"/><circle cx="20" cy="20" r="7.75" fill="#1133BB"/><polygon points="20,12.25 21.74,17.61 27.37,17.61 22.81,20.91 24.56,26.27 20,22.96 15.44,26.27 17.19,20.91 12.63,17.61 18.26,17.61" fill="white"/></svg>`,
-  avengers:`<svg viewBox="0 0 40 40" fill="none"><polygon points="20,4 32,12 32,28 20,36 8,28 8,12" fill="none" stroke="#c8a830" stroke-width="2"/><text x="20" y="26" text-anchor="middle" font-size="18" font-weight="900" fill="#c8a830" font-family="Arial Black,sans-serif">A</text></svg>`,
+  cap:`<svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="19" fill="#CC1111"/><circle cx="20" cy="20" r="15.25" fill="#EEEEEE"/><circle cx="20" cy="20" r="11.5" fill="#CC1111"/><circle cx="20" cy="20" r="7.75" fill="#1133BB"/><polygon points="20,12.25 21.74,17.61 27.37,17.61 22.81,20.91 24.56,26.27 20,22.96 15.44,26.27 17.19,20.91 12.63,17.61 18.26,17.61" fill="white"/></svg>`
 };
-const heroMap={1:SVG.ironman,2:SVG.hulk,3:SVG.ironman,4:SVG.thor,5:SVG.cap,6:SVG.avengers,7:SVG.ironman,8:SVG.thor,9:SVG.cap,12:SVG.hulk,13:SVG.cap,17:SVG.thor};
+
+// ── ASSEGNAZIONE E COLORI ──
+const heroMap={
+  1:SVG.ironman, 2:SVG.hulk, 3:SVG.ironman, 4:SVG.thor, 5:SVG.cap, 
+  6:getAvengersLogo('#4a90e2'), // The Avengers (Blu)
+  7:SVG.ironman, 8:SVG.thor, 9:SVG.cap, 
+  12:getAvengersLogo('#e03040'), // Age of Ultron (Rosso Cremisi)
+  13:SVG.cap, 17:SVG.thor, 
+  19:getAvengersLogo('#c8a830'), // Infinity War (Oro)
+  22:getAvengersLogo('#9b30e0')  // Endgame (Viola scuro/Grigio)
+};
+
+// Popolamento strip eroi in alto (uso il blu generico per l'A)
+document.getElementById('heroes-strip-container').innerHTML = `
+  <div class="hero-pip">${SVG.ironman}</div>
+  <div class="hero-pip">${SVG.hulk}</div>
+  <div class="hero-pip">${SVG.thor}</div>
+  <div class="hero-pip">${SVG.blackwidow}</div>
+  <div class="hero-pip">${SVG.cap}</div>
+  <div class="hero-pip">${getAvengersLogo('#4a90e2')}</div>
+`;
 
 // ── GEMS DATA ──
 const GEMS=[
