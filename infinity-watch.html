@@ -292,8 +292,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
 
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
-<script defer>
-window.addEventListener('DOMContentLoaded',function(){
+<script>
 firebase.initializeApp({
   apiKey:"AIzaSyCWPq-85rpGC_wal2FBKpLiNwgVl3m_Do4",
   authDomain:"infinity-watch-13869.firebaseapp.com",
@@ -836,7 +835,6 @@ function showToast(msg){
   t.textContent=msg;t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),2500);
 };
-}); // end DOMContentLoaded
 </script>
 </body>
 </html>
