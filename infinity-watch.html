@@ -8,179 +8,229 @@
 <meta name="apple-mobile-web-app-title" content="InfinityWatch">
 <title>InfinityWatch</title>
 <style>
-* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-:root {
-  --bg:#0e0b14; --surface:#161122; --border:rgba(255,255,255,0.08);
-  --border-strong:rgba(255,255,255,0.15); --text:#f0ecf8; --muted:#9b90b8; --hint:#4a4060;
-  --purple:#6b3fa0; --purple-glow:rgba(107,63,160,0.4);
-  --green:#18c87a; --yellow:#f5d020; --blue:#2088e0; --red:#e03040;
-  --radius-lg:16px; --radius-md:10px;
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#0e0b14;--surface:#161122;--surface2:#1e1730;
+  --border:rgba(255,255,255,0.08);--border-strong:rgba(255,255,255,0.15);
+  --text:#f0ecf8;--muted:#9b90b8;--hint:#4a4060;
+  --purple:#6b3fa0;--purple2:#9b30e0;--purple-glow:rgba(107,63,160,0.4);
+  --green:#18c87a;--yellow:#f5d020;--blue:#2088e0;--red:#e03040;--orange:#e87820;
+  --r-lg:16px;--r-md:10px;--r-sm:6px;
 }
-html, body { height:100%; background:var(--bg); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; }
-.app { max-width:430px; margin:0 auto; min-height:100vh; padding-bottom:80px; position:relative; }
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+.app{max-width:430px;margin:0 auto;min-height:100vh;padding-bottom:80px}
 
 /* HEADER */
-.header { padding:52px 16px 14px; background:var(--surface); border-bottom:0.5px solid var(--border); position:sticky; top:0; z-index:10; }
-.header-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
-.app-title { font-size:22px; font-weight:600; color:var(--text); letter-spacing:-0.3px; }
-.app-title span { color:#9b30e0; }
-.badge { font-size:10px; font-weight:500; padding:3px 9px; border-radius:20px; letter-spacing:1px; }
-.badge-admin { background:rgba(107,63,160,0.25); color:#c090ff; border:0.5px solid rgba(107,63,160,0.5); }
-.badge-viewer { background:rgba(24,200,122,0.15); color:#18c87a; border:0.5px solid rgba(24,200,122,0.3); }
-.heroes-strip { display:flex; gap:6px; margin-bottom:11px; justify-content:center; }
-.hero-pip { width:36px; height:36px; border-radius:50%; background:rgba(255,255,255,0.04); border:0.5px solid var(--border); display:flex; align-items:center; justify-content:center; }
-.hero-pip svg { width:24px; height:24px; }
-.progress-meta { display:flex; justify-content:space-between; font-size:11px; color:var(--muted); margin-bottom:5px; }
-.progress-track { height:3px; background:rgba(255,255,255,0.08); border-radius:2px; overflow:hidden; }
-.progress-fill { height:100%; border-radius:2px; background:linear-gradient(90deg,#9b30e0,#e02040); transition:width 0.5s; }
+.header{padding:48px 16px 12px;background:var(--surface);border-bottom:0.5px solid var(--border);position:sticky;top:0;z-index:10}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.app-title{font-size:21px;font-weight:600;color:var(--text)}
+.app-title span{color:var(--purple2)}
+.sync-dot{width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block;margin-left:6px;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+
+/* ORDER TOGGLE */
+.order-toggle{display:flex;gap:6px;margin-bottom:10px}
+.order-btn{flex:1;padding:7px;border-radius:var(--r-sm);font-size:11px;font-weight:500;cursor:pointer;border:0.5px solid var(--border-strong);background:transparent;color:var(--muted);transition:all 0.2s;letter-spacing:0.3px}
+.order-btn.active{background:var(--purple);border-color:var(--purple);color:#fff;box-shadow:0 0 12px var(--purple-glow)}
+
+/* HEROES STRIP */
+.heroes-strip{display:flex;gap:6px;margin-bottom:10px;justify-content:center}
+.hero-pip{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,0.04);border:0.5px solid var(--border);display:flex;align-items:center;justify-content:center}
+.hero-pip svg{width:22px;height:22px}
+
+/* PROGRESS */
+.progress-meta{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:5px}
+.progress-track{height:3px;background:rgba(255,255,255,0.08);border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--purple2),var(--red));transition:width 0.5s}
 
 /* PHASE */
-.phase-header { padding:18px 16px 6px; font-size:10px; font-weight:500; letter-spacing:2.5px; color:var(--purple); text-transform:uppercase; }
+.phase-header{padding:16px 16px 5px;font-size:10px;font-weight:500;letter-spacing:2.5px;color:var(--purple);text-transform:uppercase}
 
 /* FILM CARD */
-.film-card { margin:0 12px 7px; background:var(--surface); border:0.5px solid var(--border); border-radius:var(--radius-lg); padding:12px 14px; cursor:pointer; position:relative; overflow:hidden; transition:border-color 0.15s; }
-.film-card::before { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; border-radius:3px 0 0 3px; }
-.film-card.watched::before { background:var(--green); }
-.film-card.in-progress::before { background:var(--yellow); }
-.film-card.locked { opacity:0.5; }
-.film-row { display:flex; align-items:center; gap:12px; }
-.film-icon { width:46px; height:46px; display:flex; align-items:center; justify-content:center; flex-shrink:0; background:rgba(255,255,255,0.04); border:0.5px solid var(--border); border-radius:12px; font-size:24px; }
-.film-icon svg { width:32px; height:32px; }
-.film-meta { flex:1; min-width:0; }
-.film-title { font-size:15px; font-weight:500; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.film-sub { font-size:12px; color:var(--muted); margin-top:3px; display:flex; align-items:center; gap:6px; }
-.status-dot { width:5px; height:5px; border-radius:50%; flex-shrink:0; }
-.dot-watched { background:var(--green); box-shadow:0 0 5px var(--green); }
-.dot-progress { background:var(--yellow); box-shadow:0 0 5px var(--yellow); }
-.dot-locked { background:var(--hint); }
-.star-inline { color:var(--yellow); font-size:12px; }
-.chevron { font-size:16px; color:var(--hint); flex-shrink:0; transition:transform 0.2s; }
-.chevron.open { transform:rotate(180deg); }
+.film-card{margin:0 12px 7px;background:var(--surface);border:0.5px solid var(--border);border-radius:var(--r-lg);padding:12px 14px;cursor:pointer;position:relative;overflow:hidden;transition:border-color 0.15s}
+.film-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:3px 0 0 3px}
+.film-card.watched::before{background:var(--green)}
+.film-card.in-progress::before{background:var(--yellow)}
+.film-card.locked{opacity:0.5}
+.film-row{display:flex;align-items:center;gap:12px}
+.film-icon{width:46px;height:46px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:rgba(255,255,255,0.04);border:0.5px solid var(--border);border-radius:12px;font-size:24px}
+.film-icon svg{width:32px;height:32px}
+.film-meta{flex:1;min-width:0}
+.film-title{font-size:15px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.film-sub{font-size:12px;color:var(--muted);margin-top:3px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.status-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.dot-watched{background:var(--green);box-shadow:0 0 5px var(--green)}
+.dot-progress{background:var(--yellow);box-shadow:0 0 5px var(--yellow)}
+.dot-locked{background:var(--hint)}
+.star-inline{color:var(--yellow);font-size:12px}
+.pct-badge{font-size:11px;color:var(--yellow);background:rgba(245,208,32,0.1);border:0.5px solid rgba(245,208,32,0.3);border-radius:10px;padding:1px 6px}
+.chevron{font-size:16px;color:var(--hint);flex-shrink:0;display:inline-block;transition:transform 0.2s}
+.chevron.open{transform:rotate(180deg)}
 
-/* EXPAND */
-.film-expand { display:none; margin-top:12px; padding-top:12px; border-top:0.5px solid var(--border); }
-.film-expand.open { display:block; }
-.chip-row { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px; }
-.chip { font-size:12px; padding:4px 10px; border:0.5px solid var(--border-strong); border-radius:20px; color:var(--muted); display:flex; align-items:center; gap:4px; background:rgba(255,255,255,0.03); }
-.chip.c-green { border-color:var(--green); color:var(--green); }
-.chip.c-yellow { border-color:var(--yellow); color:var(--yellow); }
-.chip.c-blue { border-color:var(--blue); color:var(--blue); }
-.min-bar { background:rgba(255,255,255,0.04); border-radius:8px; padding:8px 10px; margin-bottom:10px; border:0.5px solid var(--border); }
-.min-label { font-size:11px; color:var(--muted); margin-bottom:5px; display:flex; justify-content:space-between; }
-.min-track { height:3px; background:rgba(255,255,255,0.08); border-radius:2px; overflow:hidden; }
-.min-fill { height:100%; background:var(--yellow); border-radius:2px; }
-.summary-box { background:rgba(107,63,160,0.1); border:0.5px solid rgba(107,63,160,0.3); border-radius:var(--radius-md); padding:10px 12px; margin-bottom:10px; font-size:13px; color:#c8b8e8; line-height:1.65; }
-.summary-label { font-size:10px; letter-spacing:1.5px; color:var(--purple); text-transform:uppercase; margin-bottom:5px; font-weight:500; }
-.summary-loading { color:var(--muted); font-style:italic; }
-.btn-row { display:flex; gap:8px; }
-.action-btn { flex:1; padding:9px; border-radius:var(--radius-md); font-size:13px; font-weight:500; cursor:pointer; border:0.5px solid var(--border-strong); background:transparent; color:var(--text); display:flex; align-items:center; justify-content:center; gap:5px; transition:background 0.15s; }
-.action-btn:hover { background:rgba(255,255,255,0.05); }
-.action-btn.primary { background:var(--purple); border-color:var(--purple); box-shadow:0 0 16px var(--purple-glow); }
-.action-btn.primary:hover { background:#7d4fc0; }
+/* COMPLETION BADGE */
+.completion-badge{display:none;position:absolute;inset:0;background:rgba(14,11,20,0.92);border-radius:var(--r-lg);align-items:center;justify-content:center;flex-direction:column;gap:8px;z-index:5}
+.completion-badge.show{display:flex;animation:fadeIn 0.4s ease}
+@keyframes fadeIn{from{opacity:0;transform:scale(0.8)}to{opacity:1;transform:scale(1)}}
+.completion-badge .badge-text{font-size:22px;font-weight:700;color:var(--green);letter-spacing:1px}
+.completion-badge .badge-stars{font-size:24px}
 
-/* MODAL */
-.modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.65); display:none; align-items:flex-end; justify-content:center; z-index:100; }
-.modal-overlay.open { display:flex; }
-.modal { background:var(--surface); border-radius:22px 22px 0 0; border:0.5px solid var(--border-strong); width:100%; max-width:430px; padding:20px 20px 48px; }
-.modal-handle { width:36px; height:4px; background:var(--border-strong); border-radius:2px; margin:0 auto 16px; }
-.modal-title { font-size:17px; font-weight:500; margin-bottom:16px; color:var(--text); }
-.input-label { font-size:12px; color:var(--muted); margin:12px 0 4px; }
-.modal input[type=date], .modal input[type=number], .modal input[type=password] {
-  width:100%; padding:9px 12px; border:0.5px solid var(--border-strong);
-  border-radius:var(--radius-md); font-size:14px; background:rgba(255,255,255,0.05);
-  color:var(--text); outline:none; -webkit-appearance:none;
-}
-.modal input:focus { border-color:var(--purple); }
-.stars-input { display:flex; gap:8px; margin:8px 0; }
-.star-btn { font-size:28px; cursor:pointer; opacity:0.2; transition:opacity 0.1s,transform 0.1s; background:none; border:none; padding:0; }
-.star-btn.active { opacity:1; }
-.modal-btns { display:flex; gap:8px; margin-top:16px; }
-.modal-btns button { flex:1; }
+/* DETAIL MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);display:none;align-items:flex-end;justify-content:center;z-index:100}
+.modal-overlay.open{display:flex}
+.modal{background:var(--surface);border-radius:22px 22px 0 0;border:0.5px solid var(--border-strong);width:100%;max-width:430px;max-height:90vh;overflow-y:auto;padding:0 0 48px}
+.modal-handle{width:36px;height:4px;background:var(--border-strong);border-radius:2px;margin:14px auto 0}
+.modal-hero-header{padding:20px 20px 16px;border-bottom:0.5px solid var(--border)}
+.modal-film-icon{width:56px;height:56px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.04);border:0.5px solid var(--border);border-radius:14px;font-size:30px;margin-bottom:10px}
+.modal-film-icon svg{width:38px;height:38px}
+.modal-title{font-size:20px;font-weight:600;color:var(--text);margin-bottom:4px}
+.modal-meta-row{display:flex;gap:8px;flex-wrap:wrap}
+.meta-chip{font-size:11px;padding:3px 8px;background:rgba(255,255,255,0.05);border:0.5px solid var(--border);border-radius:10px;color:var(--muted)}
+.modal-body{padding:16px 20px}
+.modal-section{margin-bottom:18px}
+.modal-section-title{font-size:10px;letter-spacing:2px;color:var(--purple);text-transform:uppercase;font-weight:500;margin-bottom:8px}
+.modal-section p{font-size:13px;color:var(--muted);line-height:1.65}
+.cast-list{display:flex;flex-direction:column;gap:6px}
+.cast-item{font-size:13px;color:var(--muted)}
+.cast-item strong{color:var(--text)}
+.heroes-list{display:flex;flex-wrap:wrap;gap:6px}
+.hero-tag{font-size:12px;padding:4px 10px;border-radius:20px;border:0.5px solid var(--border-strong);color:var(--text);cursor:pointer;background:rgba(255,255,255,0.04);transition:all 0.15s}
+.hero-tag:hover,.hero-tag.active-filter{background:var(--purple);border-color:var(--purple);color:#fff}
+.villain-tag{border-color:rgba(224,48,64,0.4);color:var(--red)}
+.villain-tag:hover,.villain-tag.active-filter{background:var(--red);border-color:var(--red);color:#fff}
 
-/* PIN SCREEN */
-.pin-screen { position:fixed; inset:0; background:var(--bg); display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:200; padding:32px; }
-.pin-title { font-size:20px; font-weight:500; color:var(--text); margin-bottom:8px; }
-.pin-sub { font-size:13px; color:var(--muted); margin-bottom:32px; text-align:center; }
-.pin-input { width:100%; padding:14px; font-size:18px; text-align:center; background:var(--surface); border:0.5px solid var(--border-strong); border-radius:var(--radius-lg); color:var(--text); outline:none; letter-spacing:4px; }
-.pin-input:focus { border-color:var(--purple); }
-.pin-btn { width:100%; margin-top:12px; padding:14px; background:var(--purple); color:#fff; border:none; border-radius:var(--radius-lg); font-size:15px; font-weight:500; cursor:pointer; }
-.pin-skip { margin-top:16px; font-size:13px; color:var(--muted); cursor:pointer; text-decoration:underline; }
-.pin-error { color:var(--red); font-size:12px; margin-top:8px; height:16px; }
+/* POST CREDIT */
+.postcredit-box{background:rgba(245,208,32,0.06);border:0.5px solid rgba(245,208,32,0.25);border-radius:var(--r-md);padding:12px}
+.postcredit-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.postcredit-label{font-size:11px;color:var(--yellow);font-weight:500;letter-spacing:1px;text-transform:uppercase;display:flex;align-items:center;gap:5px}
+.postcredit-btn{font-size:11px;padding:4px 10px;border-radius:12px;border:0.5px solid rgba(245,208,32,0.4);background:transparent;color:var(--yellow);cursor:pointer}
+.postcredit-btn.seen{background:rgba(245,208,32,0.15)}
+.postcredit-text{font-size:13px;color:var(--muted);line-height:1.6;display:none}
+.postcredit-text.visible{display:block}
 
-/* BOTTOM NAV */
-.bottom-bar { position:fixed; bottom:0; left:50%; transform:translateX(-50%); width:100%; max-width:430px; background:var(--surface); border-top:0.5px solid var(--border); padding:10px 24px 28px; display:flex; justify-content:space-around; }
-.nav-btn { display:flex; flex-direction:column; align-items:center; gap:3px; font-size:10px; color:var(--muted); background:none; border:none; cursor:pointer; padding:0; transition:color 0.15s; }
-.nav-btn.active { color:#9b30e0; }
-.nav-btn svg { width:24px; height:24px; }
+/* SUMMARY BOX */
+.summary-box{background:rgba(107,63,160,0.1);border:0.5px solid rgba(107,63,160,0.3);border-radius:var(--r-md);padding:10px 12px;font-size:13px;color:#c8b8e8;line-height:1.65}
+.summary-label{font-size:10px;letter-spacing:1.5px;color:var(--purple);text-transform:uppercase;margin-bottom:5px;font-weight:500}
 
-/* VIEWS */
-.view { display:none; }
-.view.active { display:block; }
+/* EDIT MODAL */
+.edit-modal{background:var(--surface);border-radius:22px 22px 0 0;border:0.5px solid var(--border-strong);width:100%;max-width:430px;padding:20px 20px 48px}
+.input-label{font-size:12px;color:var(--muted);margin:12px 0 4px}
+.edit-modal input{width:100%;padding:9px 12px;border:0.5px solid var(--border-strong);border-radius:var(--r-md);font-size:14px;background:rgba(255,255,255,0.05);color:var(--text);outline:none;-webkit-appearance:none}
+.edit-modal input:focus{border-color:var(--purple)}
+.stars-input{display:flex;gap:8px;margin:8px 0}
+.star-btn{font-size:28px;cursor:pointer;opacity:0.2;background:none;border:none;padding:0}
+.star-btn.active{opacity:1}
+.modal-btns{display:flex;gap:8px;margin-top:16px}
+.modal-btns button{flex:1}
+.action-btn{padding:9px;border-radius:var(--r-md);font-size:13px;font-weight:500;cursor:pointer;border:0.5px solid var(--border-strong);background:transparent;color:var(--text);display:flex;align-items:center;justify-content:center;gap:5px}
+.action-btn.primary{background:var(--purple);border-color:var(--purple);color:#fff}
+.action-btn.sm{padding:6px 12px;font-size:12px}
+
+/* GEMS VIEW */
+.gems-section{padding:16px}
+.gems-title{font-size:16px;font-weight:600;color:var(--text);margin-bottom:4px}
+.gems-sub{font-size:12px;color:var(--muted);margin-bottom:16px}
+.gems-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.gem-card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--r-lg);padding:14px;cursor:pointer;transition:border-color 0.2s}
+.gem-card:hover{border-color:var(--border-strong)}
+.gem-dot{width:36px;height:36px;border-radius:50%;margin-bottom:8px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.gem-name{font-size:14px;font-weight:500;color:var(--text);margin-bottom:2px}
+.gem-film{font-size:11px;color:var(--muted)}
+.gems-empty{text-align:center;padding:40px 20px;color:var(--muted);font-size:13px;line-height:1.7}
+
+/* GEM DETAIL MODAL */
+.gem-modal{background:var(--surface);border-radius:22px 22px 0 0;border:0.5px solid var(--border-strong);width:100%;max-width:430px;padding:24px 24px 48px}
+.gem-modal-dot{width:64px;height:64px;border-radius:50%;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;font-size:32px}
+.gem-modal-name{font-size:22px;font-weight:600;text-align:center;margin-bottom:4px}
+.gem-modal-film{font-size:13px;color:var(--muted);text-align:center;margin-bottom:20px}
+.gem-modal-section{margin-bottom:14px}
+.gem-modal-label{font-size:10px;letter-spacing:2px;color:var(--purple);text-transform:uppercase;font-weight:500;margin-bottom:6px}
+.gem-modal-text{font-size:13px;color:var(--muted);line-height:1.65}
 
 /* STATS */
-.stats-section { padding:12px; }
-.stats-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
-.stat-card { background:var(--surface); border:0.5px solid var(--border); border-radius:var(--radius-lg); padding:14px; }
-.stat-card.full { grid-column:1/-1; }
-.stat-val { font-size:24px; font-weight:500; color:var(--text); }
-.stat-key { font-size:12px; color:var(--muted); margin-top:2px; }
+.stats-section{padding:12px}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stat-card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--r-lg);padding:14px}
+.stat-card.full{grid-column:1/-1}
+.stat-val{font-size:24px;font-weight:500;color:var(--text)}
+.stat-key{font-size:12px;color:var(--muted);margin-top:2px}
 
-/* SYNC INDICATOR */
-.sync-dot { width:6px; height:6px; border-radius:50%; background:var(--green); display:inline-block; margin-left:6px; animation:pulse 2s infinite; }
-@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+/* FILTER BANNER */
+.filter-banner{margin:8px 12px;padding:8px 12px;background:rgba(107,63,160,0.15);border:0.5px solid rgba(107,63,160,0.4);border-radius:var(--r-md);display:none;align-items:center;justify-content:space-between;font-size:12px;color:#c090ff}
+.filter-banner.show{display:flex}
+.filter-clear{background:none;border:none;color:#c090ff;cursor:pointer;font-size:12px;text-decoration:underline}
+
+/* BOTTOM NAV */
+.bottom-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--surface);border-top:0.5px solid var(--border);padding:10px 24px 28px;display:flex;justify-content:space-around}
+.nav-btn{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10px;color:var(--muted);background:none;border:none;cursor:pointer;padding:0}
+.nav-btn.active{color:var(--purple2)}
+.nav-btn svg{width:24px;height:24px}
+
+/* VIEWS */
+.view{display:none}
+.view.active{display:block}
+
+/* PIN */
+.pin-screen{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:200;padding:32px}
+.pin-gauntlet{margin-bottom:20px}
+.pin-title{font-size:24px;font-weight:600;color:var(--text);margin-bottom:6px}
+.pin-sub{font-size:13px;color:var(--muted);margin-bottom:28px;text-align:center;line-height:1.6}
 
 /* TOAST */
-.toast { position:fixed; bottom:90px; left:50%; transform:translateX(-50%); background:#333; color:#fff; padding:10px 20px; border-radius:20px; font-size:13px; opacity:0; transition:opacity 0.3s; z-index:300; white-space:nowrap; }
-.toast.show { opacity:1; }
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;opacity:0;transition:opacity 0.3s;z-index:300;white-space:nowrap}
+.toast.show{opacity:1}
 </style>
 </head>
 <body>
 
 <!-- PIN SCREEN -->
-<div class="pin-screen" id="pin-screen">
-  <div class="pin-title">🎬 InfinityWatch</div>
-  <div class="pin-sub">Inserisci il PIN admin per modificare,<br>oppure continua come spettatore</div>
-  <input class="pin-input" type="password" id="pin-input" placeholder="••••••••" maxlength="20">
-  <div class="pin-error" id="pin-error"></div>
-  <button class="pin-btn" onclick="tryPin()">Accedi come Admin</button>
-  <div class="pin-skip" onclick="enterAsViewer()">Continua come spettatore →</div>
-</div>
+<div class="pin-screen" id="pin-screen" style="display:none"></div>
 
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
-<div class="app" id="main-app" style="display:none">
+<div class="app" id="main-app">
 
   <!-- HOME VIEW -->
   <div id="view-home" class="view active">
     <div class="header">
       <div class="header-top">
-        <div class="app-title">Infinity<span>Watch</span> <span class="sync-dot" id="sync-dot" style="display:none"></span></div>
-        <div class="badge" id="role-badge"></div>
+        <div class="app-title">Infinity<span>Watch</span><span class="sync-dot" id="sync-dot" style="display:none"></span></div>
+      </div>
+      <div class="order-toggle">
+        <button class="order-btn active" id="btn-release" onclick="setOrder('release')">🎬 Ordine Uscita</button>
+        <button class="order-btn" id="btn-story" onclick="setOrder('story')">📅 Ordine Storia</button>
       </div>
       <div class="heroes-strip">
-        <!-- Iron Man -->
         <div class="hero-pip"><svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="18" stroke="#60aaff" stroke-width="1.8"/><circle cx="20" cy="20" r="12" stroke="#60aaff" stroke-width="1.2"/><circle cx="20" cy="20" r="6" stroke="#60aaff" stroke-width="1"/><polygon points="20,32 9.6,14 30.4,14" fill="#60aaff"/></svg></div>
-        <!-- Hulk -->
         <div class="hero-pip"><svg viewBox="0 0 44 44" fill="none"><rect x="11" y="33" width="18" height="9" rx="3" fill="#28b854"/><rect x="7" y="21" width="26" height="14" rx="3" fill="#2ecf60"/><rect x="8" y="13" width="5.5" height="10" rx="2.2" fill="#2ecf60"/><rect x="14.5" y="11" width="5.5" height="12" rx="2.2" fill="#2ecf60"/><rect x="21" y="11" width="5.5" height="12" rx="2.2" fill="#2ecf60"/><rect x="27.5" y="13" width="5.5" height="10" rx="2.2" fill="#2ecf60"/><rect x="3" y="23" width="6" height="9" rx="2.5" fill="#2ecf60"/><line x1="8" y1="21" x2="33" y2="21" stroke="#1aaa48" stroke-width="1.2"/></svg></div>
-        <!-- Thor -->
         <div class="hero-pip"><svg viewBox="0 0 40 40" fill="none"><rect x="7.5" y="3" width="25" height="16" rx="2.5" fill="#8a8a8a" stroke="#aaaaaa" stroke-width="1"/><line x1="10" y1="8" x2="30" y2="8" stroke="#666" stroke-width="0.8"/><line x1="10" y1="13" x2="30" y2="13" stroke="#666" stroke-width="0.8"/><rect x="17" y="19" width="6" height="15" rx="2" fill="#7a4a20"/><rect x="14" y="31" width="12" height="3.5" rx="1.5" fill="#5a3410"/></svg></div>
-        <!-- Black Widow -->
         <div class="hero-pip"><svg viewBox="0 0 40 40" fill="none"><polygon points="20,24 5,5 35,5" fill="#e03040"/><polygon points="20,16 5,35 35,35" fill="#e03040"/></svg></div>
-        <!-- Hawkeye -->
         <div class="hero-pip"><svg viewBox="0 0 40 40" fill="none"><path d="M5 35 Q6 6 35 5" stroke="#c8b060" stroke-width="2.2" fill="none" stroke-linecap="round"/><line x1="5" y1="35" x2="35" y2="5" stroke="#c8b060" stroke-width="0.8" stroke-dasharray="2,2.5"/><polygon points="35,5 29,8 32,13" fill="#c8b060"/></svg></div>
-        <!-- Cap -->
         <div class="hero-pip"><svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="19" fill="#CC1111"/><circle cx="20" cy="20" r="15.25" fill="#EEEEEE"/><circle cx="20" cy="20" r="11.5" fill="#CC1111"/><circle cx="20" cy="20" r="7.75" fill="#1133BB"/><polygon points="20,12.25 21.74,17.61 27.37,17.61 22.81,20.91 24.56,26.27 20,22.96 15.44,26.27 17.19,20.91 12.63,17.61 18.26,17.61" fill="white"/></svg></div>
       </div>
       <div class="progress-meta"><span id="prog-text">0 di 22 visti</span><span id="prog-pct">0%</span></div>
       <div class="progress-track"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
     </div>
+    <div class="filter-banner" id="filter-banner">
+      <span id="filter-label">Filtro attivo</span>
+      <button class="filter-clear" onclick="clearFilter()">✕ Rimuovi filtro</button>
+    </div>
     <div id="film-list"></div>
+  </div>
+
+  <!-- GEMS VIEW -->
+  <div id="view-gems" class="view">
+    <div class="header" style="padding-top:48px">
+      <div class="header-top"><div class="app-title">Gemme <span>dell'Infinito</span></div></div>
+    </div>
+    <div class="gems-section">
+      <div class="gems-sub" id="gems-sub"></div>
+      <div class="gems-grid" id="gems-grid"></div>
+    </div>
   </div>
 
   <!-- STATS VIEW -->
   <div id="view-stats" class="view">
-    <div class="header" style="padding-top:52px">
+    <div class="header" style="padding-top:48px">
       <div class="header-top"><div class="app-title">Le <span>Stats</span></div></div>
     </div>
     <div class="stats-section">
@@ -194,356 +244,599 @@ html, body { height:100%; background:var(--bg); color:var(--text); font-family:-
       </div>
     </div>
   </div>
-
 </div>
 
 <!-- BOTTOM NAV -->
-<div class="bottom-bar" id="bottom-bar" style="display:none">
+<div class="bottom-bar" id="bottom-bar">
   <button class="nav-btn active" id="nav-home" onclick="switchView('home')">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12l9-9 9 9M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>
     Timeline
   </button>
+  <button class="nav-btn" id="nav-gems" onclick="switchView('gems')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+    Gemme
+  </button>
   <button class="nav-btn" id="nav-stats" onclick="switchView('stats')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 18h4v-8H3v8zm7 0h4V6h-4v12zm7 0h4v-4h-4v4z"/></svg>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="12" width="4" height="9"/><rect x="10" y="6" width="4" height="15"/><rect x="17" y="9" width="4" height="12"/></svg>
     Stats
   </button>
 </div>
 
+<!-- DETAIL MODAL -->
+<div class="modal-overlay" id="detail-overlay" onclick="if(event.target===this)closeDetail()">
+  <div class="modal" id="detail-modal"></div>
+</div>
+
 <!-- EDIT MODAL -->
-<div class="modal-overlay" id="modal-overlay" onclick="if(event.target===this)closeModal()">
-  <div class="modal">
+<div class="modal-overlay" id="edit-overlay" onclick="if(event.target===this)closeEdit()">
+  <div class="edit-modal" id="edit-modal">
     <div class="modal-handle"></div>
-    <div class="modal-title" id="modal-title">Modifica</div>
+    <div class="modal-title" id="edit-title" style="font-size:17px;font-weight:500;margin-bottom:16px;color:var(--text)">Modifica</div>
     <p class="input-label">Voto</p>
-    <div class="stars-input">
-      <button class="star-btn" onclick="setStar(1)">⭐</button>
-      <button class="star-btn" onclick="setStar(2)">⭐</button>
-      <button class="star-btn" onclick="setStar(3)">⭐</button>
-      <button class="star-btn" onclick="setStar(4)">⭐</button>
-      <button class="star-btn" onclick="setStar(5)">⭐</button>
-    </div>
+    <div class="stars-input"><button class="star-btn" onclick="setStar(1)">⭐</button><button class="star-btn" onclick="setStar(2)">⭐</button><button class="star-btn" onclick="setStar(3)">⭐</button><button class="star-btn" onclick="setStar(4)">⭐</button><button class="star-btn" onclick="setStar(5)">⭐</button></div>
     <p class="input-label">Data visione</p>
-    <input type="date" id="modal-date">
-    <p class="input-label">Minutaggio (se interrotto — lascia vuoto se visto per intero)</p>
-    <input type="number" id="modal-min" placeholder="es. 74" min="0" max="999">
+    <input type="date" id="edit-date">
+    <p class="input-label">Minutaggio se interrotto (vuoto = visto per intero)</p>
+    <input type="number" id="edit-min" placeholder="es. 74" min="0" max="999">
     <div class="modal-btns">
-      <button class="action-btn" onclick="closeModal()">Annulla</button>
-      <button class="action-btn primary" onclick="saveModal()">✓ Salva</button>
+      <button class="action-btn" onclick="closeEdit()">Annulla</button>
+      <button class="action-btn primary" onclick="saveEdit()">✓ Salva</button>
     </div>
   </div>
 </div>
 
-<!-- Firebase -->
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, set, onValue, update } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+<!-- GEM MODAL -->
+<div class="modal-overlay" id="gem-overlay" onclick="if(event.target===this)closeGem()">
+  <div class="gem-modal" id="gem-modal"></div>
+</div>
 
-const firebaseConfig = {
-  apiKey: "AIzaSyCWPq-85rpGC_wal2FBKpLiNwgVl3m_Do4",
-  authDomain: "infinity-watch-13869.firebaseapp.com",
-  databaseURL: "https://infinity-watch-13869-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "infinity-watch-13869",
-  storageBucket: "infinity-watch-13869.firebasestorage.app",
-  messagingSenderId: "832768497260",
-  appId: "1:832768497260:web:a67edf1bb132cdc3546a49"
-};
-
-const fbApp = initializeApp(firebaseConfig);
-const db = getDatabase(fbApp);
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+<script defer>
+window.addEventListener('DOMContentLoaded',function(){
+firebase.initializeApp({
+  apiKey:"AIzaSyCWPq-85rpGC_wal2FBKpLiNwgVl3m_Do4",
+  authDomain:"infinity-watch-13869.firebaseapp.com",
+  databaseURL:"https://infinity-watch-13869-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId:"infinity-watch-13869",
+  storageBucket:"infinity-watch-13869.firebasestorage.app",
+  messagingSenderId:"832768497260",
+  appId:"1:832768497260:web:a67edf1bb132cdc3546a49"
+});
+const db=firebase.database();
 
 // ── SVG ICONS ──
-const SVG = {
-  ironman: `<svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="18" stroke="#60aaff" stroke-width="1.8"/><circle cx="20" cy="20" r="12" stroke="#60aaff" stroke-width="1.2"/><circle cx="20" cy="20" r="6" stroke="#60aaff" stroke-width="1"/><polygon points="20,32 9.6,14 30.4,14" fill="#60aaff"/></svg>`,
-  hulk: `<svg viewBox="0 0 44 44" fill="none"><rect x="11" y="33" width="18" height="9" rx="3" fill="#28b854"/><rect x="7" y="21" width="26" height="14" rx="3" fill="#2ecf60"/><rect x="8" y="13" width="5.5" height="10" rx="2.2" fill="#2ecf60"/><rect x="14.5" y="11" width="5.5" height="12" rx="2.2" fill="#2ecf60"/><rect x="21" y="11" width="5.5" height="12" rx="2.2" fill="#2ecf60"/><rect x="27.5" y="13" width="5.5" height="10" rx="2.2" fill="#2ecf60"/><rect x="3" y="23" width="6" height="9" rx="2.5" fill="#2ecf60"/><line x1="8" y1="21" x2="33" y2="21" stroke="#1aaa48" stroke-width="1.2"/></svg>`,
-  thor: `<svg viewBox="0 0 40 40" fill="none"><rect x="7.5" y="3" width="25" height="16" rx="2.5" fill="#8a8a8a" stroke="#aaaaaa" stroke-width="1"/><line x1="10" y1="8" x2="30" y2="8" stroke="#666" stroke-width="0.8"/><line x1="10" y1="13" x2="30" y2="13" stroke="#666" stroke-width="0.8"/><rect x="17" y="19" width="6" height="15" rx="2" fill="#7a4a20"/><rect x="14" y="31" width="12" height="3.5" rx="1.5" fill="#5a3410"/></svg>`,
-  blackwidow: `<svg viewBox="0 0 40 40" fill="none"><polygon points="20,24 5,5 35,5" fill="#e03040"/><polygon points="20,16 5,35 35,35" fill="#e03040"/></svg>`,
-  hawkeye: `<svg viewBox="0 0 40 40" fill="none"><path d="M5 35 Q6 6 35 5" stroke="#c8b060" stroke-width="2.2" fill="none" stroke-linecap="round"/><line x1="5" y1="35" x2="35" y2="5" stroke="#c8b060" stroke-width="0.8" stroke-dasharray="2,2.5"/><polygon points="35,5 29,8 32,13" fill="#c8b060"/></svg>`,
-  cap: `<svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="19" fill="#CC1111"/><circle cx="20" cy="20" r="15.25" fill="#EEEEEE"/><circle cx="20" cy="20" r="11.5" fill="#CC1111"/><circle cx="20" cy="20" r="7.75" fill="#1133BB"/><polygon points="20,12.25 21.74,17.61 27.37,17.61 22.81,20.91 24.56,26.27 20,22.96 15.44,26.27 17.19,20.91 12.63,17.61 18.26,17.61" fill="white"/></svg>`,
+const SVG={
+  ironman:`<svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="18" stroke="#60aaff" stroke-width="1.8"/><circle cx="20" cy="20" r="12" stroke="#60aaff" stroke-width="1.2"/><circle cx="20" cy="20" r="6" stroke="#60aaff" stroke-width="1"/><polygon points="20,32 9.6,14 30.4,14" fill="#60aaff"/></svg>`,
+  hulk:`<svg viewBox="0 0 44 44" fill="none"><rect x="11" y="33" width="18" height="9" rx="3" fill="#28b854"/><rect x="7" y="21" width="26" height="14" rx="3" fill="#2ecf60"/><rect x="8" y="13" width="5.5" height="10" rx="2.2" fill="#2ecf60"/><rect x="14.5" y="11" width="5.5" height="12" rx="2.2" fill="#2ecf60"/><rect x="21" y="11" width="5.5" height="12" rx="2.2" fill="#2ecf60"/><rect x="27.5" y="13" width="5.5" height="10" rx="2.2" fill="#2ecf60"/><rect x="3" y="23" width="6" height="9" rx="2.5" fill="#2ecf60"/><line x1="8" y1="21" x2="33" y2="21" stroke="#1aaa48" stroke-width="1.2"/></svg>`,
+  thor:`<svg viewBox="0 0 40 40" fill="none"><rect x="7.5" y="3" width="25" height="16" rx="2.5" fill="#8a8a8a" stroke="#aaaaaa" stroke-width="1"/><line x1="10" y1="8" x2="30" y2="8" stroke="#666" stroke-width="0.8"/><line x1="10" y1="13" x2="30" y2="13" stroke="#666" stroke-width="0.8"/><rect x="17" y="19" width="6" height="15" rx="2" fill="#7a4a20"/><rect x="14" y="31" width="12" height="3.5" rx="1.5" fill="#5a3410"/></svg>`,
+  blackwidow:`<svg viewBox="0 0 40 40" fill="none"><polygon points="20,24 5,5 35,5" fill="#e03040"/><polygon points="20,16 5,35 35,35" fill="#e03040"/></svg>`,
+  hawkeye:`<svg viewBox="0 0 40 40" fill="none"><path d="M5 35 Q6 6 35 5" stroke="#c8b060" stroke-width="2.2" fill="none" stroke-linecap="round"/><line x1="5" y1="35" x2="35" y2="5" stroke="#c8b060" stroke-width="0.8" stroke-dasharray="2,2.5"/><polygon points="35,5 29,8 32,13" fill="#c8b060"/></svg>`,
+  cap:`<svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="19" fill="#CC1111"/><circle cx="20" cy="20" r="15.25" fill="#EEEEEE"/><circle cx="20" cy="20" r="11.5" fill="#CC1111"/><circle cx="20" cy="20" r="7.75" fill="#1133BB"/><polygon points="20,12.25 21.74,17.61 27.37,17.61 22.81,20.91 24.56,26.27 20,22.96 15.44,26.27 17.19,20.91 12.63,17.61 18.26,17.61" fill="white"/></svg>`,
+  avengers:`<svg viewBox="0 0 40 40" fill="none"><polygon points="20,4 32,12 32,28 20,36 8,28 8,12" fill="none" stroke="#c8a830" stroke-width="2"/><text x="20" y="26" text-anchor="middle" font-size="18" font-weight="900" fill="#c8a830" font-family="Arial Black,sans-serif">A</text></svg>`,
 };
+const heroMap={1:SVG.ironman,2:SVG.hulk,3:SVG.ironman,4:SVG.thor,5:SVG.cap,6:SVG.avengers,7:SVG.ironman,8:SVG.thor,9:SVG.cap,12:SVG.hulk,13:SVG.cap,17:SVG.thor};
 
-const heroMap = { 1:SVG.ironman,2:SVG.hulk,3:SVG.ironman,4:SVG.thor,5:SVG.cap,7:SVG.ironman,8:SVG.thor,9:SVG.cap,12:SVG.hulk,13:SVG.cap,17:SVG.thor };
-
-// ── FILM DATA ──
-const FILMS_DEFAULT = [
-  {id:1,  title:"Iron Man",                            icon:"🦾", phase:1, duration:126},
-  {id:2,  title:"The Incredible Hulk",                 icon:"💚", phase:1, duration:112},
-  {id:3,  title:"Iron Man 2",                          icon:"🦾", phase:1, duration:124},
-  {id:4,  title:"Thor",                                icon:"⚡", phase:1, duration:115},
-  {id:5,  title:"Captain America: The First Avenger", icon:"🛡️",phase:1, duration:124},
-  {id:6,  title:"The Avengers",                        icon:"🅐", phase:1, duration:143},
-  {id:7,  title:"Iron Man 3",                          icon:"🦾", phase:2, duration:130},
-  {id:8,  title:"Thor: The Dark World",                icon:"⚡", phase:2, duration:112},
-  {id:9,  title:"Captain America: The Winter Soldier",icon:"🛡️",phase:2, duration:136},
-  {id:10, title:"Guardians of the Galaxy",             icon:"🚀", phase:2, duration:121},
-  {id:11, title:"Ant-Man",                             icon:"🐜", phase:2, duration:117},
-  {id:12, title:"Avengers: Age of Ultron",             icon:"🤖", phase:2, duration:141},
-  {id:13, title:"Captain America: Civil War",          icon:"🛡️",phase:3, duration:147},
-  {id:14, title:"Spider-Man: Homecoming",              icon:"🕷️",phase:3, duration:133},
-  {id:15, title:"Doctor Strange",                      icon:"🔮", phase:3, duration:115},
-  {id:16, title:"Guardians of the Galaxy Vol. 2",      icon:"🚀", phase:3, duration:136},
-  {id:17, title:"Thor: Ragnarok",                      icon:"⚡", phase:3, duration:130},
-  {id:18, title:"Black Panther",                       icon:"🐾", phase:3, duration:134},
-  {id:19, title:"Avengers: Infinity War",              icon:"♾️", phase:3, duration:149},
-  {id:20, title:"Ant-Man and the Wasp",                icon:"🐜", phase:3, duration:118},
-  {id:21, title:"Captain Marvel",                      icon:"⭐", phase:3, duration:124},
-  {id:22, title:"Avengers: Endgame",                   icon:"🕰️",phase:3, duration:181},
+// ── GEMS DATA ──
+const GEMS=[
+  {id:'space',name:'Gemma dello Spazio',color:'#2088e0',glow:'rgba(32,136,224,0.4)',emoji:'💙',unlockedBy:5,film:'Captain America: The First Avenger',powers:'Permette di spostarsi istantaneamente in qualsiasi punto dell\'universo e aprire portali dimensionali. È contenuta nel Tesseract, un cubo luminoso di immenso potere.',origin:'Il Tesseract è stato trovato dal HYDRA durante la Seconda Guerra Mondiale. Contiene al suo interno la Gemma dello Spazio, capace di attraversare lo spazio in un istante.'},
+  {id:'mind',name:'Gemma della Mente',color:'#f5d020',glow:'rgba(245,208,32,0.4)',emoji:'💛',unlockedBy:6,film:'The Avengers',powers:'Amplifica le capacità mentali del portatore e permette di controllare la mente altrui. Può interfacciarsi con altre gemme e potenziarne gli effetti.',origin:'Celata all\'interno del Bastone di Loki durante l\'invasione di New York, la Gemma della Mente è rimasta nascosta fino a quando i suoi veri poteri non sono stati scoperti.'},
+  {id:'reality',name:'Gemma della Realtà',color:'#e02040',glow:'rgba(224,32,64,0.4)',emoji:'❤️',unlockedBy:8,film:'Thor: The Dark World',powers:'Permette di alterare la realtà a piacimento, trasformare la materia e creare illusioni indistinguibili dalla realtà stessa.',origin:'Conosciuta come l\'Etere, questa sostanza oscura e fluida è stata cercata da Malekith per riportare l\'universo nel buio primordiale durante la Convergenza.'},
+  {id:'power',name:'Gemma del Potere',color:'#9b30e0',glow:'rgba(155,48,224,0.4)',emoji:'💜',unlockedBy:10,film:'Guardians of the Galaxy',powers:'Contiene un\'energia distruttiva infinita capace di annientare interi pianeti. Chi la tocca senza protezione viene disintegrato dall\'energia.',origin:'Contenuta nell\'Orbe, questa gemma viola fu cercata da Ronan il Distruttore per conto di Thanos. I Guardiani la consegnarono al Corpo Nova su Xandar per tenerla al sicuro.'},
+  {id:'time',name:'Gemma del Tempo',color:'#18c87a',glow:'rgba(24,200,122,0.4)',emoji:'💚',unlockedBy:15,film:'Doctor Strange',powers:'Permette di manipolare il tempo: tornare nel passato, avanzare nel futuro o creare loop temporali. È custodita nell\'Occhio di Agamotto.',origin:'Custodita per secoli dai Maestri delle Arti Mistiche di Kamar-Taj, la Gemma del Tempo è conservata nell\'Occhio di Agamotto, il medaglione del Maestro Supremo.'},
+  {id:'soul',name:'Gemma dell\'Anima',color:'#e87820',glow:'rgba(232,120,32,0.4)',emoji:'🧡',unlockedBy:19,film:'Avengers: Infinity War',powers:'Gestisce le anime dei vivi e dei morti. Permette di entrare in un universo tascabile all\'interno della gemma stessa dove risiedono le anime intrappolate.',origin:'Nascosta su Vormir, un pianeta remoto guardato da un misterioso custode, questa gemma richiede il sacrificio più grande per essere ottenuta.'},
 ];
 
+// ── FILM DATA ──
+const FILMS=[
+  {id:1,releaseOrder:1,storyOrder:3,title:"Iron Man",icon:"🦾",phase:1,duration:126,year:2008,director:"Jon Favreau",
+   cast:[{actor:"Robert Downey Jr.",role:"Tony Stark / Iron Man"},{actor:"Gwyneth Paltrow",role:"Pepper Potts"},{actor:"Jeff Bridges",role:"Obadiah Stane / Iron Monger"},{actor:"Terrence Howard",role:"James Rhodes"}],
+   heroes:["Iron Man / Tony Stark","Pepper Potts"],villains:["Iron Monger / Obadiah Stane"],
+   summary:"Tony Stark, genio miliardario e costruttore di armi, viene catturato in Afghanistan e costruisce una tuta corazzata per fuggire. Tornato a casa, perfeziona la tecnologia e affronta il suo ex-socio. Nel finale rivela al mondo: «Sono Iron Man».",
+   postCreditSeen:false,postCreditText:"Nick Fury si presenta a Tony Stark con una proposta straordinaria: sta mettendo insieme un gruppo di persone straordinarie. L'universo Marvel è appena diventato molto più grande. 🌟",
+   gemId:null},
+  {id:2,releaseOrder:2,storyOrder:5,title:"The Incredible Hulk",icon:"💚",phase:1,duration:112,year:2008,director:"Louis Leterrier",
+   cast:[{actor:"Edward Norton",role:"Bruce Banner / Hulk"},{actor:"Liv Tyler",role:"Betty Ross"},{actor:"Tim Roth",role:"Emil Blonsky / Abomination"},{actor:"William Hurt",role:"General Thaddeus Ross"}],
+   heroes:["Hulk / Bruce Banner"],villains:["Abomination / Emil Blonsky"],
+   summary:"Bruce Banner vive in fuga cercando una cura per la sua condizione. Viene rintracciato dall'esercito e costretto a combattere Abomination a Harlem. Un cameo sorprendente alla fine apre le porte a qualcosa di più grande.",
+   postCreditSeen:false,postCreditText:"Tony Stark fa una visita inaspettata al Generale Ross: qualcuno sta mettendo insieme un team di individui straordinari. Il puzzle del MCU inizia a comporsi! 🔧",
+   gemId:null},
+  {id:3,releaseOrder:3,storyOrder:4,title:"Iron Man 2",icon:"🦾",phase:1,duration:124,year:2010,director:"Jon Favreau",
+   cast:[{actor:"Robert Downey Jr.",role:"Tony Stark / Iron Man"},{actor:"Gwyneth Paltrow",role:"Pepper Potts"},{actor:"Scarlett Johansson",role:"Natasha Romanoff / Black Widow"},{actor:"Mickey Rourke",role:"Ivan Vanko / Whiplash"},{actor:"Don Cheadle",role:"James Rhodes / War Machine"}],
+   heroes:["Iron Man / Tony Stark","Black Widow / Natasha Romanoff","War Machine / James Rhodes"],villains:["Whiplash / Ivan Vanko","Justin Hammer"],
+   summary:"Tony viene avvelenato dal palladio nel suo reattore Arc e deve trovare urgentemente un nuovo elemento. Ivan Vanko attacca con fruste energetiche. Nick Fury rivela a Tony del progetto Avengers. Debutta la Vedova Nera.",
+   postCreditSeen:false,postCreditText:"Un misterioso martello è stato trovato in un cratere nel New Mexico. Qualcosa di enorme sta per arrivare dall'alto dei cieli... ⚡",
+   gemId:null},
+  {id:4,releaseOrder:4,storyOrder:6,title:"Thor",icon:"⚡",phase:1,duration:115,year:2011,director:"Kenneth Branagh",
+   cast:[{actor:"Chris Hemsworth",role:"Thor Odinson"},{actor:"Natalie Portman",role:"Jane Foster"},{actor:"Tom Hiddleston",role:"Loki"},{actor:"Anthony Hopkins",role:"Odino"}],
+   heroes:["Thor / Thor Odinson"],villains:["Loki Laufeyson"],
+   summary:"Thor, principe di Asgard, viene esiliato sulla Terra per la sua arroganza. Perde i poteri ma incontra Jane Foster. Suo fratello Loki cerca di prendere il potere. Thor si redime sacrificandosi per proteggere gli innocenti e riacquista Mjolnir.",
+   postCreditSeen:false,postCreditText:"Un cubo luminoso di immenso potere cosmico viene scoperto da un misterioso individuo. Il Tesseract è nelle mani sbagliate e l'universo trema... 🔵",
+   gemId:null},
+  {id:5,releaseOrder:5,storyOrder:1,title:"Captain America: The First Avenger",icon:"🛡️",phase:1,duration:124,year:2011,director:"Joe Johnston",
+   cast:[{actor:"Chris Evans",role:"Steve Rogers / Captain America"},{actor:"Hayley Atwell",role:"Peggy Carter"},{actor:"Hugo Weaving",role:"Johann Schmidt / Red Skull"},{actor:"Sebastian Stan",role:"Bucky Barnes"}],
+   heroes:["Captain America / Steve Rogers","Peggy Carter","Bucky Barnes"],villains:["Red Skull / Johann Schmidt"],
+   summary:"Durante la Seconda Guerra Mondiale, Steve Rogers diventa Captain America grazie al siero del Supersoldato. Combatte HYDRA e Red Skull, che vuole usare il Tesseract come arma. Steve si sacrifica precipitando nell'Artico, per svegliarsi 70 anni dopo.",
+   postCreditSeen:false,postCreditText:"Nick Fury incontra un uomo fuori dal suo tempo che ha bisogno di uno scopo. Un'epica avventura moderna sta per iniziare per il soldato venuto dal passato! 🛡️",
+   gemId:'space'},
+  {id:6,releaseOrder:6,storyOrder:7,title:"The Avengers",icon:"🅐",phase:1,duration:143,year:2012,director:"Joss Whedon",
+   cast:[{actor:"Robert Downey Jr.",role:"Tony Stark / Iron Man"},{actor:"Chris Evans",role:"Steve Rogers / Captain America"},{actor:"Chris Hemsworth",role:"Thor"},{actor:"Mark Ruffalo",role:"Bruce Banner / Hulk"},{actor:"Scarlett Johansson",role:"Natasha Romanoff / Black Widow"},{actor:"Jeremy Renner",role:"Clint Barton / Hawkeye"}],
+   heroes:["Iron Man / Tony Stark","Captain America / Steve Rogers","Thor","Hulk / Bruce Banner","Black Widow / Natasha Romanoff","Hawkeye / Clint Barton"],villains:["Loki Laufeyson"],
+   summary:"Nick Fury riunisce Iron Man, Cap, Thor, Hulk, Black Widow e Hawkeye per formare gli Avengers. Loki vuole usare il Tesseract per aprire un portale e invadere la Terra con l'esercito Chitauri. La prima battaglia epica di New York definisce tutto quello che verrà.",
+   postCreditSeen:false,postCreditText:"Un'entità misteriosa e terrificante sorride nell'oscurità cosmica. Qualcuno di molto più potente di Loki era dietro tutto questo fin dall'inizio. Il vero villain dell'universo si mostra per la prima volta... 💜",
+   gemId:'mind'},
+  {id:7,releaseOrder:7,storyOrder:8,title:"Iron Man 3",icon:"🦾",phase:2,duration:130,year:2013,director:"Shane Black",
+   cast:[{actor:"Robert Downey Jr.",role:"Tony Stark / Iron Man"},{actor:"Gwyneth Paltrow",role:"Pepper Potts"},{actor:"Guy Pearce",role:"Aldrich Killian"},{actor:"Don Cheadle",role:"James Rhodes / Iron Patriot"}],
+   heroes:["Iron Man / Tony Stark","War Machine / James Rhodes"],villains:["Aldrich Killian","Il Mandarino"],
+   summary:"Tony soffre di attacchi d'ansia dopo New York. Il misterioso Mandarino minaccia la nazione. La villa di Tony viene distrutta. Solo nel Tennessee, senza la tuta, deve riscoprire chi è senza l'armatura. Alla fine capisce: è Iron Man, non la tuta.",
+   postCreditSeen:false,postCreditText:"Tony racconta tutte queste avventure a qualcuno di inaspettato durante una sessione di terapia... e si scopre che anche i supereroi hanno i loro problemi! 😄",
+   gemId:null},
+  {id:8,releaseOrder:8,storyOrder:9,title:"Thor: The Dark World",icon:"⚡",phase:2,duration:112,year:2013,director:"Alan Taylor",
+   cast:[{actor:"Chris Hemsworth",role:"Thor Odinson"},{actor:"Natalie Portman",role:"Jane Foster"},{actor:"Tom Hiddleston",role:"Loki"},{actor:"Christopher Eccleston",role:"Malekith"}],
+   heroes:["Thor / Thor Odinson","Loki Laufeyson"],villains:["Malekith"],
+   summary:"Malekith, signore degli Elfi Oscuri, cerca di usare l'Etere durante la Convergenza cosmica. Jane Foster assorbe accidentalmente l'Etere. Thor e Loki, nemici-alleati, combattono insieme per salvare l'universo dalla regressione nel buio.",
+   postCreditSeen:false,postCreditText:"Una sostanza oscura e fluida viene consegnata a dei custodi misteriosi per essere tenuta al sicuro lontano da Asgard. Qualcosa di enorme si agita nell'oscurità... 🔴",
+   gemId:'reality'},
+  {id:9,releaseOrder:9,storyOrder:10,title:"Captain America: The Winter Soldier",icon:"🛡️",phase:2,duration:136,year:2014,director:"Anthony e Joe Russo",
+   cast:[{actor:"Chris Evans",role:"Steve Rogers / Captain America"},{actor:"Scarlett Johansson",role:"Natasha Romanoff / Black Widow"},{actor:"Sebastian Stan",role:"Bucky Barnes / Il Soldato d'Inverno"},{actor:"Samuel L. Jackson",role:"Nick Fury"},{actor:"Anthony Mackie",role:"Sam Wilson / Falcon"}],
+   heroes:["Captain America / Steve Rogers","Black Widow / Natasha Romanoff","Falcon / Sam Wilson","Nick Fury"],villains:["Il Soldato d'Inverno / Bucky Barnes","Alexander Pierce"],
+   summary:"S.H.I.E.L.D. è stata infiltrata da HYDRA fin dalla fondazione. Il Soldato d'Inverno è in realtà Bucky Barnes. Con Natasha e Sam Wilson, Steve sabota il Progetto Insight e smantella sia HYDRA che S.H.I.E.L.D. Un tradimento che cambia tutto.",
+   postCreditSeen:false,postCreditText:"Due individui con poteri straordinari sono tenuti prigionieri. Una ragazza con poteri telecinetici e un ragazzo velocissimo: i Massimoff. Il futuro degli Avengers sta per complicarsi enormemente... ⚡",
+   gemId:null},
+  {id:10,releaseOrder:10,storyOrder:11,title:"Guardians of the Galaxy",icon:"🚀",phase:2,duration:121,year:2014,director:"James Gunn",
+   cast:[{actor:"Chris Pratt",role:"Peter Quill / Star-Lord"},{actor:"Zoe Saldana",role:"Gamora"},{actor:"Dave Bautista",role:"Drax"},{actor:"Vin Diesel",role:"Groot (voce)"},{actor:"Bradley Cooper",role:"Rocket (voce)"}],
+   heroes:["Star-Lord / Peter Quill","Gamora","Drax","Groot","Rocket"],villains:["Ronan il Distruttore","Nebula","Thanos (cameo)"],
+   summary:"Un gruppo improbabile di criminali spaziali — Star-Lord, Gamora, Drax, Rocket e Groot — si unisce per impedire a Ronan di usare un orbe misterioso per distruggere Xandar. I Guardiani della Galassia nascono dall'amicizia più strana dell'universo.",
+   postCreditSeen:false,postCreditText:"Un papero spaziale in giacca e cravatta brinda su una nave stellare... Howard the Duck fa la sua comparsa nel MCU! E i Guardiani sono pronti per la loro prossima avventura. 🦆",
+   gemId:'power'},
+  {id:11,releaseOrder:11,storyOrder:13,title:"Ant-Man",icon:"🐜",phase:2,duration:117,year:2015,director:"Peyton Reed",
+   cast:[{actor:"Paul Rudd",role:"Scott Lang / Ant-Man"},{actor:"Michael Douglas",role:"Hank Pym"},{actor:"Evangeline Lilly",role:"Hope van Dyne"},{actor:"Corey Stoll",role:"Darren Cross / Yellowjacket"}],
+   heroes:["Ant-Man / Scott Lang","Hank Pym","Hope van Dyne"],villains:["Yellowjacket / Darren Cross"],
+   summary:"Hank Pym recluta Scott Lang, un ladro con principi, per indossare la tuta Ant-Man e fermare Darren Cross che vuole vendere la tecnologia a forze oscure. Scott impara a controllare gli insetti e combatte in miniatura, con momenti esilaranti.",
+   postCreditSeen:false,postCreditText:"Hope van Dyne riceve finalmente la sua tuta: elegante, sofisticata, potentissima. La Vespa è pronta. E nel frattempo Cap e Sam Wilson hanno trovato qualcuno che conoscono... 🐝",
+   gemId:null},
+  {id:12,releaseOrder:12,storyOrder:14,title:"Avengers: Age of Ultron",icon:"🤖",phase:2,duration:141,year:2015,director:"Joss Whedon",
+   cast:[{actor:"Robert Downey Jr.",role:"Tony Stark / Iron Man"},{actor:"Chris Evans",role:"Steve Rogers / Captain America"},{actor:"James Spader",role:"Ultron (voce)"},{actor:"Paul Bettany",role:"Visione"},{actor:"Elizabeth Olsen",role:"Wanda Maximoff / Scarlet Witch"},{actor:"Aaron Taylor-Johnson",role:"Pietro Maximoff / Quicksilver"}],
+   heroes:["Iron Man / Tony Stark","Captain America / Steve Rogers","Thor","Hulk / Bruce Banner","Black Widow / Natasha Romanoff","Hawkeye / Clint Barton","Scarlet Witch / Wanda Maximoff","Quicksilver / Pietro Maximoff","Visione"],
+   villains:["Ultron"],
+   summary:"Tony crea Ultron, un'IA per proteggere il mondo, ma Ultron decide che la pace significa l'eliminazione dell'umanità. I Gemelli Massimoff entrano in scena. Sokovia è in pericolo. Nasce Visione. Un capitolo che cambia tutto per gli Avengers.",
+   postCreditSeen:false,postCreditText:"Una mano dorata afferra un guanto vuoto e mormora: 'Okay, lo farò io.' Thanos sta per iniziare la sua caccia. Qualcosa di immane si avvicina all'orizzonte dell'universo... 💜",
+   gemId:null},
+  {id:13,releaseOrder:13,storyOrder:15,title:"Captain America: Civil War",icon:"🛡️",phase:3,duration:147,year:2016,director:"Anthony e Joe Russo",
+   cast:[{actor:"Chris Evans",role:"Steve Rogers / Captain America"},{actor:"Robert Downey Jr.",role:"Tony Stark / Iron Man"},{actor:"Chadwick Boseman",role:"T'Challa / Black Panther"},{actor:"Tom Holland",role:"Peter Parker / Spider-Man"},{actor:"Daniel Brühl",role:"Zemo"}],
+   heroes:["Captain America / Steve Rogers","Iron Man / Tony Stark","Black Panther / T'Challa","Spider-Man / Peter Parker","Black Widow / Natasha Romanoff","Falcon / Sam Wilson","Ant-Man / Scott Lang","War Machine / James Rhodes","Scarlet Witch / Wanda Maximoff","Visione","Hawkeye / Clint Barton","Il Soldato d'Inverno / Bucky Barnes"],
+   villains:["Zemo"],
+   summary:"Gli Accords di Sokovia dividono gli Avengers in due fazioni. Bucky viene incastrato. Zemo manipola tutto dall'ombra. Iron Man contro Captain America: l'amicizia si spezza. Debuttano Spider-Man e Black Panther nel MCU.",
+   postCreditSeen:false,postCreditText:"Bucky Barnes va in ibernazione in Wakanda, il paese africano più avanzato al mondo. Black Panther promette protezione. Un regno segreto si apre all'alleanza... 🐾",
+   gemId:null},
+  {id:14,releaseOrder:14,storyOrder:16,title:"Spider-Man: Homecoming",icon:"🕷️",phase:3,duration:133,year:2017,director:"Jon Watts",
+   cast:[{actor:"Tom Holland",role:"Peter Parker / Spider-Man"},{actor:"Michael Keaton",role:"Adrian Toomes / Avvoltoio"},{actor:"Robert Downey Jr.",role:"Tony Stark / Iron Man"},{actor:"Marisa Tomei",role:"Zia May"}],
+   heroes:["Spider-Man / Peter Parker","Iron Man / Tony Stark"],villains:["Avvoltoio / Adrian Toomes"],
+   summary:"Peter Parker è un liceale che cerca di impressionare Tony Stark mentre affronta l'Avvoltoio, un trafficante di armi aliene. Tony lo frena: deve imparare prima di volare troppo alto. Peter scopre che il padre della sua ragazza è il criminale che sta cercando.",
+   postCreditSeen:false,postCreditText:"Captain America dà un consiglio sulla pazienza che risulta incredibilmente ironico nel contesto... e Toomes in prigione mostra di avere ancora dei principi. 😏",
+   gemId:null},
+  {id:15,releaseOrder:15,storyOrder:17,title:"Doctor Strange",icon:"🔮",phase:3,duration:115,year:2016,director:"Scott Derrickson",
+   cast:[{actor:"Benedict Cumberbatch",role:"Stephen Strange / Doctor Strange"},{actor:"Tilda Swinton",role:"L'Antico"},{actor:"Chiwetel Ejiofor",role:"Karl Mordo"},{actor:"Mads Mikkelsen",role:"Kaecilius"}],
+   heroes:["Doctor Strange / Stephen Strange","L'Antico","Wong"],villains:["Kaecilius","Dormammu"],
+   summary:"Stephen Strange, brillante neurochirurgo, perde l'uso delle mani in un incidente. La ricerca di una cura lo porta alle arti mistiche. Diventa il Maestro delle Arti Mistiche e usa la Gemma del Tempo per intrappolare Dormammu in un loop eterno.",
+   postCreditSeen:false,postCreditText:"Thor arriva alla Sanctum Sanctorum di New York con una richiesta per Doctor Strange: sta cercando suo padre Odino sulla Terra. Un'alleanza cosmica si forma... ⚡🔮",
+   gemId:'time'},
+  {id:16,releaseOrder:16,storyOrder:12,title:"Guardians of the Galaxy Vol. 2",icon:"🚀",phase:3,duration:136,year:2017,director:"James Gunn",
+   cast:[{actor:"Chris Pratt",role:"Peter Quill / Star-Lord"},{actor:"Zoe Saldana",role:"Gamora"},{actor:"Kurt Russell",role:"Ego"},{actor:"Sylvester Stallone",role:"Stakar Ogord"}],
+   heroes:["Star-Lord / Peter Quill","Gamora","Drax","Groot (baby)","Rocket","Nebula","Mantis","Yondu"],
+   villains:["Ego il Pianeta Vivente"],
+   summary:"Peter Quill scopre che suo padre è Ego, un pianeta vivente con piani cosmici terrificanti. I Guardiani affrontano tradimenti, rivelazioni sulla famiglia e la perdita. Yondu si rivela il vero padre di Peter in un finale straziante.",
+   postCreditSeen:false,postCreditText:"Cinque scene post-credit! Adolescente Groot è magnificamente pigro, Stakar raduna la sua squadra originale, e soprattutto: Adam Warlock viene annunciato. Una forza cosmica immensa si prepara... ✨",
+   gemId:null},
+  {id:17,releaseOrder:17,storyOrder:18,title:"Thor: Ragnarok",icon:"⚡",phase:3,duration:130,year:2017,director:"Taika Waititi",
+   cast:[{actor:"Chris Hemsworth",role:"Thor Odinson"},{actor:"Tom Hiddleston",role:"Loki"},{actor:"Cate Blanchett",role:"Hela"},{actor:"Mark Ruffalo",role:"Bruce Banner / Hulk"},{actor:"Tessa Thompson",role:"Valchiria"}],
+   heroes:["Thor / Thor Odinson","Loki","Hulk / Bruce Banner","Valchiria"],villains:["Hela, dea della morte"],
+   summary:"Hela, dea della morte e sorella segreta di Thor, prende Asgard. Thor finisce su Sakaar dove trova Hulk campione dell'arena. Con Loki e Valchiria, Thor evoca Ragnarok per liberare il suo popolo. Asgard non è un luogo, è un popolo.",
+   postCreditSeen:false,postCreditText:"La nave degli Asgardiani viene intercettata da un'enorme astronave nell'oscurità dello spazio. Chi arriva a seminare terrore tra i superstiti del regno distrutto? L'ora più buia si avvicina... 💀",
+   gemId:null},
+  {id:18,releaseOrder:18,storyOrder:19,title:"Black Panther",icon:"🐾",phase:3,duration:134,year:2018,director:"Ryan Coogler",
+   cast:[{actor:"Chadwick Boseman",role:"T'Challa / Black Panther"},{actor:"Michael B. Jordan",role:"Erik Killmonger"},{actor:"Lupita Nyong'o",role:"Nakia"},{actor:"Danai Gurira",role:"Okoye"}],
+   heroes:["Black Panther / T'Challa","Nakia","Okoye","Shuri"],villains:["Killmonger / Erik Stevens"],
+   summary:"T'Challa torna in Wakanda per prendere il trono. Killmonger sfida il trono con rivendicazioni legittime e piani di rivoluzione globale. T'Challa vince e decide di aprire Wakanda al mondo. Una nazione segreta esce dall'ombra.",
+   postCreditSeen:false,postCreditText:"Wakanda apre le porte all'ONU, portando la sua tecnologia avanzata al mondo intero. E in un villaggio wakandiano, un uomo con il braccio bianco si risveglia... 🤍",
+   gemId:null},
+  {id:19,releaseOrder:19,storyOrder:20,title:"Avengers: Infinity War",icon:"♾️",phase:3,duration:149,year:2018,director:"Anthony e Joe Russo",
+   cast:[{actor:"Josh Brolin",role:"Thanos"},{actor:"Robert Downey Jr.",role:"Tony Stark / Iron Man"},{actor:"Benedict Cumberbatch",role:"Doctor Strange"},{actor:"Chris Pratt",role:"Star-Lord"},{actor:"Chris Hemsworth",role:"Thor"}],
+   heroes:["Iron Man / Tony Stark","Doctor Strange / Stephen Strange","Spider-Man / Peter Parker","Star-Lord / Peter Quill","Thor","Captain America / Steve Rogers","Black Panther / T'Challa","Wanda Maximoff","Visione","Gamora"],
+   villains:["Thanos","I Figli di Thanos"],
+   summary:"Thanos percorre l'universo raccogliendo le sei Gemme dell'Infinito per dimezzare tutta la vita. Gli eroi si dividono su più fronti ma falliscono. Thor colpisce quasi a morte Thanos con Stormbreaker. Con tutte le gemme, Thanos schiocca le dita. Metà dell'universo svanisce.",
+   postCreditSeen:false,postCreditText:"Nell'apocalisse del blip, un cercapersone invia un ultimo segnale prima di spegnersi: una stella con otto raggi su sfondo rosso e blu. Qualcuno di molto potente è stato appena chiamato in soccorso... ⭐",
+   gemId:'soul'},
+  {id:20,releaseOrder:20,storyOrder:21,title:"Ant-Man and the Wasp",icon:"🐜",phase:3,duration:118,year:2018,director:"Peyton Reed",
+   cast:[{actor:"Paul Rudd",role:"Scott Lang / Ant-Man"},{actor:"Evangeline Lilly",role:"Hope van Dyne / Vespa"},{actor:"Michael Douglas",role:"Hank Pym"},{actor:"Michelle Pfeiffer",role:"Janet van Dyne"},{actor:"Hannah John-Kamen",role:"Ghost"}],
+   heroes:["Ant-Man / Scott Lang","Vespa / Hope van Dyne","Hank Pym","Janet van Dyne"],villains:["Ghost / Ava Starr"],
+   summary:"Scott Lang e Hope aprono un tunnel quantistico per recuperare Janet van Dyne, intrappolata nel regno quantistico da 30 anni. Ghost vuole usare Janet per stabilizzarsi. Riescono a salvarla. Nel post-credits accade qualcosa di devastante che collega tutto a ciò che è appena successo.",
+   postCreditSeen:false,postCreditText:"Mentre Scott è nel regno quantistico a raccogliere energie curative, Hank, Janet e Hope scompaiono nel nulla. Scott è intrappolato. Il blip di Thanos ha colpito anche loro. Scott è solo nel regno quantistico... ⚛️",
+   gemId:null},
+  {id:21,releaseOrder:21,storyOrder:2,title:"Captain Marvel",icon:"⭐",phase:3,duration:124,year:2019,director:"Anna Boden e Ryan Fleck",
+   cast:[{actor:"Brie Larson",role:"Carol Danvers / Captain Marvel"},{actor:"Samuel L. Jackson",role:"Nick Fury (giovane)"},{actor:"Ben Mendelsohn",role:"Talos"},{actor:"Jude Law",role:"Yon-Rogg"}],
+   heroes:["Captain Marvel / Carol Danvers","Nick Fury","Goose (il gatto)"],villains:["Yon-Rogg","L'Intelligenza Suprema Kree"],
+   summary:"Carol Danvers, ex-pilota senza memoria, scopre la sua vera identità sulla Terra del 1995 insieme a un giovane Nick Fury. I nemici Skrull sono in realtà rifugiati. La vera minaccia è l'Intelligenza Suprema Kree. Carol libera i suoi poteri cosmici senza limiti.",
+   postCreditSeen:false,postCreditText:"Captain Marvel risponde al cercapersone di Fury e si trova faccia a faccia con gli Avengers sopravvissuti. Dov'è Fury? E cosa succederà ora? La più potente eroina del MCU è finalmente tornata! 💙",
+   gemId:null},
+  {id:22,releaseOrder:22,storyOrder:22,title:"Avengers: Endgame",icon:"🕰️",phase:3,duration:181,year:2019,director:"Anthony e Joe Russo",
+   cast:[{actor:"Robert Downey Jr.",role:"Tony Stark / Iron Man"},{actor:"Chris Evans",role:"Steve Rogers / Captain America"},{actor:"Scarlett Johansson",role:"Natasha Romanoff / Black Widow"},{actor:"Chris Hemsworth",role:"Thor"},{actor:"Mark Ruffalo",role:"Bruce Banner / Hulk"},{actor:"Jeremy Renner",role:"Clint Barton / Ronin"}],
+   heroes:["Iron Man / Tony Stark","Captain America / Steve Rogers","Thor","Hulk / Bruce Banner","Black Widow / Natasha Romanoff","Hawkeye / Clint Barton","Ant-Man / Scott Lang","War Machine / James Rhodes","Nebula","Captain Marvel / Carol Danvers"],
+   villains:["Thanos (2014)"],
+   summary:"Cinque anni dopo il blip, Scott Lang scopre che nel regno quantistico il tempo scorre diversamente. Gli Avengers costruiscono una macchina del tempo per recuperare le gemme nel passato. Sacrifici enormi, battaglie epiche, e una conclusione che chiude un'era e ne apre un'altra.",
+   postCreditSeen:false,postCreditText:"Nessuna scena post-credit tradizionale — solo il suono di un martello che forgia qualcosa. Il suono di Tony Stark che costruisce la sua prima tuta. Un omaggio silenzioso alla fine di un'era. 🔨",
+   gemId:null},
+];
+
+// ── SUMMARIES ──
+const SUMMARIES={
+  1:{full:"Tony Stark, genio miliardario e mercante d'armi, viene catturato in Afghanistan e costretto a costruire un'arma. Invece crea una tuta corazzata per fuggire. Tornato a casa, perfeziona la tecnologia e affronta Obadiah Stane, il suo socio che lo ha tradito. Nel finale, davanti alle telecamere di tutto il mondo, rivela la sua identità: «Io sono Iron Man»."},
+  2:{full:"Bruce Banner vive in fuga in Brasile cercando una cura per la sua condizione. Il generale Ross lo rintraccia e manda una squadra. Banner torna a New York per completare la ricerca, ma viene catturato. Ross potenzia Blonsky trasformandolo nell'Abomination. Hulk combatte e sconfigge Blonsky a Harlem. Nel finale Tony Stark contatta Ross, accennando alla formazione di un team."},
+  3:{full:"Tony Stark deve fare i conti con il palladio nel reattore Arc che lo sta avvelenando. Ivan Vanko, figlio di un vecchio socio di suo padre, attacca Tony al Gran Prix di Monaco con fruste energetiche. Nick Fury mostra a Tony i vecchi file di suo padre che lo aiutano a sintetizzare un nuovo elemento. Tony e James Rhodes sconfiggono Vanko durante un'expo tecnologica. La Vedova Nera fa la sua prima apparizione."},
+  4:{full:"Thor, principe di Asgard, viene esiliato sulla Terra dal padre Odino per la sua arroganza. Incontra la scienziata Jane Foster. Loki, suo fratello adottivo, scopre di essere figlio del re dei Giganti di Ghiaccio e manda il Distruttore a eliminare Thor. Senza poteri, Thor si sacrifica per proteggere gli innocenti: Mjolnir torna a lui. Thor sconfigge il Distruttore, ma Loki scompare nel vuoto cosmico."},
+  5:{full:"Durante la Seconda Guerra Mondiale, Steve Rogers diventa Captain America grazie al Supersoldato. Insieme agli Howling Commandos combatte HYDRA, guidata da Red Skull che ha recuperato il Tesseract. Steve sacrifica se stesso facendo precipitare l'aereo nell'Artico. Si risveglia nel presente, a New York, 70 anni dopo."},
+  6:{full:"Nick Fury riunisce Iron Man, Captain America, Thor, Hulk, Black Widow e Hawkeye per formare gli Avengers. L'obiettivo: fermare Loki che ha rubato il Tesseract per aprire un portale all'esercito Chitauri. Dopo scontri interni, il team trova la coesione nella battaglia di New York. Tony devia un missile nucleare attraverso il portale. Loki viene catturato. Nel post-credits appare Thanos."},
+  7:{full:"Tony Stark viene minacciato dal Mandarino. Dopo la distruzione della sua villa, si ritrova solo nel Tennessee senza tuta. Scopre che il Mandarino è una facciata: il vero villain è Aldrich Killian con Extremis. Con Rhodes salva il Presidente. Alla fine fa rimuovere il reattore Arc dal petto: dichiara «Io sono Iron Man», non la tuta."},
+  8:{full:"Malekith cerca di usare l'Etere durante la Convergenza per riportare l'universo nel buio. Jane Foster assorbe accidentalmente l'Etere. Thor e Loki collaborano per attirare Malekith fuori da Asgard. Durante la battaglia finale a Londra, l'Etere viene estratto da Jane e Malekith viene sconfitto. Loki prende il posto di Odino sul trono di Asgard."},
+  9:{full:"Steve Rogers scopre che S.H.I.E.L.D. è stata infiltrata da HYDRA sin dalla fondazione. Il Soldato d'Inverno è in realtà Bucky Barnes. Con Natasha e Sam Wilson, Steve sabota i tre helicarrier di Project Insight. HYDRA viene smantellata, S.H.I.E.L.D. sciolta. Bucky sopravvive e inizia a ricordare."},
+  10:{full:"Peter Quill ruba un orbe misterioso e viene braccato da Ronan. Forma una squadra con Gamora, Rocket, Groot e Drax. L'orbe contiene la Gemma del Potere. Ronan tenta di usarla per distruggere Xandar. I Guardiani uniscono le forze e riescono a contenere l'energia della gemma insieme, sconfiggendo Ronan. Quill scopre di essere per metà di origine aliena."},
+  11:{full:"Hank Pym recluta Scott Lang per indossare la tuta Ant-Man e fermare Darren Cross che vuole vendere la tecnologia Yellowjacket a HYDRA. Scott impara a controllare gli insetti. Nella battaglia finale riesce a sconfiggere Cross ma deve rimpicciolire a livello subatomico per salvare sua figlia, riuscendo poi a tornare. Hope riceve la sua tuta: diventerà la Vespa."},
+  12:{full:"Tony Stark crea Ultron, un'IA pensata per proteggere il mondo, che invece interpreta la pace come eliminazione dell'umanità. Dopo aver rubato il vibranio, Ultron pianifica di sollevare Sokovia come un meteorite. I Gemelli Massimoff entrano in scena. Nasce Visione. Pietro muore proteggendo Clint. Wanda distrugge Ultron. Thor e Tony fanno esplodere la città in aria."},
+  13:{full:"Gli Accordi di Sokovia dividono gli Avengers: Tony favorevole, Steve contrario. Zemo incastra Bucky per un attentato e risveglia i Supersoldati HYDRA. Gli eroi si scontrano all'aeroporto di Lipsia. Zemo rivela a Tony che Bucky ha ucciso i suoi genitori: duello brutale tra Tony e Steve. Steve porta via Bucky. La frattura è permanente. Debuttano Spider-Man e Black Panther."},
+  14:{full:"Peter Parker cerca di fare colpo su Tony Stark mentre affronta l'Avvoltoio, un trafficante di armi aliene. Tony gli ritira la tuta dopo un disastro su un traghetto. Peter scopre che l'Avvoltoio è il padre della sua ragazza. Lo affronta senza armatura e sventa il furto di armi. Tony gli offre un posto negli Avengers: Peter rifiuta, vuole restare il Friendly Neighborhood Spider-Man."},
+  15:{full:"Stephen Strange, brillante neurochirurgo, si ferisce gravemente le mani in un incidente. Trova l'Antico che lo introduce alle arti mistiche. Kaecilius vuole aprire la Terra a Dormammu del Reame Oscuro. L'Antico muore nel conflitto. Strange affronta Dormammu intrappolandolo in un loop temporale con la Gemma del Tempo finché accetta di andarsene. Strange diventa il nuovo Maestro delle Arti Mistiche."},
+  16:{full:"I Guardiani scoprono che Ego, un pianeta vivente, è il padre biologico di Peter. Ego vuole espandere la sua coscienza in tutti i pianeti dell'universo, uccidendo ogni altra vita, inclusa la madre di Peter. Nebula e Gamora affrontano i loro traumi come figlie di Thanos. Yondu si sacrifica per salvare Peter. I Guardiani sconfiggono Ego distruggendone il nucleo."},
+  17:{full:"Thor viene catturato su Sakaar dove trova Hulk campione dell'arena. Hela, dea della morte, ha preso Asgard. Thor convinces Hulk e una Valchiria sopravvissuta ad aiutarlo. Portano il popolo asgardiano in salvo. Per fermare Hela, Thor evoca Ragnarok: Surtur distrugge Asgard insieme a Hela. Asgard non è un luogo, è un popolo."},
+  18:{full:"T'Challa torna in Wakanda per prendere il trono. Killmonger, suo cugino, sfida il trono e vince. Intende usare le armi al vibranio per rivoluzionare il mondo. T'Challa sopravvive e sfida di nuovo Killmonger sconfiggendolo. Wakanda decide di aprirsi al mondo e condividere la propria tecnologia. Nel post-credits Bucky è in cura in Wakanda."},
+  19:{full:"Thanos raccoglie le sei Gemme dell'Infinito. Gli Avengers e i Guardiani tentano di fermarlo su più fronti ma falliscono. Thor colpisce quasi a morte Thanos ma non al cuore. Doctor Strange consegna la Gemma del Tempo a Thanos per salvare Tony. Con tutte e sei le gemme, Thanos schiocca le dita: metà di tutta la vita svanisce in cenere, inclusi molti eroi. Solo i sei Avengers originali sopravvivono."},
+  20:{full:"Scott Lang e Hope aprono un tunnel quantistico per recuperare Janet van Dyne. Ghost vuole usare Janet per stabilizzarsi. Riescono a estrarre Janet. Nel post-credits, mentre Scott è nel regno quantistico, i Pym e Hope scompaiono per il blip di Thanos. Scott rimane intrappolato."},
+  21:{full:"Carol Danvers, agente Kree senza memoria, atterra sulla Terra nel 1995 e incontra Nick Fury. Scopre di essere una ex-pilota e che gli Skrull sono rifugiati innocenti. La vera minaccia è l'Intelligenza Suprema Kree. Carol libera i suoi poteri senza limitazioni e sconfigge i Kree. Lascia a Fury un cercapersone per emergenze. Nel post-credits risponde alla chiamata di Fury dopo il blip."},
+  22:{full:"Cinque anni dopo il blip, Scott Lang scopre che nel regno quantistico il tempo scorre diversamente. Gli Avengers costruiscono una macchina del tempo. Si dividono per recuperare le gemme nel passato. Natasha si sacrifica per la Gemma dell'Anima. Hulk riporta tutti in vita con il guanto. Thanos del 2014 attacca. Tutti gli eroi tornano per la battaglia finale. Tony schiocca le dita sacrificandosi. Steve torna nel passato a riportare le gemme e rimane con Peggy, passando lo scudo a Sam."},
+};
+
+const PARTIAL_SUMMARIES={
+  3:{default:(min,dur)=>{
+    if(min<=30)return"Tony Stark ha dichiarato di essere Iron Man al mondo e sta gestendo la sua nuova vita pubblica. Pepper è diventata CEO di Stark Industries. Qualcosa non va però con il reattore Arc nel suo petto...";
+    if(min<=60)return"Tony scopre che il palladio nel reattore Arc lo sta avvelenando lentamente. Ivan Vanko, figlio di un collaboratore di suo padre, ha costruito fruste energetiche e ha attaccato Tony al Gran Prix di Monaco davanti al mondo intero.";
+    if(min<=90)return"Nick Fury ha rivelato a Tony il progetto Avengers e i file segreti di suo padre. Justin Hammer ha liberato Vanko per costruire droni militari. Tony cerca disperatamente un nuovo elemento prima che il palladio lo uccida.";
+    return"Tony ha sintetizzato un nuovo elemento per il reattore Arc. La Vedova Nera ha fatto la sua comparsa. Vanko completa i droni e si prepara al contrattacco finale durante l'expo di Stark.";
+  }}
+};
+
 // ── STATE ──
-const ADMIN_PIN = "17112004";
-let isAdmin = false;
-let films = FILMS_DEFAULT.map(f => ({...f, status:"upcoming", stars:null, date:null, minute:null, summary:""}));
-let openCard = null;
-let editingId = null;
-let tempStar = 0;
-let summaryCache = {};
-
-// ── PIN ──
-window.tryPin = function() {
-  const val = document.getElementById('pin-input').value;
-  if(val === ADMIN_PIN) {
-    isAdmin = true;
-    enterApp();
-  } else {
-    document.getElementById('pin-error').textContent = "PIN errato, riprova.";
-    document.getElementById('pin-input').value = '';
-  }
-};
-
-window.enterAsViewer = function() {
-  isAdmin = false;
-  enterApp();
-};
-
-document.getElementById('pin-input').addEventListener('keydown', e => { if(e.key==='Enter') tryPin(); });
-
-function enterApp() {
-  document.getElementById('pin-screen').style.display = 'none';
-  document.getElementById('main-app').style.display = 'block';
-  document.getElementById('bottom-bar').style.display = 'flex';
-  const badge = document.getElementById('role-badge');
-  if(isAdmin) { badge.textContent = 'ADMIN'; badge.className = 'badge badge-admin'; }
-  else { badge.textContent = 'VIEWER'; badge.className = 'badge badge-viewer'; }
-  initFirebase();
-}
+var films=FILMS.map(f=>({...f,status:"upcoming",stars:null,date:null,minute:null,postCreditSeen:false}));
+var currentOrder='release';
+var activeFilter=null;
+var openCard=null;
+var editingId=null;
+var tempStar=0;
 
 // ── FIREBASE ──
-function initFirebase() {
-  const filmsRef = ref(db, 'films');
-  onValue(filmsRef, (snapshot) => {
-    const data = snapshot.val();
-    if(data) {
-      // merge firebase data with local defaults
-      films = FILMS_DEFAULT.map(f => ({
-        ...f,
-        ...(data[f.id] || {status:"upcoming", stars:null, date:null, minute:null, summary:""})
-      }));
-    } else if(isAdmin) {
-      // first time: initialize db
-      const initial = {};
-      FILMS_DEFAULT.forEach(f => {
-        initial[f.id] = {status:"upcoming", stars:null, date:null, minute:null, summary:""};
-      });
-      set(filmsRef, initial);
+var fbRef=db.ref('films');
+fbRef.on('value',(snap)=>{
+  const data=snap.val();
+  if(data){
+    films=FILMS.map(f=>({...f,...(data[f.id]||{status:"upcoming",stars:null,date:null,minute:null,postCreditSeen:false})}));
+  } else {
+    const init={};
+    FILMS.forEach(f=>{init[f.id]={status:"upcoming",stars:null,date:null,minute:null,postCreditSeen:false};});
+    fbRef.set(init);
+  }
+  document.getElementById('sync-dot').style.display='inline-block';
+  renderAll();
+});
+
+function saveFilm(f){
+  db.ref(`films/${f.id}`).update({status:f.status,stars:f.stars||null,date:f.date||null,minute:f.minute||null,postCreditSeen:f.postCreditSeen||false});
+}
+
+// ── HELPERS ──
+function starsHTML(n){let h='';for(let i=1;i<=5;i++)h+=`<span class="star-inline" style="opacity:${i<=(n||0)?1:0.2}">★</span>`;return h;}
+function fmt(d){if(!d)return'';const p=d.split('-');return`${p[2]}/${p[1]}/${p[0]}`;}
+function iconCell(f,size=46){
+  const svg=heroMap[f.id];
+  const svgSize=Math.round(size*0.7);
+  return svg
+    ?`<div class="film-icon" style="width:${size}px;height:${size}px"><svg viewBox="${svg.match(/viewBox="([^"]+)"/)[1]}" style="width:${svgSize}px;height:${svgSize}px" fill="none">${svg.replace(/<svg[^>]*>/,'').replace('</svg>','')}</svg></div>`
+    :`<div class="film-icon" style="width:${size}px;height:${size}px;font-size:${Math.round(size*0.5)}px">${f.icon}</div>`;
+}
+
+function getSortedFilms(){
+  const ordered=[...films].sort((a,b)=>
+    currentOrder==='release'?a.releaseOrder-b.releaseOrder:a.storyOrder-b.storyOrder
+  );
+  if(activeFilter){
+    return ordered.map(f=>{
+      const inHeroes=f.heroes&&f.heroes.some(h=>h.toLowerCase().includes(activeFilter.toLowerCase()));
+      const inVillains=f.villains&&f.villains.some(v=>v.toLowerCase().includes(activeFilter.toLowerCase()));
+      return{...f,_filtered:inHeroes||inVillains};
+    });
+  }
+  return ordered;
+}
+
+function getSummaryHTML(f){
+  if(f.status==='upcoming')return'';
+  if(f.status==='in-progress'&&f.minute){
+    const partial=PARTIAL_SUMMARIES[f.id];
+    let text;
+    if(partial&&partial.default){text=partial.default(f.minute,f.duration);}
+    else{
+      const pct=Math.round((f.minute/f.duration)*100);
+      const full=SUMMARIES[f.id]?.full||'';
+      if(full){const words=full.split(' ');const cut=Math.max(20,Math.floor(words.length*(pct/100)*0.6));text=words.slice(0,cut).join(' ')+'… <em style="color:var(--hint);font-size:11px">[il resto è ancora da scoprire]</em>';}
+      else{text=`Avete visto il film fino al minuto ${f.minute} di ${f.duration}.`;}
     }
-    document.getElementById('sync-dot').style.display = 'inline-block';
-    renderList();
-  });
+    return`<div class="summary-box"><div class="summary-label">📖 Trama · fino al min ${f.minute}</div>${text}</div>`;
+  }
+  if(f.status==='watched'){
+    const s=SUMMARIES[f.id]?.full;
+    return s?`<div class="summary-box"><div class="summary-label">📖 Trama completa</div>${s}</div>`:'';
+  }
+  return'';
 }
 
-function saveFilmToDb(film) {
-  const filmRef = ref(db, `films/${film.id}`);
-  update(filmRef, {
-    status: film.status,
-    stars: film.stars || null,
-    date: film.date || null,
-    minute: film.minute || null,
-    summary: film.summary || ""
-  });
-}
+// ── RENDER LIST ──
+function renderList(){
+  const c=document.getElementById('film-list');
+  const sorted=getSortedFilms();
+  let html='',curPhase=0;
 
-// ── RENDER ──
-function starsHTML(n) {
-  let h='';
-  for(let i=1;i<=5;i++) h+=`<span class="star-inline" style="opacity:${i<=(n||0)?1:0.2}">★</span>`;
-  return h;
-}
-function fmt(d) { if(!d)return''; const p=d.split('-'); return `${p[2]}/${p[1]}/${p[0]}`; }
-function iconCell(f) {
-  const svg = heroMap[f.id];
-  return svg ? `<div class="film-icon">${svg}</div>` : `<div class="film-icon">${f.icon}</div>`;
-}
+  if(activeFilter){
+    const banner=document.getElementById('filter-banner');
+    banner.classList.add('show');
+    document.getElementById('filter-label').textContent=`Filtro: ${activeFilter}`;
+  }
 
-function renderList() {
-  const c = document.getElementById('film-list');
-  let html = '', curPhase = 0;
-  films.forEach(f => {
-    if(f.phase !== curPhase) { curPhase=f.phase; html+=`<div class="phase-header">⬡ Phase ${curPhase}</div>`; }
-    const cls = f.status==='watched'?'watched':f.status==='in-progress'?'in-progress':'locked';
-    const dotCls = f.status==='watched'?'dot-watched':f.status==='in-progress'?'dot-progress':'dot-locked';
-    const sub = f.status==='watched'?'Visto':f.status==='in-progress'?`In corso · ${f.minute} min`:'Da vedere';
-    const isOpen = openCard===f.id;
-
-    let exp = '';
-    if(isOpen) {
-      exp += `<div class="film-expand open"><div class="chip-row">`;
-      if(f.stars) exp+=`<div class="chip c-yellow">★ ${f.stars}/5</div>`;
-      if(f.date)  exp+=`<div class="chip c-blue">📅 ${fmt(f.date)}</div>`;
-      if(f.minute&&f.status==='in-progress') exp+=`<div class="chip c-yellow">⏱ ${f.minute}/${f.duration} min</div>`;
-      if(f.status==='watched') exp+=`<div class="chip c-green">✓ Completato</div>`;
-      exp+=`</div>`;
-
-      if(f.status==='in-progress'&&f.minute) {
-        const pct=Math.round((f.minute/f.duration)*100);
-        exp+=`<div class="min-bar"><div class="min-label"><span>Progresso visione</span><span>${f.minute}/${f.duration} min</span></div><div class="min-track"><div class="min-fill" style="width:${pct}%"></div></div></div>`;
-      }
-
-      // Summary box
-      if(f.status==='watched'||f.status==='in-progress') {
-        const cachedSummary = summaryCache[`${f.id}_${f.minute||'full'}`];
-        if(f.summary) {
-          exp+=`<div class="summary-box"><div class="summary-label">📖 Trama · niente spoiler</div>${f.summary}</div>`;
-        } else if(cachedSummary) {
-          exp+=`<div class="summary-box"><div class="summary-label">📖 Trama · niente spoiler</div>${cachedSummary}</div>`;
-        } else {
-          exp+=`<div class="summary-box" id="summary-${f.id}"><div class="summary-label">📖 Trama · niente spoiler</div><span class="summary-loading">Caricamento riassunto AI...</span></div>`;
-          generateSummary(f);
-        }
-      }
-
-      exp+=`<div class="btn-row">`;
-      if(isAdmin) {
-        exp+=`<button class="action-btn" onclick="openModal(${f.id});event.stopPropagation()">✏️ Modifica</button>`;
-        if(f.status==='upcoming') exp+=`<button class="action-btn primary" onclick="markWatched(${f.id});event.stopPropagation()">✓ Visto</button>`;
-      }
-      exp+=`</div></div>`;
+  sorted.forEach(f=>{
+    if(f.phase!==curPhase&&currentOrder==='release'){
+      curPhase=f.phase;
+      html+=`<div class="phase-header">⬡ Phase ${curPhase}</div>`;
     }
+    const cls=f.status==='watched'?'watched':f.status==='in-progress'?'in-progress':'locked';
+    const dotCls=f.status==='watched'?'dot-watched':f.status==='in-progress'?'dot-progress':'dot-locked';
+    const pct=f.minute?Math.round((f.minute/f.duration)*100):null;
+    const sub=f.status==='watched'?'Visto':f.status==='in-progress'?`${f.minute}/${f.duration} min (${pct}%)`:'Da vedere';
+    const dimmed=activeFilter&&f._filtered===false?'opacity:0.3;':'';
 
-    html+=`<div class="film-card ${cls}" onclick="toggleCard(${f.id})">
-      <div class="film-row">${iconCell(f)}
+    html+=`<div class="film-card ${cls}" style="${dimmed}" onclick="openDetail(${f.id})">
+      <div class="film-row">
+        ${iconCell(f)}
         <div class="film-meta">
           <div class="film-title">${f.title}</div>
-          <div class="film-sub"><span class="status-dot ${dotCls}"></span><span>${sub}</span>${f.stars?`<span>${starsHTML(f.stars)}</span>`:''}</div>
+          <div class="film-sub">
+            <span class="status-dot ${dotCls}"></span>
+            <span>${sub}</span>
+            ${f.stars?`<span>${starsHTML(f.stars)}</span>`:''}
+            ${pct&&f.status==='in-progress'?`<span class="pct-badge">${pct}%</span>`:''}
+          </div>
         </div>
-        <span class="chevron ${isOpen?'open':''}">⌄</span>
-      </div>${exp}</div>`;
+        <span style="font-size:11px;color:var(--hint)">›</span>
+      </div>
+    </div>`;
   });
-  c.innerHTML = html;
+  c.innerHTML=html;
   updateProgress();
 }
 
-async function generateSummary(f) {
-  try {
-    const prompt = f.status==='in-progress' && f.minute
-      ? `Sei un esperto Marvel. Scrivi un riassunto della trama del film "${f.title}" SOLO fino al minuto ${f.minute} su ${f.duration} totali. Niente spoiler oltre quel punto. Max 3 frasi, in italiano, tono coinvolgente.`
-      : `Sei un esperto Marvel. Scrivi un riassunto della trama completa del film "${f.title}". Max 3 frasi, in italiano, tono coinvolgente.`;
+function updateProgress(){
+  const w=films.filter(f=>f.status==='watched').length;
+  const pct=Math.round((w/films.length)*100);
+  document.getElementById('prog-text').textContent=`${w} di ${films.length} visti`;
+  document.getElementById('prog-pct').textContent=`${pct}%`;
+  document.getElementById('prog-fill').style.width=pct+'%';
+}
 
-    const res = await fetch("https://api.anthropic.com/v1/messages", {
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body: JSON.stringify({
-        model:"claude-sonnet-4-6",
-        max_tokens:1000,
-        messages:[{role:"user", content:prompt}]
-      })
-    });
-    const data = await res.json();
-    const text = data.content?.[0]?.text || "Riassunto non disponibile.";
-    const key = `${f.id}_${f.minute||'full'}`;
-    summaryCache[key] = text;
-    const box = document.getElementById(`summary-${f.id}`);
-    if(box) box.innerHTML = `<div class="summary-label">📖 Trama · niente spoiler</div>${text}`;
-    // save to db if admin
-    if(isAdmin) {
-      const filmRef = ref(db, `films/${f.id}`);
-      update(filmRef, { summary: text });
-    }
-  } catch(e) {
-    const box = document.getElementById(`summary-${f.id}`);
-    if(box) box.innerHTML = `<div class="summary-label">📖 Trama</div>Riassunto non disponibile.`;
+// ── DETAIL MODAL ──
+function openDetail(id){
+  const f=films.find(x=>x.id===id);
+  const modal=document.getElementById('detail-modal');
+  const svgIcon=heroMap[f.id]?`<div class="modal-film-icon">${heroMap[f.id]}</div>`:`<div class="modal-film-icon" style="font-size:30px">${f.icon}</div>`;
+  const heroTags=(f.heroes||[]).map(h=>`<span class="hero-tag" onclick="filterByChar('${h}',event)">${h}</span>`).join('');
+  const villainTags=(f.villains||[]).map(v=>`<span class="hero-tag villain-tag" onclick="filterByChar('${v}',event)">${v}</span>`).join('');
+  const castHTML=(f.cast||[]).map(c=>`<div class="cast-item"><strong>${c.actor}</strong> · ${c.role}</div>`).join('');
+  const summary=getSummaryHTML(f);
+  const pcSeen=f.postCreditSeen;
+
+  let editBtn='';
+  editBtn=`<button class="action-btn sm" onclick="openEdit(${f.id});closeDetail()" style="width:100%;margin-top:8px">✏️ Modifica progressi</button>`;
+  if(f.status==='upcoming')editBtn=`<button class="action-btn primary sm" onclick="markWatched(${f.id});closeDetail()" style="width:100%;margin-top:8px">✓ Segna come visto</button>`;
+
+  modal.innerHTML=`
+    <div class="modal-handle"></div>
+    <div class="modal-hero-header">
+      ${svgIcon}
+      <div class="modal-title">${f.title}</div>
+      <div class="modal-meta-row">
+        <span class="meta-chip">📅 ${f.year}</span>
+        <span class="meta-chip">⏱ ${f.duration} min</span>
+        <span class="meta-chip">🎬 ${f.director}</span>
+        <span class="meta-chip">Phase ${f.phase}</span>
+      </div>
+    </div>
+    <div class="modal-body">
+      ${summary?`<div class="modal-section">${summary}</div>`:''}
+      <div class="modal-section">
+        <div class="modal-section-title">Cast principale</div>
+        <div class="cast-list">${castHTML}</div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">Eroi presenti · tocca per filtrare</div>
+        <div class="heroes-list">${heroTags}</div>
+      </div>
+      ${villainTags?`<div class="modal-section"><div class="modal-section-title">Villain</div><div class="heroes-list">${villainTags}</div></div>`:''}
+      ${f.status!=='upcoming'?`
+      <div class="modal-section">
+        <div class="modal-section-title">🎬 Scena Post-Credit</div>
+        <div class="postcredit-box">
+          <div class="postcredit-header">
+            <div class="postcredit-label">🎞️ ${pcSeen?'Vista!':'Non vista'}</div>
+            <button class="postcredit-btn ${pcSeen?'seen':''}" onclick="togglePostCredit(${f.id})">${pcSeen?'✓ Vista':'Segna come vista'}</button>
+          </div>
+          <div class="postcredit-text ${pcSeen?'visible':''}" id="pc-text-${f.id}">${f.postCreditText||'Nessuna scena post-credit.'}</div>
+        </div>
+      </div>`:''}
+      ${editBtn}
+    </div>`;
+  document.getElementById('detail-overlay').classList.add('open');
+};
+
+function closeDetail(){document.getElementById('detail-overlay').classList.remove('open');};
+
+function togglePostCredit(id){
+  const f=films.find(x=>x.id===id);
+  f.postCreditSeen=!f.postCreditSeen;
+  saveFilm(f);
+  // update UI without closing
+  const btn=document.querySelector('.postcredit-btn');
+  const text=document.getElementById(`pc-text-${id}`);
+  if(btn){btn.textContent=f.postCreditSeen?'✓ Vista':'Segna come vista';btn.classList.toggle('seen',f.postCreditSeen);}
+  if(text){text.classList.toggle('visible',f.postCreditSeen);}
+  showToast(f.postCreditSeen?'🎬 Scena post-credit vista!':'Rimossa dai visti');
+};
+
+function filterByChar(name,e){
+  e.stopPropagation();
+  activeFilter=name;
+  closeDetail();
+  switchView('home');
+  document.getElementById('filter-banner').classList.add('show');
+  document.getElementById('filter-label').textContent=`Filtro: ${name}`;
+  renderList();
+};
+function clearFilter(){
+  activeFilter=null;
+  document.getElementById('filter-banner').classList.remove('show');
+  renderList();
+};
+
+// ── EDIT MODAL ──
+function openEdit(id){
+  editingId=id;
+  const f=films.find(x=>x.id===id);
+  document.getElementById('edit-title').textContent=f.title;
+  document.getElementById('edit-date').value=f.date||'';
+  document.getElementById('edit-min').value=f.minute||'';
+  tempStar=f.stars||0;renderModalStars();
+  document.getElementById('edit-overlay').classList.add('open');
+};
+function closeEdit(){document.getElementById('edit-overlay').classList.remove('open');};
+function renderModalStars(){document.querySelectorAll('.star-btn').forEach((b,i)=>b.classList.toggle('active',i<tempStar));}
+function setStar(n){tempStar=n;renderModalStars();};
+function saveEdit(){
+  const f=films.find(x=>x.id===editingId);
+  f.stars=tempStar||null;
+  f.date=document.getElementById('edit-date').value||null;
+  const min=parseInt(document.getElementById('edit-min').value);
+  if(min&&min>0){f.minute=min;f.status='in-progress';}
+  else{f.minute=null;if(f.date)f.status='watched';}
+  saveFilm(f);closeEdit();showToast('💾 Salvato');
+  // show completion badge if newly watched
+  if(f.status==='watched'&&!f.minute)showCompletionFor(f.id);
+};
+
+function showCompletionFor(id){
+  // find card and flash
+  setTimeout(()=>{
+    renderList();
+    showToast('🎉 Film completato!');
+  },300);
+}
+
+function markWatched(id){
+  const f=films.find(x=>x.id===id);
+  f.status='watched';f.minute=null;
+  saveFilm(f);showToast('✓ Segnato come visto');
+};
+
+// ── ORDER TOGGLE ──
+function setOrder(o){
+  currentOrder=o;
+  document.getElementById('btn-release').classList.toggle('active',o==='release');
+  document.getElementById('btn-story').classList.toggle('active',o==='story');
+  renderList();
+};
+
+// ── GEMS ──
+function getUnlockedGems(){
+  return GEMS.filter(g=>{
+    const triggerFilm=films.find(f=>f.id===g.unlockedBy);
+    return triggerFilm&&triggerFilm.status==='watched';
+  });
+}
+
+function renderGems(){
+  const unlocked=getUnlockedGems();
+  const grid=document.getElementById('gems-grid');
+  const sub=document.getElementById('gems-sub');
+  if(unlocked.length===0){
+    sub.innerHTML='';
+    grid.innerHTML=`<div class="gems-empty" style="grid-column:1/-1">Le gemme dell\'Infinito si sbloccano man mano che completate i film.<br><br>Continuate a guardare per scoprire i segreti dell\'universo Marvel! 🌌</div>`;
+    return;
   }
+  sub.textContent=`${unlocked.length} di 6 gemme scoperte`;
+  grid.innerHTML=unlocked.map(g=>`
+    <div class="gem-card" onclick="openGem('${g.id}')">
+      <div class="gem-dot" style="background:${g.color}20;box-shadow:0 0 12px ${g.glow}">${g.emoji}</div>
+      <div class="gem-name" style="color:${g.color}">${g.name}</div>
+      <div class="gem-film">${g.film}</div>
+    </div>`).join('');
 }
 
-window.toggleCard = function(id) { openCard = openCard===id ? null : id; renderList(); };
-
-function updateProgress() {
-  const w = films.filter(f=>f.status==='watched').length;
-  const pct = Math.round((w/films.length)*100);
-  document.getElementById('prog-text').textContent = `${w} di ${films.length} visti`;
-  document.getElementById('prog-pct').textContent = `${pct}%`;
-  document.getElementById('prog-fill').style.width = pct+'%';
-}
-
-function updateStats() {
-  const w = films.filter(f=>f.status==='watched');
-  const rated = w.filter(f=>f.stars);
-  const avg = rated.length ? (rated.reduce((a,f)=>a+f.stars,0)/rated.length).toFixed(1) : '—';
-  const best = rated.length ? rated.reduce((a,b)=>a.stars>b.stars?a:b) : null;
-  const phases = [...new Set(films.filter(f=>f.status!=='upcoming').map(f=>f.phase))];
-  document.getElementById('s-watched').textContent = w.length;
-  document.getElementById('s-remain').textContent = films.length - w.length;
-  document.getElementById('s-avg').textContent = rated.length ? `⭐ ${avg}` : '—';
-  document.getElementById('s-phase').textContent = phases.length ? `Phase ${Math.max(...phases)}` : '—';
-  document.getElementById('s-best').textContent = best ? `${best.title} (${best.stars}★)` : '—';
-  document.getElementById('s-ratings-list').innerHTML = rated.length ? rated.map(f=>`${f.title} — ${starsHTML(f.stars)}`).join('<br>') : '—';
-}
-
-window.markWatched = function(id) {
-  const f = films.find(x=>x.id===id);
-  f.status = 'watched'; f.minute = null;
-  saveFilmToDb(f);
-  openCard = null;
-  showToast('✓ Segnato come visto');
+function openGem(id){
+  const g=GEMS.find(x=>x.id===id);
+  if(!g)return;
+  document.getElementById('gem-modal').innerHTML=`
+    <div class="modal-handle"></div>
+    <div class="gem-modal-dot" style="background:${g.color}20;box-shadow:0 0 20px ${g.glow};font-size:36px">${g.emoji}</div>
+    <div class="gem-modal-name" style="color:${g.color}">${g.name}</div>
+    <div class="gem-modal-film">Apparsa per la prima volta in<br><strong>${g.film}</strong></div>
+    <div class="gem-modal-section">
+      <div class="gem-modal-label">Poteri</div>
+      <div class="gem-modal-text">${g.powers}</div>
+    </div>
+    <div class="gem-modal-section">
+      <div class="gem-modal-label">Origine nel MCU</div>
+      <div class="gem-modal-text">${g.origin}</div>
+    </div>`;
+  document.getElementById('gem-overlay').classList.add('open');
 };
+function closeGem(){document.getElementById('gem-overlay').classList.remove('open');};
 
-// ── MODAL ──
-window.openModal = function(id) {
-  editingId = id;
-  const f = films.find(x=>x.id===id);
-  document.getElementById('modal-title').textContent = f.title;
-  document.getElementById('modal-date').value = f.date || '';
-  document.getElementById('modal-min').value = f.minute || '';
-  tempStar = f.stars || 0;
-  renderModalStars();
-  document.getElementById('modal-overlay').classList.add('open');
-};
-
-function renderModalStars() {
-  document.querySelectorAll('.star-btn').forEach((b,i) => b.classList.toggle('active', i<tempStar));
+// ── STATS ──
+function updateStats(){
+  const w=films.filter(f=>f.status==='watched');
+  const rated=w.filter(f=>f.stars);
+  const avg=rated.length?(rated.reduce((a,f)=>a+f.stars,0)/rated.length).toFixed(1):'—';
+  const best=rated.length?rated.reduce((a,b)=>a.stars>b.stars?a:b):null;
+  const phases=[...new Set(films.filter(f=>f.status!=='upcoming').map(f=>f.phase))];
+  document.getElementById('s-watched').textContent=w.length;
+  document.getElementById('s-remain').textContent=films.length-w.length;
+  document.getElementById('s-avg').textContent=rated.length?`⭐ ${avg}`:'—';
+  document.getElementById('s-phase').textContent=phases.length?`Phase ${Math.max(...phases)}`:'—';
+  document.getElementById('s-best').textContent=best?`${best.title} (${best.stars}★)`:'—';
+  document.getElementById('s-ratings-list').innerHTML=rated.length?rated.map(f=>`${f.title} — ${starsHTML(f.stars)}`).join('<br>'):'—';
 }
-window.setStar = function(n) { tempStar=n; renderModalStars(); };
-
-window.saveModal = function() {
-  const f = films.find(x=>x.id===editingId);
-  f.stars = tempStar || null;
-  f.date = document.getElementById('modal-date').value || null;
-  const min = parseInt(document.getElementById('modal-min').value);
-  if(min && min>0) { f.minute=min; f.status='in-progress'; f.summary=''; }
-  else if(f.status!=='watched') { f.minute=null; }
-  if(document.getElementById('modal-date').value && f.status==='upcoming') f.status='watched';
-  saveFilmToDb(f);
-  closeModal();
-  showToast('💾 Salvato');
-};
-
-window.closeModal = function() { document.getElementById('modal-overlay').classList.remove('open'); };
 
 // ── NAV ──
-window.switchView = function(v) {
+function switchView(v){
   document.querySelectorAll('.view').forEach(el=>el.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(el=>el.classList.remove('active'));
   document.getElementById('view-'+v).classList.add('active');
   document.getElementById('nav-'+v).classList.add('active');
-  if(v==='stats') updateStats();
+  if(v==='stats')updateStats();
+  if(v==='gems')renderGems();
 };
 
-// ── TOAST ──
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2000);
-}
+function renderAll(){renderList();if(document.getElementById('view-gems').classList.contains('active'))renderGems();}
 
+// ── TOAST ──
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+};
+}); // end DOMContentLoaded
 </script>
 </body>
 </html>
