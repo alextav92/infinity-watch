@@ -6,6 +6,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="InfinityWatch">
+<!-- Questo è il link che dice all'iPhone quale immagine usare per la Home -->
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <title>InfinityWatch</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -46,8 +48,9 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
 /* PHASE */
 .phase-header{padding:16px 16px 5px;font-size:10px;font-weight:500;letter-spacing:2.5px;color:var(--purple);text-transform:uppercase}
 
-/* FILM CARD */
-.film-card{margin:0 12px 7px;background:var(--surface);border:0.5px solid var(--border);border-radius:var(--r-lg);padding:12px 14px;cursor:pointer;position:relative;overflow:hidden;transition:border-color 0.15s}
+/* FILM CARD & ANIMATIONS */
+.film-card{margin:0 12px 7px;background:var(--surface);border:0.5px solid var(--border);border-radius:var(--r-lg);padding:12px 14px;cursor:pointer;position:relative;overflow:hidden;transition:transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.27), border-color 0.2s, box-shadow 0.2s}
+.film-card:active{transform:scale(0.97);box-shadow:0 0 15px rgba(107, 63, 160, 0.2)}
 .film-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:3px 0 0 3px}
 .film-card.watched::before{background:var(--green)}
 .film-card.in-progress::before{background:var(--yellow)}
@@ -125,21 +128,27 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
 .action-btn.primary{background:var(--purple);border-color:var(--purple);color:#fff}
 .action-btn.sm{padding:6px 12px;font-size:12px}
 
-/* GEMS VIEW */
+/* GEMS VIEW & ANIMATIONS */
 .gems-section{padding:16px}
 .gems-title{font-size:16px;font-weight:600;color:var(--text);margin-bottom:4px}
 .gems-sub{font-size:12px;color:var(--muted);margin-bottom:16px}
 .gems-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.gem-card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--r-lg);padding:14px;cursor:pointer;transition:border-color 0.2s}
+.gem-card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--r-lg);padding:14px;cursor:pointer;transition:transform 0.2s ease, border-color 0.2s}
+.gem-card:active{transform:scale(0.95)}
 .gem-card:hover{border-color:var(--border-strong)}
-.gem-dot{width:36px;height:36px;border-radius:50%;margin-bottom:8px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.gem-dot{width:36px;height:36px;border-radius:50%;margin-bottom:8px;display:flex;align-items:center;justify-content:center;font-size:18px;animation:cosmicBreath 3.5s infinite ease-in-out}
+@keyframes cosmicBreath{
+  0%{filter:brightness(1) drop-shadow(0 0 8px currentColor)}
+  50%{filter:brightness(1.3) drop-shadow(0 0 18px currentColor)}
+  100%{filter:brightness(1) drop-shadow(0 0 8px currentColor)}
+}
 .gem-name{font-size:14px;font-weight:500;color:var(--text);margin-bottom:2px}
 .gem-film{font-size:11px;color:var(--muted)}
 .gems-empty{text-align:center;padding:40px 20px;color:var(--muted);font-size:13px;line-height:1.7}
 
 /* GEM DETAIL MODAL */
 .gem-modal{background:var(--surface);border-radius:22px 22px 0 0;border:0.5px solid var(--border-strong);width:100%;max-width:430px;padding:24px 24px 48px}
-.gem-modal-dot{width:64px;height:64px;border-radius:50%;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;font-size:32px}
+.gem-modal-dot{width:64px;height:64px;border-radius:50%;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;font-size:32px;animation:cosmicBreath 3.5s infinite ease-in-out}
 .gem-modal-name{font-size:22px;font-weight:600;text-align:center;margin-bottom:4px}
 .gem-modal-film{font-size:13px;color:var(--muted);text-align:center;margin-bottom:20px}
 .gem-modal-section{margin-bottom:14px}
@@ -165,15 +174,13 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
 .nav-btn.active{color:var(--purple2)}
 .nav-btn svg{width:24px;height:24px}
 
-/* VIEWS */
+/* VIEWS & SLIDE ANIMATION */
+@keyframes slideUpFade{
+  from{opacity:0;transform:translateY(15px)}
+  to{opacity:1;transform:translateY(0)}
+}
 .view{display:none}
-.view.active{display:block}
-
-/* PIN */
-.pin-screen{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:200;padding:32px}
-.pin-gauntlet{margin-bottom:20px}
-.pin-title{font-size:24px;font-weight:600;color:var(--text);margin-bottom:6px}
-.pin-sub{font-size:13px;color:var(--muted);margin-bottom:28px;text-align:center;line-height:1.6}
+.view.active{display:block;animation:slideUpFade 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) forwards}
 
 /* TOAST */
 .toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;opacity:0;transition:opacity 0.3s;z-index:300;white-space:nowrap}
@@ -181,9 +188,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
 </style>
 </head>
 <body>
-
-<!-- PIN SCREEN -->
-<div class="pin-screen" id="pin-screen" style="display:none"></div>
 
 <div class="toast" id="toast"></div>
 
@@ -194,16 +198,8 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
     <div class="header">
       <div class="header-top">
         <div style="display:flex; align-items:center;">
-          <!-- NUOVO LOGO GUANTO DELL'INFINITO -->
-          <svg viewBox="0 0 24 24" fill="#d4af37" xmlns="http://www.w3.org/2000/svg" style="width:28px;height:28px;margin-right:10px;filter:drop-shadow(0 0 5px rgba(245,208,32,0.4))">
-            <path d="M18 11.5v-1a1.5 1.5 0 00-3 0v-4.5a1.5 1.5 0 00-3 0V4.5a1.5 1.5 0 00-3 0v1.5a1.5 1.5 0 00-3 0v4.5C4.5 11 4 12 4 13.5v3.8c0 1.5.5 2.5 1.5 3.2v1.5h11v-1.5c1-.7 1.5-1.7 1.5-3.2v-1.5c1.2 0 1.5-1.3 1.5-2.3 0-1-.5-2-1.5-2z" fill="#d4af37"/>
-            <circle cx="7.5" cy="13.5" r="1.2" fill="#9b30e0"/>
-            <circle cx="10.5" cy="13.5" r="1.2" fill="#2088e0"/>
-            <circle cx="13.5" cy="13.5" r="1.2" fill="#e03040"/>
-            <circle cx="16.5" cy="13.5" r="1.2" fill="#e87820"/>
-            <circle cx="6" cy="16.5" r="1.2" fill="#18c87a"/>
-            <ellipse cx="12" cy="17" rx="2" ry="2.5" fill="#f5d020"/>
-          </svg>
+          <!-- IL TUO LOGO AVENGERS 3D UFFICIALE -->
+          <img src="0d27bd892ae651c99cad606c1c0354c8.jpg" alt="Avengers Logo" style="width: 34px; height: 34px; object-fit: cover; border-radius: 8px; margin-right: 10px; box-shadow: 0 0 10px rgba(107, 63, 160, 0.5);">
           <div class="app-title">Infinity<span>Watch</span><span class="sync-dot" id="sync-dot" style="display:none"></span></div>
         </div>
       </div>
@@ -212,7 +208,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
         <button class="order-btn" id="btn-story" onclick="setOrder('story')">📅 Ordine Storia</button>
       </div>
       <div class="heroes-strip" id="heroes-strip-container">
-        <!-- Generato via script per includere il nuovo logo Avengers -->
+        <!-- Generato via script -->
       </div>
       <div class="progress-meta"><span id="prog-text">0 di 22 visti</span><span id="prog-pct">0%</span></div>
       <div class="progress-track"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
@@ -311,15 +307,11 @@ firebase.initializeApp({
 });
 const db=firebase.database();
 
-// ── NUOVO LOGO AVENGERS DINAMICO ──
+// ── NUOVO LOGO AVENGERS CON LA FRECCIA (MOLTO ACCURATO) ──
 function getAvengersLogo(color) {
-  return `<svg viewBox="0 0 40 40" fill="none">
-    <!-- Cerchio Esterno (3/4) -->
-    <path d="M35 20 A 15 15 0 1 1 20 5" stroke="${color}" stroke-width="2.5" stroke-linecap="round"/>
-    <!-- Gambe della A -->
-    <path d="M20 5 L8 34 M20 5 L32 34" stroke="${color}" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
-    <!-- Freccia / Barra centrale -->
-    <path d="M13 22 H36 L30 16 M36 22 L30 28" stroke="${color}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  return `<svg viewBox="0 0 512 512" fill="${color}">
+    <!-- Path esatto del logo classico Avengers con freccia a destra -->
+    <path d="M256 32C132.3 32 32 132.3 32 256c0 82.5 44.9 154.4 112.5 195.4l34.8-82.6C152.1 346 136 312 136 274c0-78.4 63.6-142 142-142 78.4 0 142 63.6 142 142 0 35.1-12.8 67-34 91.8l38.2 45.4C460.7 375.4 480 327.9 480 276c0-123.7-100.3-224-224-224zm-19.6 42.4L98.5 408h64l30.4-76h91.1v-48h-70.6l21.3-51.5 53.8 128.4h48.3l-55.9-133.4 38.2-22.3-102.7-129.2zM276 250v48l53.8-24-53.8-24z"/>
   </svg>`;
 }
 
@@ -341,10 +333,10 @@ const heroMap={
   12:getAvengersLogo('#e03040'), // Age of Ultron (Rosso Cremisi)
   13:SVG.cap, 17:SVG.thor, 
   19:getAvengersLogo('#c8a830'), // Infinity War (Oro)
-  22:getAvengersLogo('#9b30e0')  // Endgame (Viola scuro/Grigio)
+  22:getAvengersLogo('#9b30e0')  // Endgame (Viola/Grigio)
 };
 
-// Popolamento strip eroi in alto (uso il blu generico per l'A)
+// Popolamento strip eroi in alto
 document.getElementById('heroes-strip-container').innerHTML = `
   <div class="hero-pip">${SVG.ironman}</div>
   <div class="hero-pip">${SVG.hulk}</div>
