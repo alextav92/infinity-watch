@@ -307,11 +307,11 @@ firebase.initializeApp({
 });
 const db=firebase.database();
 
-// ── NUOVO LOGO AVENGERS CON LA FRECCIA (MOLTO ACCURATO) ──
+// ── NUOVO LOGO AVENGERS CON LA FRECCIA (CORRETTO) ──
 function getAvengersLogo(color) {
   return `<svg viewBox="0 0 512 512">
-    <!-- Path esatto del logo classico Avengers con freccia a destra -->
-    <path fill="${color}" d="M256 32C132.3 32 32 132.3 32 256c0 82.5 44.9 154.4 112.5 195.4l34.8-82.6C152.1 346 136 312 136 274c0-78.4 63.6-142 142-142 78.4 0 142 63.6 142 142 0 35.1-12.8 67-34 91.8l38.2 45.4C460.7 375.4 480 327.9 480 276c0-123.7-100.3-224-224-224zm-19.6 42.4L98.5 408h64l30.4-76h91.1v-48h-70.6l21.3-51.5 53.8 128.4h48.3l-55.9-133.4 38.2-22.3-102.7-129.2zM276 250v48l53.8-24-53.8-24z"/>
+    <!-- Path con fill-rule="evenodd" per ritagliare correttamente i vuoti interni -->
+    <path fill="${color}" fill-rule="evenodd" clip-rule="evenodd" d="M256 32C132.3 32 32 132.3 32 256c0 82.5 44.9 154.4 112.5 195.4l34.8-82.6C152.1 346 136 312 136 274c0-78.4 63.6-142 142-142 78.4 0 142 63.6 142 142 0 35.1-12.8 67-34 91.8l38.2 45.4C460.7 375.4 480 327.9 480 276c0-123.7-100.3-224-224-224zm-19.6 42.4L98.5 408h64l30.4-76h91.1v-48h-70.6l21.3-51.5 53.8 128.4h48.3l-55.9-133.4 38.2-22.3-102.7-129.2zM276 250v48l53.8-24-53.8-24z"/>
   </svg>`;
 }
 
