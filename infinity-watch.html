@@ -559,7 +559,17 @@ var fbRef=db.ref('films');
 fbRef.on('value',(snap)=>{
   const data=snap.val();
   if(data){
-    films=FILMS.map(f=>({...f,...(data[f.id]||{status:"upcoming",stars:null,date:null,minute:null,postCreditSeen:false})}));
+    films=FILMS.map(function(f){
+  var saved=data[f.id]||{};
+  return Object.assign({},f,{
+    status: saved.status||'upcoming',
+    stars: saved.stars||null,
+    date: saved.date||null,
+    minute: saved.minute||null,
+    postCreditSeen: saved.postCreditSeen||false
+  });
+});
+
   } else {
     const init={};
     FILMS.forEach(f=>{init[f.id]={status:"upcoming",stars:null,date:null,minute:null,postCreditSeen:false};});
