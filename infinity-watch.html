@@ -12,10 +12,10 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{
-  --bg:#0e0b14;--surface:#161122;--surface2:#1e1730;
+  --bg:#080d0a;--surface:#0f1712;--surface2:#16211a;
   --border:rgba(255,255,255,0.08);--border-strong:rgba(255,255,255,0.15);
-  --text:#f0ecf8;--muted:#9b90b8;--hint:#4a4060;
-  --purple:#6b3fa0;--purple2:#9b30e0;--purple-glow:rgba(107,63,160,0.4);
+  --text:#ecf3ee;--muted:#8fa596;--hint:#34483b;
+  --purple:#1f6b3a;--purple2:#3ccf6e;--purple-glow:rgba(31,107,58,0.45);
   --green:#18c87a;--yellow:#f5d020;--blue:#2088e0;--red:#e03040;--orange:#e87820;
   --r-lg:16px;--r-md:10px;--r-sm:6px;
 }
@@ -27,8 +27,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
 .header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
 .app-title{font-size:21px;font-weight:600;color:var(--text);display:flex;align-items:center;}
 .app-title span{color:var(--purple2)}
-.sync-dot{width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block;margin-left:6px;animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
 
 /* ORDER TOGGLE */
 .order-toggle{display:flex;gap:6px;margin-bottom:10px}
@@ -50,7 +48,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
 
 /* FILM CARD & ANIMATIONS */
 .film-card{margin:0 12px 7px;background:var(--surface);border:0.5px solid var(--border);border-radius:var(--r-lg);padding:12px 14px;cursor:pointer;position:relative;overflow:hidden;transition:transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.27), border-color 0.2s, box-shadow 0.2s}
-.film-card:active{transform:scale(0.97);box-shadow:0 0 15px rgba(107, 63, 160, 0.2)}
+.film-card:active{transform:scale(0.97);box-shadow:0 0 15px rgba(60,207,110,0.2)}
 .film-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:3px 0 0 3px}
 .film-card.watched::before{background:var(--green)}
 .film-card.in-progress::before{background:var(--yellow)}
@@ -111,7 +109,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
 .postcredit-text.visible{display:block}
 
 /* SUMMARY BOX */
-.summary-box{background:rgba(107,63,160,0.1);border:0.5px solid rgba(107,63,160,0.3);border-radius:var(--r-md);padding:10px 12px;font-size:13px;color:#c8b8e8;line-height:1.65}
+.summary-box{background:rgba(31,107,58,0.12);border:0.5px solid rgba(60,207,110,0.3);border-radius:var(--r-md);padding:10px 12px;font-size:13px;color:#bfe3cb;line-height:1.65}
 .summary-label{font-size:10px;letter-spacing:1.5px;color:var(--purple);text-transform:uppercase;margin-bottom:5px;font-weight:500}
 
 /* EDIT MODAL */
@@ -164,9 +162,9 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
 .stat-key{font-size:12px;color:var(--muted);margin-top:2px}
 
 /* FILTER BANNER */
-.filter-banner{margin:8px 12px;padding:8px 12px;background:rgba(107,63,160,0.15);border:0.5px solid rgba(107,63,160,0.4);border-radius:var(--r-md);display:none;align-items:center;justify-content:space-between;font-size:12px;color:#c090ff}
+.filter-banner{margin:8px 12px;padding:8px 12px;background:rgba(31,107,58,0.18);border:0.5px solid rgba(60,207,110,0.4);border-radius:var(--r-md);display:none;align-items:center;justify-content:space-between;font-size:12px;color:#8ff0b0}
 .filter-banner.show{display:flex}
-.filter-clear{background:none;border:none;color:#c090ff;cursor:pointer;font-size:12px;text-decoration:underline}
+.filter-clear{background:none;border:none;color:#8ff0b0;cursor:pointer;font-size:12px;text-decoration:underline}
 
 /* BOTTOM NAV */
 .bottom-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--surface);border-top:0.5px solid var(--border);padding:10px 24px 28px;display:flex;justify-content:space-around}
@@ -181,6 +179,50 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
 }
 .view{display:none}
 .view.active{display:block;animation:slideUpFade 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) forwards}
+
+/* MODE SWITCH */
+.mode-switch{display:flex;background:rgba(255,255,255,0.04);border:0.5px solid var(--border);border-radius:var(--r-md);padding:3px;margin-bottom:10px}
+.mode-switch button{flex:1;padding:7px 4px;border:none;border-radius:7px;background:transparent;color:var(--muted);font-size:11px;font-weight:600;cursor:pointer;transition:all 0.2s}
+.mode-switch button.active{background:linear-gradient(135deg,var(--purple),#2b3a31);color:#fff;box-shadow:0 0 12px var(--purple-glow)}
+.doom-only,.doom-inline{display:none}
+body.doom .doom-only{display:block}
+body.doom .doom-inline{display:inline}
+body.doom .infinity-only{display:none!important}
+.app-title .ttl{color:var(--text)}
+
+/* COUNTDOWN */
+.countdown{display:flex;align-items:center;gap:12px;padding:10px 12px;margin-bottom:10px;border-radius:var(--r-md);background:linear-gradient(135deg,rgba(31,107,58,0.28),rgba(140,150,145,0.08));border:0.5px solid rgba(60,207,110,0.3)}
+.cd-num{font-size:34px;font-weight:700;color:var(--purple2);text-shadow:0 0 14px var(--purple-glow);min-width:52px;text-align:center;font-variant-numeric:tabular-nums}
+.cd-label{font-size:12px;color:var(--muted);line-height:1.45}
+.cd-label strong{color:var(--text)}
+
+/* PACE */
+.pace-meta{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:5px;gap:8px}
+.pace-track{position:relative;height:6px;background:rgba(255,255,255,0.08);border-radius:3px}
+.pace-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--purple),var(--purple2));transition:width 0.5s}
+.pace-marker{position:absolute;top:-3px;width:2px;height:12px;margin-left:-1px;background:var(--text);border-radius:1px;transition:left 0.5s}
+.pace-status{display:flex;justify-content:space-between;gap:8px;font-size:11px;margin-top:7px}
+.pace-ok{color:var(--purple2);font-weight:500}
+.pace-late{color:var(--orange);font-weight:500}
+
+/* TAGS & FOX */
+.tag{font-size:9.5px;letter-spacing:0.5px;text-transform:uppercase;padding:1px 6px;border-radius:8px;border:0.5px solid}
+.tag-fox{color:#e8c070;border-color:rgba(232,192,112,0.4);background:rgba(232,192,112,0.08)}
+.tag-shared{color:var(--muted);border-color:var(--border-strong)}
+.film-card.fox{border-style:dashed;border-color:rgba(232,192,112,0.35)}
+
+.concept-locked{opacity:0.45;border-style:dashed}
+.concept-locked .gem-dot{animation:none;background:rgba(255,255,255,0.05);filter:grayscale(1)}
+.concept-locked .gem-name{color:var(--muted)}
+
+/* EPISODES */
+.ep-list{display:flex;flex-direction:column;gap:6px}
+.ep-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:var(--r-md);background:rgba(255,255,255,0.03);border:0.5px solid var(--border);cursor:pointer}
+.ep-item.seen{border-color:rgba(60,207,110,0.4);background:rgba(31,107,58,0.15)}
+.ep-check{width:20px;height:20px;border-radius:50%;border:1px solid var(--border-strong);display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0}
+.ep-item.seen .ep-check{background:var(--purple2);border-color:var(--purple2);color:#08110b}
+.ep-title{font-size:13px;color:var(--text)}
+.ep-dur{font-size:11px;color:var(--muted);margin-left:auto;flex-shrink:0}
 
 /* TOAST */
 .toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;opacity:0;transition:opacity 0.3s;z-index:300;white-space:nowrap}
@@ -199,19 +241,32 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
       <div class="header-top">
         <div style="display:flex; align-items:center;">
           <!-- IL TUO LOGO AVENGERS 3D UFFICIALE -->
-          <img src="apple-touch-icon.png" alt="Avengers Logo" style="width: 34px; height: 34px; object-fit: cover; border-radius: 8px; margin-right: 10px; box-shadow: 0 0 10px rgba(107, 63, 160, 0.5);">
-          <div class="app-title">Infinity<span>Watch</span><span class="sync-dot" id="sync-dot" style="display:none"></span></div>
+          <img src="apple-touch-icon.png" alt="Avengers Logo" style="width: 34px; height: 34px; object-fit: cover; border-radius: 8px; margin-right: 10px; box-shadow: 0 0 10px rgba(60,207,110,0.5);">
+          <div class="app-title"><span class="ttl infinity-only">Infinity<span>Watch</span></span><span class="ttl doom-inline">Road to <span>Doomsday</span></span></div>
         </div>
       </div>
-      <div class="order-toggle">
+      <div class="mode-switch">
+        <button id="mode-infinity" onclick="setMode('infinity')">♾️ InfinityWatch</button>
+        <button id="mode-doom" onclick="setMode('doom')">🛡️ Road to Doomsday</button>
+      </div>
+      <div class="doom-only">
+        <div class="countdown">
+          <div class="cd-num" id="cd-days">—</div>
+          <div class="cd-label" id="cd-label">giorni ad <strong>Avengers: Doomsday</strong><br>al cinema dal 16 dicembre 2026</div>
+        </div>
+        <div class="pace-meta"><span id="pace-text">0 di 16 titoli</span><span id="pace-pct">0%</span></div>
+        <div class="pace-track"><div class="pace-fill" id="pace-fill" style="width:0%"></div><div class="pace-marker" id="pace-marker" style="left:0%"></div></div>
+        <div class="pace-status"><span id="pace-status">—</span><span id="pace-rate" style="color:var(--muted)"></span></div>
+      </div>
+      <div class="order-toggle infinity-only">
         <button class="order-btn active" id="btn-release" onclick="setOrder('release')">🎬 Ordine Uscita</button>
         <button class="order-btn" id="btn-story" onclick="setOrder('story')">📅 Ordine Storia</button>
       </div>
-      <div class="heroes-strip" id="heroes-strip-container">
+      <div class="heroes-strip infinity-only" id="heroes-strip-container">
         <!-- Generato via script -->
       </div>
-      <div class="progress-meta"><span id="prog-text">0 di 22 visti</span><span id="prog-pct">0%</span></div>
-      <div class="progress-track"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+      <div class="progress-meta infinity-only"><span id="prog-text">0 di 22 visti</span><span id="prog-pct">0%</span></div>
+      <div class="progress-track infinity-only"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
     </div>
     <div class="filter-banner" id="filter-banner">
       <span id="filter-label">Filtro attivo</span>
@@ -223,7 +278,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
   <!-- GEMS VIEW -->
   <div id="view-gems" class="view">
     <div class="header" style="padding-top:48px">
-      <div class="header-top"><div class="app-title">Gemme <span>dell'Infinito</span></div></div>
+      <div class="header-top"><div class="app-title"><span class="ttl infinity-only">Gemme <span>dell'Infinito</span></span><span class="ttl doom-inline">Il <span>Multiverso</span></span></div></div>
     </div>
     <div class="gems-section">
       <div class="gems-sub" id="gems-sub"></div>
@@ -244,6 +299,10 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
         <div class="stat-card"><div class="stat-val" id="s-phase">—</div><div class="stat-key">Fase attuale</div></div>
         <div class="stat-card full"><div class="stat-key" style="margin-bottom:6px">Miglior film</div><div style="font-size:15px;font-weight:500;color:var(--text)" id="s-best">—</div></div>
         <div class="stat-card full"><div class="stat-key" style="margin-bottom:8px">Voti dati</div><div id="s-ratings-list" style="font-size:13px;color:var(--muted);line-height:2">—</div></div>
+        <div class="stat-card full">
+          <div class="stat-key" style="margin-bottom:8px">I progressi sono salvati solo su questo dispositivo. Ognuno ha il suo rewatch.</div>
+          <button class="action-btn sm" style="width:100%" onclick="importLegacy()">☁️ Importa dal vecchio salvataggio condiviso</button>
+        </div>
       </div>
     </div>
   </div>
@@ -257,7 +316,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
   </button>
   <button class="nav-btn" id="nav-gems" onclick="switchView('gems')">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
-    Gemme
+    <span class="infinity-only">Gemme</span><span class="doom-inline">Multiverso</span>
   </button>
   <button class="nav-btn" id="nav-stats" onclick="switchView('stats')">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="12" width="4" height="9"/><rect x="10" y="6" width="4" height="15"/><rect x="17" y="9" width="4" height="12"/></svg>
@@ -279,8 +338,10 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
     <div class="stars-input"><button class="star-btn" onclick="setStar(1)">⭐</button><button class="star-btn" onclick="setStar(2)">⭐</button><button class="star-btn" onclick="setStar(3)">⭐</button><button class="star-btn" onclick="setStar(4)">⭐</button><button class="star-btn" onclick="setStar(5)">⭐</button></div>
     <p class="input-label">Data visione</p>
     <input type="date" id="edit-date">
+    <div id="edit-min-wrap">
     <p class="input-label">Minutaggio se interrotto (vuoto = visto per intero)</p>
     <input type="number" id="edit-min" placeholder="es. 74" min="0" max="999">
+    </div>
     <div class="modal-btns">
       <button class="action-btn" onclick="closeEdit()">Annulla</button>
       <button class="action-btn primary" onclick="saveEdit()">✓ Salva</button>
@@ -293,10 +354,8 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
   <div class="gem-modal" id="gem-modal"></div>
 </div>
 
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
 <script>
-firebase.initializeApp({
+const LEGACY_FIREBASE={
   apiKey:"AIzaSyCWPq-85rpGC_wal2FBKpLiNwgVl3m_Do4",
   authDomain:"infinity-watch-13869.firebaseapp.com",
   databaseURL:"https://infinity-watch-13869-default-rtdb.europe-west1.firebasedatabase.app",
@@ -304,8 +363,7 @@ firebase.initializeApp({
   storageBucket:"infinity-watch-13869.firebasestorage.app",
   messagingSenderId:"832768497260",
   appId:"1:832768497260:web:a67edf1bb132cdc3546a49"
-});
-const db=firebase.database();
+};
 
 // ── NUOVO LOGO AVENGERS CON LA FRECCIA (PERFETTO E TAGLIATO) ──
 function getAvengersLogo(color) {
@@ -546,6 +604,152 @@ const PARTIAL_SUMMARIES={
   }}
 };
 
+// ── ROAD TO DOOMSDAY: DATI ──
+const DOOM_GROUPS={fox:"⬡ Universo X-Men · Fox",infinity:"⬡ Saga dell'Infinito",multiverse:"⬡ Saga del Multiverso"};
+const DOOM_ITEMS=[
+  {id:101,title:"X-Men",icon:"🧬",mcu:false,year:2000,duration:104,director:"Bryan Singer",
+   cast:[{actor:"Hugh Jackman",role:"Logan / Wolverine"},{actor:"Patrick Stewart",role:"Charles Xavier / Professor X"},{actor:"Ian McKellen",role:"Erik Lehnsherr / Magneto"},{actor:"Famke Janssen",role:"Jean Grey"},{actor:"James Marsden",role:"Scott Summers / Ciclope"},{actor:"Halle Berry",role:"Ororo Munroe / Tempesta"},{actor:"Anna Paquin",role:"Rogue"}],
+   heroes:["Wolverine / Logan","Professor X / Charles Xavier","Jean Grey","Ciclope / Scott Summers","Tempesta / Ororo Munroe","Rogue"],villains:["Magneto / Erik Lehnsherr","Mystica","Sabretooth","Rospo"],
+   postCreditText:"Nessuna scena post-credit: nel 2000 non era ancora un'abitudine. Ma questo è il film che ha dato il via ai supereroi moderni al cinema. 🧬"},
+  {id:102,title:"X2",icon:"🧬",mcu:false,year:2003,duration:134,director:"Bryan Singer",
+   cast:[{actor:"Hugh Jackman",role:"Logan / Wolverine"},{actor:"Patrick Stewart",role:"Charles Xavier / Professor X"},{actor:"Ian McKellen",role:"Erik Lehnsherr / Magneto"},{actor:"Famke Janssen",role:"Jean Grey"},{actor:"Alan Cumming",role:"Kurt Wagner / Nightcrawler"},{actor:"Brian Cox",role:"William Stryker"}],
+   heroes:["Wolverine / Logan","Professor X / Charles Xavier","Jean Grey","Ciclope / Scott Summers","Tempesta / Ororo Munroe","Nightcrawler / Kurt Wagner","Rogue"],villains:["William Stryker","Lady Deathstrike","Magneto / Erik Lehnsherr","Mystica"],
+   postCreditText:"Nessuna scena post-credit. Ma resta fino all'ultima inquadratura prima dei titoli: c'è un dettaglio nell'acqua che i fan non hanno mai dimenticato. 🔥"},
+  {id:103,title:"Shang-Chi e la leggenda dei Dieci Anelli",icon:"💍",phase:4,year:2021,duration:132,director:"Destin Daniel Cretton",
+   cast:[{actor:"Simu Liu",role:"Shang-Chi"},{actor:"Awkwafina",role:"Katy"},{actor:"Tony Leung",role:"Xu Wenwu"},{actor:"Meng'er Zhang",role:"Xialing"},{actor:"Michelle Yeoh",role:"Ying Nan"},{actor:"Ben Kingsley",role:"Trevor Slattery"}],
+   heroes:["Shang-Chi","Katy","Xialing","Ying Nan","Wong"],villains:["Wenwu","Il Divoratore di Anime"],
+   postCreditText:"Due scene. Nella prima, Shang-Chi e Katy vengono convocati da un volto noto insieme a due Avengers in collegamento: i Dieci Anelli stanno mandando un segnale... verso qualcosa di molto lontano. Nella seconda, qualcuno prende in mano l'eredità dei Dieci Anelli. 💍"},
+  {id:104,title:"Spider-Man: No Way Home",icon:"🕷️",phase:4,year:2021,duration:148,director:"Jon Watts",
+   cast:[{actor:"Tom Holland",role:"Peter Parker / Spider-Man"},{actor:"Zendaya",role:"MJ"},{actor:"Benedict Cumberbatch",role:"Stephen Strange / Doctor Strange"},{actor:"Jacob Batalon",role:"Ned Leeds"},{actor:"Marisa Tomei",role:"Zia May"},{actor:"Willem Dafoe",role:"Norman Osborn / Green Goblin"},{actor:"Alfred Molina",role:"Otto Octavius / Doctor Octopus"},{actor:"Jamie Foxx",role:"Max Dillon / Electro"}],
+   heroes:["Spider-Man / Peter Parker","Doctor Strange / Stephen Strange","MJ","Ned Leeds","Zia May","Wong"],villains:["Green Goblin / Norman Osborn","Doctor Octopus / Otto Octavius","Electro / Max Dillon","Sandman","Lizard"],
+   postCreditText:"Due scene. In un bar lontano, un ospite inatteso viene rispedito a casa... ma lascia qualcosa dietro di sé. Poi un'anteprima: Doctor Strange deve fare i conti con le conseguenze di aver giocato col Multiverso. 🕸️"},
+];
+Object.assign(SUMMARIES,{
+  101:{full:"Rogue, una ragazza che assorbe la forza vitale di chi tocca, fugge di casa e incontra Logan, un mutante con artigli e capacità di guarigione che non ricorda il suo passato. Entrambi finiscono alla scuola del Professor Xavier, rifugio per mutanti e base degli X-Men. Magneto, vecchio amico di Xavier, vuole trasformare in mutanti i leader mondiali riuniti a Ellis Island con una macchina alimentata proprio da Rogue. Gli X-Men lo fermano sulla Statua della Libertà, Logan salva Rogue e Magneto finisce in una prigione di plastica. Logan parte verso Alkali Lake in cerca del suo passato."},
+  102:{full:"Nightcrawler, controllato mentalmente, attacca il Presidente degli Stati Uniti. Il colonnello William Stryker usa l'attentato per assaltare la scuola di Xavier e rapire il Professore, con l'obiettivo di usare una copia di Cerebro per uccidere tutti i mutanti del mondo. Gli X-Men si alleano con Magneto e Mystica. Logan scopre che Stryker è l'uomo che gli ha innestato l'adamantio. Magneto ribalta il piano per colpire gli umani, ma gli X-Men salvano Xavier. La diga di Alkali Lake crolla e Jean Grey si sacrifica per salvare la squadra. Xavier mostra al Presidente la verità e chiede pace tra umani e mutanti."},
+  103:{full:"Shang-Chi vive a San Francisco come parcheggiatore insieme all'amica Katy, finché gli uomini dei Dieci Anelli lo attaccano su un autobus per rubargli il ciondolo della madre. Si scopre che è figlio di Wenwu, guerriero millenario reso immortale dai Dieci Anelli. Wenwu, convinto che la moglie morta lo chiami da Ta Lo, villaggio nascosto in un'altra dimensione, vuole abbatterne il sigillo. In realtà la voce è del Divoratore di Anime, imprigionato lì. Wenwu libera la creatura e muore passando gli anelli al figlio. Shang-Chi, Katy e Xialing, con il Grande Protettore drago, sconfiggono il Divoratore. Xialing prende il comando dei Dieci Anelli."},
+  104:{full:"Dopo che Mysterio ha rivelato al mondo che Peter Parker è Spider-Man, la vita di Peter, MJ e Ned va in pezzi. Peter chiede a Doctor Strange un incantesimo per far dimenticare a tutti la sua identità, ma lo interrompe più volte e l'incantesimo si rompe: dal Multiverso arrivano villain di altri universi che conoscono Peter Parker, come Green Goblin, Doctor Octopus ed Electro. Peter decide di curarli invece di rimandarli a morire, ma Green Goblin uccide Zia May. Arrivano due Spider-Man di altri universi, interpretati da Tobey Maguire e Andrew Garfield: insieme i tre Peter curano i villain alla Statua della Libertà. Per salvare la realtà, Peter chiede a Strange di far dimenticare Peter Parker a tutti. Neppure MJ e Ned lo ricordano più: Peter ricomincia da solo, con un costume cucito a mano."},
+});
+DOOM_ITEMS.push(
+  {id:105,title:"Loki · Stagione 1",icon:"🐍",type:"series",phase:4,year:2021,director:"Kate Herron",
+   cast:[{actor:"Tom Hiddleston",role:"Loki"},{actor:"Owen Wilson",role:"Mobius M. Mobius"},{actor:"Sophia Di Martino",role:"Sylvie"},{actor:"Gugu Mbatha-Raw",role:"Ravonna Renslayer"},{actor:"Wunmi Mosaku",role:"Cacciatrice B-15"}],
+   heroes:["Loki","Mobius","Sylvie","Cacciatrice B-15"],villains:["Ravonna Renslayer"],
+   episodes:[
+    {t:"Glorioso scopo",d:51,s:"Il Loki del 2012 fugge con il Tesseract durante il viaggio nel tempo di Endgame e finisce nel deserto del Gobi, dove viene arrestato dalla TVA per crimini contro la Linea Temporale Sacra. Scopre di essere una variante, vede il proprio destino già scritto e accetta di aiutare l'agente Mobius a catturare una variante pericolosa che uccide i Minutemen."},
+    {t:"La variante",d:54,s:"Loki capisce che la variante si nasconde dentro le apocalissi, dove nulla può alterare la linea temporale. Nel 2050 a Roxxcart la variante si mostra: è una Loki donna, che piazza bombe a ripristino su tutta la linea temporale creando decine di ramificazioni. Mentre la TVA è nel caos, lei fugge in un portale e Loki la segue."},
+    {t:"Lamentis",d:42,s:"Loki e la variante, che si fa chiamare Sylvie, restano bloccati su Lamentis-1, una luna che sta per essere distrutta. Parlano di amore e della loro natura. Sylvie rivela che tutti gli agenti della TVA sono varianti a cui è stata cancellata la memoria. L'arca che doveva salvarli viene distrutta davanti ai loro occhi."},
+    {t:"L'evento Nexus",d:50,s:"La TVA li recupera un istante prima della fine. Mobius scopre che la TVA mente e viene potato da Ravonna. Loki e Sylvie arrivano davanti ai Custodi del Tempo e scoprono che sono soltanto automi. Ravonna pota Loki, che si risveglia in un luogo sconosciuto circondato da altre varianti di sé stesso."},
+    {t:"Viaggio nel mistero",d:50,s:"Loki è nel Vuoto alla fine del tempo, dove finisce tutto ciò che viene potato. Incontra altre varianti, tra cui Loki Classico, Loki Bambino e Loki Alligatore, e la mostruosa nube Alioth che divora tutto. Sylvie si fa potare per raggiungerlo. Insieme incantano Alioth e oltre la nube appare un castello."},
+    {t:"Per sempre. Sempre.",d:52,s:"Nel castello li accoglie Colui che Rimane: ha creato la TVA per evitare una guerra tra sue varianti in universi diversi. Offre una scelta: prendere il suo posto o ucciderlo e scatenare il caos. Sylvie respinge Loki in un portale e uccide Colui che Rimane. La Linea Temporale Sacra si ramifica senza controllo. Loki torna alla TVA, ma Mobius non lo riconosce e al posto dei Custodi c'è una statua di una variante di Colui che Rimane."}
+   ],
+   postCreditText:"Nessuna scena post-credit vera e propria, ma un timbro della TVA sui titoli di coda promette che Loki tornerà nella stagione 2. 🐍"},
+  {id:106,title:"Doctor Strange nel Multiverso della Follia",icon:"🔮",phase:4,year:2022,duration:126,director:"Sam Raimi",
+   cast:[{actor:"Benedict Cumberbatch",role:"Stephen Strange / Doctor Strange"},{actor:"Elizabeth Olsen",role:"Wanda Maximoff / Scarlet Witch"},{actor:"Xochitl Gomez",role:"America Chavez"},{actor:"Benedict Wong",role:"Wong"},{actor:"Rachel McAdams",role:"Christine Palmer"},{actor:"Chiwetel Ejiofor",role:"Karl Mordo"}],
+   heroes:["Doctor Strange / Stephen Strange","America Chavez","Wong","Scarlet Witch / Wanda Maximoff","Christine Palmer"],villains:["Gargantos","Il Darkhold"],
+   postCreditText:"Due scene. Una donna misteriosa apre un varco e chiede l'aiuto di Strange: c'è un'incursione da sistemare, e l'ha causata lui. La seconda è pura comicità alla Sam Raimi. 🍕"},
+  {id:107,title:"Black Panther: Wakanda Forever",icon:"🐾",phase:4,year:2022,duration:161,director:"Ryan Coogler",
+   cast:[{actor:"Letitia Wright",role:"Shuri"},{actor:"Angela Bassett",role:"Regina Ramonda"},{actor:"Tenoch Huerta",role:"Namor"},{actor:"Lupita Nyong'o",role:"Nakia"},{actor:"Danai Gurira",role:"Okoye"},{actor:"Dominique Thorne",role:"Riri Williams / Ironheart"},{actor:"Winston Duke",role:"M’Baku"}],
+   heroes:["Shuri","Regina Ramonda","Okoye","Nakia","M’Baku","Ironheart / Riri Williams"],villains:["Namor"],
+   postCreditText:"Una scena a metà dei titoli di coda, delicata e importante: Nakia ha un segreto che porta speranza al futuro del Wakanda. 💜"}
+);
+Object.assign(SUMMARIES,{
+  105:{full:"Il Loki del 2012, fuggito con il Tesseract in Endgame, viene catturato dalla TVA, l'organizzazione che protegge la Linea Temporale Sacra potando ogni ramificazione. Con l'agente Mobius dà la caccia a Sylvie, una sua variante che attacca la TVA. Loki e Sylvie scoprono che gli agenti sono varianti senza memoria e che i Custodi del Tempo sono automi. Attraverso il Vuoto arrivano al castello alla fine del tempo, dove Colui che Rimane rivela di aver creato la TVA per impedire una guerra tra sue varianti. Sylvie lo uccide: la Linea Temporale Sacra esplode in un Multiverso e una sua variante più pericolosa si prepara a prendere il potere."},
+  106:{full:"America Chavez, una ragazza capace di viaggiare tra universi, viene inseguita da un demone. Doctor Strange e Wong la salvano e chiedono aiuto a Wanda Maximoff, ma scoprono che è lei la cacciatrice: corrotta dal Darkhold, vuole il potere di America per raggiungere un universo in cui i suoi figli esistono. Wanda attacca Kamar-Taj. Strange e America fuggono sulla Terra-838, dove gli Illuminati spiegano le incursioni, collisioni tra universi causate da uno Strange di quel mondo, prima di essere sterminati da Wanda. Strange possiede il corpo di una sua variante morta per tornare in battaglia. America, finalmente padrona del suo potere, mostra a Wanda i figli che hanno paura di lei. Wanda capisce, distrugge il Darkhold e sembra morire nel crollo. A Strange compare un terzo occhio."},
+  107:{full:"Re T'Challa muore di malattia e il Wakanda è in lutto. Il mondo vuole il vibranio, e una ricerca sottomarina attira l'attenzione di Namor, re della civiltà nascosta di Talokan, che possiede anch'essa il vibranio. Namor chiede al Wakanda di consegnargli Riri Williams, la giovane scienziata che ha costruito il rilevatore. Shuri e Okoye la trovano, ma Namor rapisce Shuri e Riri. Nakia le libera, Talokan attacca il Wakanda e la Regina Ramonda muore. Shuri ricrea l'erba a forma di cuore e diventa la nuova Black Panther. Nella battaglia in mare sconfigge Namor ma lo risparmia, scegliendo la pace. Nakia rivela di avere un figlio di T'Challa."},
+});
+DOOM_ITEMS.push(
+  {id:108,title:"Loki · Stagione 2",icon:"🐍",type:"series",phase:5,year:2023,director:"Justin Benson e Aaron Moorhead",
+   cast:[{actor:"Tom Hiddleston",role:"Loki"},{actor:"Owen Wilson",role:"Mobius M. Mobius"},{actor:"Sophia Di Martino",role:"Sylvie"},{actor:"Ke Huy Quan",role:"Ouroboros (O.B.)"},{actor:"Gugu Mbatha-Raw",role:"Ravonna Renslayer"},{actor:"Wunmi Mosaku",role:"Hunter B-15"}],
+   heroes:["Loki","Mobius","Sylvie","Ouroboros","Cacciatrice B-15"],villains:["Ravonna Renslayer","Miss Minutes"],
+   episodes:[
+    {t:"Ouroboros",d:51,s:"Loki scivola involontariamente tra passato, presente e futuro della TVA. Con Mobius raggiunge O.B., il tecnico che ripara il Telaio Temporale, la macchina che tiene insieme le linee temporali. Una tuta improvvisata ferma gli slittamenti, ma il Telaio è sotto sforzo per le infinite ramificazioni. Sylvie intanto vive tranquilla nell'Oklahoma del 1982."},
+    {t:"Breaking Brad",d:47,s:"Loki e Mobius danno la caccia a X-5, un ex Minuteman diventato divo del cinema nel 1977. Scoprono dove si nasconde Sylvie e la trovano in un fast food del 1982. Renslayer e Miss Minutes intanto cercano un'arma contro la TVA."},
+    {t:"1893",d:52,s:"Alla Fiera Mondiale di Chicago del 1893 tutti cercano Victor Timely, giovane inventore e variante di Colui che Rimane. Renslayer e Miss Minutes vogliono usarlo, Loki e Mobius vogliono portarlo alla TVA, Sylvie vuole eliminarlo. Alla fine Timely viene portato alla TVA."},
+    {t:"Cuore della TVA",d:50,s:"Timely accetta di aiutare a riparare il Telaio Temporale. Renslayer viene spedita nel Vuoto. Timely si avvicina al Telaio per installare la sua invenzione, ma la macchina esplode: davanti agli occhi di Loki, Mobius, O.B. e B-15 si disintegrano."},
+    {t:"Scienza/Finzione",d:50,s:"Loki si ritrova a scivolare tra le ramificazioni, dove i suoi amici vivono vite normali senza ricordare la TVA. Uno alla volta li riporta indietro. Impara a controllare i suoi salti nel tempo, ma le ramificazioni stanno morendo."},
+    {t:"Glorioso scopo",d:58,s:"Loki ripete per secoli ogni tentativo di salvare il Telaio, senza successo. Capisce che l'unico modo è prendere il suo posto. Distrugge la macchina e tiene insieme le linee temporali con le proprie mani, seduto su un trono alla fine del tempo: le ramificazioni diventano un grande albero. La TVA ora protegge il Multiverso invece di potarlo."}
+   ],
+   postCreditText:"Nessuna scena post-credit: il finale parla da solo. 🌳"},
+  {id:109,title:"Deadpool & Wolverine",icon:"⚔️",phase:5,year:2024,duration:128,director:"Shawn Levy",
+   cast:[{actor:"Ryan Reynolds",role:"Wade Wilson / Deadpool"},{actor:"Hugh Jackman",role:"Logan / Wolverine"},{actor:"Emma Corrin",role:"Cassandra Nova"},{actor:"Matthew Macfadyen",role:"Mr. Paradox"},{actor:"Rob Delaney",role:"Peter"}],
+   heroes:["Deadpool / Wade Wilson","Wolverine / Logan"],villains:["Cassandra Nova","Mr. Paradox"],
+   postCreditText:"Una scena dopo i titoli: un personaggio inatteso dal Vuoto si toglie qualche sassolino dalla scarpa, nel modo più sboccato possibile. 😂"},
+  {id:110,title:"Captain America: Brave New World",icon:"🛡️",phase:5,year:2025,duration:118,director:"Julius Onah",
+   cast:[{actor:"Anthony Mackie",role:"Sam Wilson / Captain America"},{actor:"Harrison Ford",role:"Presidente Thaddeus Ross"},{actor:"Danny Ramirez",role:"Joaquin Torres / Falcon"},{actor:"Carl Lumbly",role:"Isaiah Bradley"},{actor:"Tim Blake Nelson",role:"Samuel Sterns"},{actor:"Giancarlo Esposito",role:"Seth Voelker / Sidewinder"}],
+   heroes:["Captain America / Sam Wilson","Falcon / Joaquin Torres","Isaiah Bradley"],villains:["Samuel Sterns","Sidewinder"],
+   postCreditText:"Un incontro in prigione: qualcuno avverte Sam che non è solo questo mondo a essere in pericolo. Altri mondi stanno arrivando. 🌍"},
+  {id:111,title:"Thunderbolts*",icon:"⚡",phase:5,year:2025,duration:127,director:"Jake Schreier",
+   cast:[{actor:"Florence Pugh",role:"Yelena Belova"},{actor:"Sebastian Stan",role:"Bucky Barnes"},{actor:"David Harbour",role:"Alexei Shostakov / Red Guardian"},{actor:"Wyatt Russell",role:"John Walker / US Agent"},{actor:"Hannah John-Kamen",role:"Ava Starr / Ghost"},{actor:"Lewis Pullman",role:"Bob"},{actor:"Julia Louis-Dreyfus",role:"Valentina Allegra de Fontaine"}],
+   heroes:["Yelena Belova","Bucky Barnes","Red Guardian / Alexei Shostakov","US Agent / John Walker","Ghost / Ava Starr","Bob"],villains:["Valentina Allegra de Fontaine"],
+   postCreditText:"Due scene. Nella seconda, quattordici mesi dopo, la nuova squadra discute di nomi e marchi registrati... finché un allarme segnala un'astronave da un'altra dimensione in arrivo. 🚀"},
+  {id:112,title:"I Fantastici 4: Gli inizi",icon:"4️⃣",phase:6,year:2025,duration:115,director:"Matt Shakman",
+   cast:[{actor:"Pedro Pascal",role:"Reed Richards / Mister Fantastic"},{actor:"Vanessa Kirby",role:"Sue Storm / Donna Invisibile"},{actor:"Joseph Quinn",role:"Johnny Storm / Torcia Umana"},{actor:"Ebon Moss-Bachrach",role:"Ben Grimm / La Cosa"},{actor:"Julia Garner",role:"Shalla-Bal / Silver Surfer"},{actor:"Ralph Ineson",role:"Galactus"}],
+   heroes:["Mister Fantastic / Reed Richards","Donna Invisibile / Sue Storm","Torcia Umana / Johnny Storm","La Cosa / Ben Grimm","H.E.R.B.I.E."],villains:["Galactus","Silver Surfer"],
+   postCreditText:"Una scena a metà titoli che porta dritti al cinema il 16 dicembre: qualcuno, con una maschera di metallo, fa visita alla famiglia. Il destino ha un nome. 🛡️ Poi una piccola chicca in stile anni Sessanta. 📺"}
+);
+Object.assign(SUMMARIES,{
+  108:{full:"Dopo la morte di Colui che Rimane, la TVA rischia il collasso e Loki scivola involontariamente nel tempo. Con Mobius e il tecnico O.B. cerca di salvare il Telaio Temporale, sovraccarico per le infinite ramificazioni. Renslayer e Miss Minutes cercano Victor Timely, variante di Colui che Rimane, che viene portato alla TVA. Il Telaio esplode e i suoi amici si disintegrano. Loki impara a controllare il tempo e prova per secoli a salvare il Telaio. Capisce che l'unica soluzione è sacrificarsi: distrugge la macchina e diventa lui stesso il custode delle linee temporali, alla fine del tempo. Le ramificazioni formano un grande albero e la TVA ora protegge il Multiverso."},
+  109:{full:"Wade Wilson, il Deadpool dell'universo Fox, scopre dalla TVA che il suo mondo morirà perché il suo essere àncora, il Wolverine di quell'universo, è morto. Mr. Paradox vuole accelerarne la fine. Wade cerca un'altra variante di Wolverine e trova la peggiore di tutte, un Logan pieno di rimpianti. Paradox li spedisce nel Vuoto, regno di Cassandra Nova, gemella di Charles Xavier con poteri immensi. Lì incontrano eroi dimenticati di vecchi film Fox, come Elektra, Blade, X-23, Gambit e una Torcia Umana interpretata da Chris Evans. Tornati alla TVA, Deadpool e Wolverine fermano la macchina con cui Paradox e Cassandra vogliono distruggere gli universi. Cassandra muore e Logan diventa la nuova àncora del mondo di Wade."},
+  110:{full:"Thaddeus Ross, ora Presidente degli Stati Uniti, chiede a Sam Wilson di ricostruire gli Avengers. Durante un vertice alla Casa Bianca, Isaiah Bradley e altri agenti, controllati mentalmente, tentano di uccidere Ross. Sam indaga per scagionare Isaiah e scopre Samuel Sterns, scienziato trasformato dai raggi gamma, che vuole vendicarsi di Ross. In gioco c'è anche l'adamantio trovato sull'Isola Celestiale, conteso tra le nazioni. Sterns ha avvelenato Ross per anni: durante un discorso il Presidente si trasforma in Red Hulk. Sam lo affronta e riesce a farlo tornare in sé. Ross si consegna e Sam annuncia il ritorno degli Avengers."},
+  111:{full:"Yelena Belova, ancora in lutto per la sorella Natasha, lavora per Valentina Allegra de Fontaine. Valentina, sotto inchiesta, la manda in un caveau insieme a US Agent, Ghost e Taskmaster perché si eliminino a vicenda. Taskmaster muore. I sopravvissuti trovano Bob, unica cavia del progetto Sentry, e fuggono con l'aiuto di Red Guardian e Bucky Barnes. Valentina attiva Bob come Sentry, ma il suo lato oscuro, il Vuoto, avvolge New York nell'ombra e intrappola le persone nei loro traumi. La squadra entra nel buio e salva Bob con l'empatia, non con la forza. Valentina li presenta al mondo come i nuovi Avengers per salvarsi la faccia."},
+  112:{full:"Sulla Terra-828, futuro retrò ispirato agli anni Sessanta, i Fantastici 4 sono eroi amati da quattro anni, da quando i raggi cosmici li hanno trasformati. Sue scopre di essere incinta. Arriva Silver Surfer, araldo di Galactus, il divoratore di mondi che vuole mangiare la Terra. I Fantastici 4 vanno nello spazio a trattare, ma Galactus chiede in cambio il figlio non ancora nato. Fuggono e nasce Franklin. Il mondo si rivolta contro di loro, ma Sue convince tutti a resistere. Nello scontro finale Sue si sacrifica spingendo Galactus in un portale con l'aiuto di Silver Surfer, e il piccolo Franklin la riporta in vita. Un anno dopo, qualcuno con una maschera di metallo fa visita a Franklin."},
+});
+const DOOM_ORDER=[
+  {id:101,group:"fox"},{id:102,group:"fox"},
+  {id:5,group:"infinity"},{id:6,group:"infinity"},{id:19,group:"infinity"},{id:22,group:"infinity"},
+  {id:103,group:"multiverse"},{id:104,group:"multiverse"},{id:105,group:"multiverse"},{id:106,group:"multiverse"},
+  {id:107,group:"multiverse"},{id:108,group:"multiverse"},{id:109,group:"multiverse"},{id:110,group:"multiverse"},
+  {id:111,group:"multiverse"},{id:112,group:"multiverse"}
+];
+const DOOM_START=new Date(2026,10,17);
+const DOOM_DATE=new Date(2026,11,16);
+
+const MULTIVERSE=[
+  {id:'mutants',name:"Mutanti",emoji:"🧬",color:"#e8c070",unlockedBy:101,
+   what:"Persone nate con un gene, il gene X, che dà poteri straordinari. A differenza degli eroi creati da esperimenti o incidenti, i mutanti nascono così, e per questo spesso sono temuti e discriminati.",
+   why:"Gli X-Men vivono in un universo diverso da quello degli Avengers. Tieni a mente le loro facce."},
+  {id:'branches',name:"Linee temporali ramificate",emoji:"🌿",color:"#3ccf6e",unlockedBy:22,
+   what:"Se viaggi nel passato e cambi qualcosa, non riscrivi il tuo futuro: crei una nuova linea temporale, un ramo che si stacca da quella principale.",
+   why:"È la regola che rende possibile tutto il resto: ogni scelta può generare una realtà alternativa."},
+  {id:'tva',name:"TVA",emoji:"⏳",color:"#e87820",unlockedBy:105,
+   what:"La Time Variance Authority è un'organizzazione che vive fuori dal tempo. Sorveglia la linea temporale e pota ogni ramo che devia dal percorso stabilito.",
+   why:"Burocrazia, timbri e orologi: la TVA è il guardiano del Multiverso, e decide cosa esiste e cosa no."},
+  {id:'sacred',name:"Linea Temporale Sacra",emoji:"📜",color:"#f5d020",unlockedBy:105,
+   what:"L'unica sequenza di eventi considerata giusta. Tutto ciò che se ne allontana viene chiamato evento Nexus e cancellato.",
+   why:"Capire chi l'ha scritta, e perché, è uno dei misteri centrali della Saga del Multiverso."},
+  {id:'variants',name:"Varianti",emoji:"🎭",color:"#9bd0ff",unlockedBy:105,
+   what:"Versioni diverse della stessa persona, nate in linee temporali diverse. Possono avere un altro aspetto, un altro carattere, persino un'altra specie.",
+   why:"Nel Multiverso nessuno è unico: lo stesso volto può essere un eroe in un mondo e un nemico in un altro."},
+  {id:'multiverse',name:"Il Multiverso",emoji:"🌀",color:"#c070ff",unlockedBy:104,
+   what:"Un insieme infinito di universi paralleli, ognuno con la propria storia. Di solito restano separati, ma la magia o la tecnologia possono aprire dei varchi.",
+   why:"Quando le barriere tra universi si incrinano, chiunque può arrivare da chiunque."},
+  {id:'incursions',name:"Incursioni",emoji:"💥",color:"#e03040",unlockedBy:106,
+   what:"Quando due universi si scontrano, uno dei due viene distrutto. È un'incursione: la catastrofe più grande possibile nel Multiverso.",
+   why:"È il pericolo che incombe su tutto ciò che sta arrivando."},
+  {id:'loom',name:"Il Telaio Temporale",emoji:"🧵",color:"#60aaff",unlockedBy:108,
+   what:"La macchina al cuore della TVA che tesse le linee temporali e le tiene stabili.",
+   why:"Mostra quanto sia fragile l'equilibrio che tiene insieme le realtà."},
+  {id:'anchor',name:"Esseri àncora",emoji:"⚓",color:"#c8a830",unlockedBy:109,
+   what:"In ogni universo esiste una persona così importante che, se muore, il suo intero mondo comincia lentamente a spegnersi.",
+   why:"Alcune vite reggono interi universi sulle spalle."},
+  {id:'earth828',name:"Terra-828",emoji:"🪐",color:"#2088e0",unlockedBy:112,
+   what:"Ogni Terra del Multiverso ha un numero. Quella degli Avengers è la Terra-616, quella dei Fantastici 4 è la Terra-828, un mondo con un'estetica anni Sessanta.",
+   why:"Due Terre, due squadre di eroi, un solo appuntamento al cinema."},
+];
+
+function doomDefaults(t,saved){
+  const s=saved||{};
+  return Object.assign({},t,{
+    status:s.status||'upcoming',stars:s.stars||null,date:s.date||null,minute:s.minute||null,
+    postCreditSeen:s.postCreditSeen||false,
+    epSeen:t.episodes?t.episodes.map((e,i)=>!!(s.epSeen&&s.epSeen[i])):null,
+    duration:t.episodes?t.episodes.reduce((a,e)=>a+e.d,0):t.duration
+  });
+}
+var doomState=DOOM_ITEMS.map(t=>doomDefaults(t,null));
+var mode='infinity';
+try{mode=localStorage.getItem('iw-mode')||'infinity';}catch(e){}
+
 // ── STATE ──
 var films=FILMS.map(f=>({...f,status:"upcoming",stars:null,date:null,minute:null,postCreditSeen:false}));
 var currentOrder='release';
@@ -554,33 +758,98 @@ var openCard=null;
 var editingId=null;
 var tempStar=0;
 
-// ── FIREBASE ──
-var fbRef=db.ref('films');
-fbRef.on('value',(snap)=>{
-  const data=snap.val();
-  if(data){
-    films=FILMS.map(function(f){
-  var saved=data[f.id]||{};
-  return Object.assign({},f,{
-    status: saved.status||'upcoming',
-    stars: saved.stars||null,
-    date: saved.date||null,
-    minute: saved.minute||null,
-    postCreditSeen: saved.postCreditSeen||false
-  });
-});
-
-  } else {
-    const init={};
-    FILMS.forEach(f=>{init[f.id]={status:"upcoming",stars:null,date:null,minute:null,postCreditSeen:false};});
-    fbRef.set(init);
-  }
-  document.getElementById('sync-dot').style.display='inline-block';
-  renderAll();
-});
+// ── SALVATAGGIO LOCALE ──
+// Key namespaced: every repo on the same github.io origin shares localStorage.
+const STORE_KEY='infinitywatch-save-v1';
+function pickProgress(s){
+  const p={status:s.status||'upcoming',stars:s.stars||null,date:s.date||null,minute:s.minute||null,postCreditSeen:!!s.postCreditSeen};
+  if(s.epSeen)p.epSeen=s.epSeen;
+  return p;
+}
+function loadSave(){
+  try{
+    const s=JSON.parse(localStorage.getItem(STORE_KEY));
+    if(s&&s.films&&s.doomsday)return s;
+  }catch(e){}
+  return{films:{},doomsday:{}};
+}
+var save=loadSave();
+function persist(){
+  try{localStorage.setItem(STORE_KEY,JSON.stringify(save));}
+  catch(e){showToast('⚠️ Impossibile salvare su questo dispositivo');}
+}
+function applySave(){
+  films=FILMS.map(f=>Object.assign({},f,pickProgress(save.films[f.id]||{})));
+  doomState=DOOM_ITEMS.map(t=>doomDefaults(t,save.doomsday[t.id]));
+}
 
 function saveFilm(f){
-  db.ref(`films/${f.id}`).update({status:f.status,stars:f.stars||null,date:f.date||null,minute:f.minute||null,postCreditSeen:f.postCreditSeen||false});
+  const p={status:f.status,stars:f.stars||null,date:f.date||null,minute:f.minute||null,postCreditSeen:f.postCreditSeen||false};
+  if(f.epSeen)p.epSeen=f.epSeen;
+  save[f.id>=100?'doomsday':'films'][f.id]=p;
+  persist();
+  applySave();
+  renderAll();
+}
+
+// ── IMPORTAZIONE DAL VECCHIO SALVATAGGIO CONDIVISO (sola lettura) ──
+function loadScript(src){
+  return new Promise((res,rej)=>{const s=document.createElement('script');s.src=src;s.onload=res;s.onerror=rej;document.head.appendChild(s);});
+}
+async function importLegacy(){
+  if(!confirm('Importare i progressi dal vecchio salvataggio condiviso?\n\nSostituiscono quelli salvati su questo telefono. Il vecchio salvataggio non viene modificato.'))return;
+  showToast('☁️ Importazione in corso…');
+  try{
+    if(!window.firebase){
+      await loadScript('https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js');
+      await loadScript('https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js');
+    }
+    if(!firebase.apps.length)firebase.initializeApp(LEGACY_FIREBASE);
+    const db=firebase.database();
+    const [fs,ds]=await Promise.all([db.ref('films').once('value'),db.ref('doomsday').once('value')]);
+    const fData=fs.val()||{},dData=ds.val()||{};
+    const next={films:{},doomsday:{}};
+    FILMS.forEach(f=>{if(fData[f.id])next.films[f.id]=pickProgress(fData[f.id]);});
+    DOOM_ITEMS.forEach(t=>{if(dData[t.id])next.doomsday[t.id]=pickProgress(dData[t.id]);});
+    save=next;persist();applySave();renderAll();updateStats();
+    showToast(`✓ Importati ${Object.keys(next.films).length+Object.keys(next.doomsday).length} titoli`);
+  }catch(e){
+    showToast('⚠️ Importazione non riuscita: controlla le regole Firebase');
+  }
+}
+
+function findItem(id){return films.find(x=>x.id===id)||doomState.find(x=>x.id===id);}
+function doomUnits(f){
+  if(f.epSeen)return f.epSeen.filter(Boolean).length/f.epSeen.length;
+  if(f.status==='watched')return 1;
+  if(f.status==='in-progress'&&f.minute)return Math.min(f.minute/f.duration,0.99);
+  return 0;
+}
+function seriesStatus(f){
+  const n=f.epSeen.filter(Boolean).length;
+  return n===0?'upcoming':n===f.epSeen.length?'watched':'in-progress';
+}
+function doomList(){return DOOM_ORDER.map(o=>findItem(o.id));}
+function activeList(){return mode==='doom'?doomList():films;}
+function matchesFilter(f){
+  const q=activeFilter.toLowerCase();
+  return (f.heroes||[]).some(h=>h.toLowerCase().includes(q))||(f.villains||[]).some(v=>v.toLowerCase().includes(q));
+}
+
+// ── MODE ──
+function setMode(m){
+  mode=m;
+  try{localStorage.setItem('iw-mode',m);}catch(e){}
+  activeFilter=null;
+  document.getElementById('filter-banner').classList.remove('show');
+  applyMode();
+  renderAll();
+  if(document.getElementById('view-stats').classList.contains('active'))updateStats();
+}
+function applyMode(){
+  document.body.classList.toggle('doom',mode==='doom');
+  document.getElementById('mode-infinity').classList.toggle('active',mode!=='doom');
+  document.getElementById('mode-doom').classList.toggle('active',mode==='doom');
 }
 
 // ── HELPERS ──
@@ -610,6 +879,10 @@ function getSortedFilms(){
 
 function getSummaryHTML(f){
   if(f.status==='upcoming')return'';
+  if(f.epSeen&&f.status!=='watched'){
+    const seen=f.episodes.map((e,i)=>f.epSeen[i]?`<p style="margin-bottom:8px"><strong style="color:var(--text)">Ep. ${i+1} · ${e.t}</strong><br>${e.s}</p>`:'').join('');
+    return`<div class="summary-box"><div class="summary-label">📖 Trama · episodi visti</div>${seen}<em style="color:var(--hint);font-size:11px">[il resto è ancora da scoprire]</em></div>`;
+  }
   if(f.status==='in-progress'&&f.minute){
     const partial=PARTIAL_SUMMARIES[f.id];
     let text;
@@ -618,7 +891,7 @@ function getSummaryHTML(f){
       const pct=Math.round((f.minute/f.duration)*100);
       const full=SUMMARIES[f.id]?.full||'';
       if(full){const words=full.split(' ');const cut=Math.max(20,Math.floor(words.length*(pct/100)*0.6));text=words.slice(0,cut).join(' ')+'… <em style="color:var(--hint);font-size:11px">[il resto è ancora da scoprire]</em>';}
-      else{text=`Avete visto il film fino al minuto ${f.minute} di ${f.duration}.`;}
+      else{text=`Hai visto il film fino al minuto ${f.minute} di ${f.duration}.`;}
     }
     return`<div class="summary-box"><div class="summary-label">📖 Trama · fino al min ${f.minute}</div>${text}</div>`;
   }
@@ -630,7 +903,83 @@ function getSummaryHTML(f){
 }
 
 // ── RENDER LIST ──
+function renderDoomList(){
+  const c=document.getElementById('film-list');
+  if(activeFilter){
+    document.getElementById('filter-banner').classList.add('show');
+    document.getElementById('filter-label').textContent=`Filtro: ${activeFilter}`;
+  }
+  let html='',grp='';
+  DOOM_ORDER.forEach(o=>{
+    const f=findItem(o.id);
+    if(!f)return;
+    if(o.group!==grp){grp=o.group;html+=`<div class="phase-header">${DOOM_GROUPS[grp]}</div>`;}
+    const cls=f.status==='watched'?'watched':f.status==='in-progress'?'in-progress':'locked';
+    const dotCls=f.status==='watched'?'dot-watched':f.status==='in-progress'?'dot-progress':'dot-locked';
+    let sub,pct=null;
+    if(f.epSeen){
+      const n=f.epSeen.filter(Boolean).length;
+      sub=f.status==='watched'?'Vista':f.status==='in-progress'?`${n}/${f.epSeen.length} episodi`:`Da vedere · ${f.epSeen.length} episodi`;
+    } else {
+      pct=f.minute?Math.round((f.minute/f.duration)*100):null;
+      sub=f.status==='watched'?'Visto':f.status==='in-progress'?`${f.minute}/${f.duration} min`:'Da vedere';
+    }
+    const dimmed=activeFilter&&!matchesFilter(f)?'opacity:0.3;':'';
+    const tags=(f.mcu===false?'<span class="tag tag-fox">Fuori MCU</span>':'')+(f.id<100?'<span class="tag tag-shared">♾️ InfinityWatch</span>':'');
+    html+=`<div class="film-card ${cls}${f.mcu===false?' fox':''}" style="${dimmed}" onclick="openDetail(${f.id})">
+      <div class="film-row">
+        ${iconCell(f)}
+        <div class="film-meta">
+          <div class="film-title">${f.title}</div>
+          <div class="film-sub">
+            <span class="status-dot ${dotCls}"></span>
+            <span>${sub}</span>
+            ${f.stars?`<span>${starsHTML(f.stars)}</span>`:''}
+            ${pct&&f.status==='in-progress'?`<span class="pct-badge">${pct}%</span>`:''}
+            ${tags}
+          </div>
+        </div>
+        <span style="font-size:11px;color:var(--hint)">›</span>
+      </div>
+    </div>`;
+  });
+  c.innerHTML=html;
+  updateDoomProgress();
+}
+
+function updateDoomProgress(){
+  const L=doomList().filter(Boolean),total=L.length;
+  const done=L.reduce((a,f)=>a+doomUnits(f),0);
+  const watched=L.filter(f=>f.status==='watched').length;
+  const DAY=864e5,now=new Date();
+  const today=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  const daysLeft=Math.max(0,Math.round((DOOM_DATE-today)/DAY));
+  const span=(DOOM_DATE-DOOM_START)/DAY;
+  const elapsed=Math.min(Math.max((today-DOOM_START)/DAY,0),span);
+  const expected=total*elapsed/span;
+  const diff=done-expected;
+
+  document.getElementById('cd-days').textContent=daysLeft;
+  document.getElementById('cd-label').innerHTML=daysLeft>0
+    ?`${daysLeft===1?'giorno':'giorni'} ad <strong>Avengers: Doomsday</strong><br>al cinema dal 16 dicembre 2026`
+    :`<strong>Avengers: Doomsday</strong> è al cinema! 🍿`;
+  document.getElementById('pace-text').textContent=`${watched} di ${total} titoli`;
+  document.getElementById('pace-pct').textContent=`${Math.round(done/total*100)}%`;
+  document.getElementById('pace-fill').style.width=(done/total*100)+'%';
+  document.getElementById('pace-marker').style.left=(expected/total*100)+'%';
+
+  const st=document.getElementById('pace-status');
+  if(done>=total){st.textContent='Tutto pronto per Doomsday! 🛡️';st.className='pace-ok';}
+  else if(diff>=1){const n=Math.floor(diff);st.textContent=`Avanti di ${n} ${n===1?'titolo':'titoli'} ✓`;st.className='pace-ok';}
+  else if(diff>-0.5){st.textContent='In pari con la tabella di marcia ✓';st.className='pace-ok';}
+  else{const n=Math.ceil(-diff-0.5);st.textContent=`Indietro di ${n} ${n===1?'titolo':'titoli'}`;st.className='pace-late';}
+  const remaining=total-done;
+  document.getElementById('pace-rate').textContent=daysLeft>0&&remaining>0
+    ?`servono ${(remaining/daysLeft*7).toFixed(1)} titoli/settimana`:'';
+}
+
 function renderList(){
+  if(mode==='doom'){renderDoomList();return;}
   const c=document.getElementById('film-list');
   const sorted=getSortedFilms();
   let html='',curPhase=0;
@@ -682,7 +1031,7 @@ function updateProgress(){
 
 // ── DETAIL MODAL ──
 function openDetail(id){
-  const f=films.find(x=>x.id===id);
+  const f=findItem(id);
   const modal=document.getElementById('detail-modal');
   const svgIcon=heroMap[f.id]?`<div class="modal-film-icon">${heroMap[f.id]}</div>`:`<div class="modal-film-icon" style="font-size:30px">${f.icon}</div>`;
   const heroTags=(f.heroes||[]).map(h=>`<span class="hero-tag" onclick="filterByChar('${h}',event)">${h}</span>`).join('');
@@ -702,13 +1051,17 @@ function openDetail(id){
       <div class="modal-title">${f.title}</div>
       <div class="modal-meta-row">
         <span class="meta-chip">📅 ${f.year}</span>
-        <span class="meta-chip">⏱ ${f.duration} min</span>
+        ${f.epSeen?`<span class="meta-chip">📺 ${f.episodes.length} episodi · ~${f.duration} min</span>`:`<span class="meta-chip">⏱ ${f.duration} min</span>`}
         <span class="meta-chip">🎬 ${f.director}</span>
-        <span class="meta-chip">Phase ${f.phase}</span>
+        ${f.mcu===false?'<span class="meta-chip" style="color:#e8c070;border-color:rgba(232,192,112,0.4)">Fuori MCU · Fox</span>':`<span class="meta-chip">Phase ${f.phase}</span>`}
       </div>
     </div>
     <div class="modal-body">
       ${summary?`<div class="modal-section">${summary}</div>`:''}
+      ${f.epSeen?`<div class="modal-section">
+        <div class="modal-section-title">Episodi · tocca per segnare</div>
+        <div class="ep-list">${f.episodes.map((e,i)=>`<div class="ep-item ${f.epSeen[i]?'seen':''}" onclick="toggleEpisode(${f.id},${i})"><span class="ep-check">${f.epSeen[i]?'✓':''}</span><span class="ep-title">${i+1}. ${e.t}</span><span class="ep-dur">${e.d} min</span></div>`).join('')}</div>
+      </div>`:''}
       <div class="modal-section">
         <div class="modal-section-title">Cast principale</div>
         <div class="cast-list">${castHTML}</div>
@@ -737,7 +1090,7 @@ function openDetail(id){
 function closeDetail(){document.getElementById('detail-overlay').classList.remove('open');};
 
 function togglePostCredit(id){
-  const f=films.find(x=>x.id===id);
+  const f=findItem(id);
   f.postCreditSeen=!f.postCreditSeen;
   saveFilm(f);
   // update UI without closing
@@ -766,10 +1119,11 @@ function clearFilter(){
 // ── EDIT MODAL ──
 function openEdit(id){
   editingId=id;
-  const f=films.find(x=>x.id===id);
+  const f=findItem(id);
   document.getElementById('edit-title').textContent=f.title;
   document.getElementById('edit-date').value=f.date||'';
   document.getElementById('edit-min').value=f.minute||'';
+  document.getElementById('edit-min-wrap').style.display=f.epSeen?'none':'block';
   tempStar=f.stars||0;renderModalStars();
   document.getElementById('edit-overlay').classList.add('open');
 };
@@ -777,9 +1131,10 @@ function closeEdit(){document.getElementById('edit-overlay').classList.remove('o
 function renderModalStars(){document.querySelectorAll('.star-btn').forEach((b,i)=>b.classList.toggle('active',i<tempStar));}
 function setStar(n){tempStar=n;renderModalStars();};
 function saveEdit(){
-  const f=films.find(x=>x.id===editingId);
+  const f=findItem(editingId);
   f.stars=tempStar||null;
   f.date=document.getElementById('edit-date').value||null;
+  if(f.epSeen){saveFilm(f);closeEdit();showToast('💾 Salvato');return;}
   const min=parseInt(document.getElementById('edit-min').value);
   if(min&&min>0){f.minute=min;f.status='in-progress';}
   else{f.minute=null;if(f.date)f.status='watched';}
@@ -797,9 +1152,20 @@ function showCompletionFor(id){
 }
 
 function markWatched(id){
-  const f=films.find(x=>x.id===id);
+  const f=findItem(id);
   f.status='watched';f.minute=null;
+  if(f.epSeen)f.epSeen=f.epSeen.map(()=>true);
   saveFilm(f);showToast('✓ Segnato come visto');
+};
+
+function toggleEpisode(id,i){
+  const f=findItem(id);
+  f.epSeen[i]=!f.epSeen[i];
+  f.status=seriesStatus(f);
+  if(f.status==='watched'&&!f.date)f.date=new Date().toISOString().slice(0,10);
+  saveFilm(f);
+  openDetail(id);
+  showToast(f.status==='watched'?'🎉 Stagione completata!':f.epSeen[i]?`✓ Episodio ${i+1} visto`:'Episodio rimosso dai visti');
 };
 
 // ── ORDER TOGGLE ──
@@ -818,13 +1184,52 @@ function getUnlockedGems(){
   });
 }
 
+function renderMultiverse(){
+  const isOpen=m=>{const f=findItem(m.unlockedBy);return f&&f.status==='watched';};
+  const n=MULTIVERSE.filter(isOpen).length;
+  document.getElementById('gems-sub').innerHTML=`${n} di ${MULTIVERSE.length} concetti sbloccati<br><span style="color:var(--hint)">Ogni concetto si svela solo quando completi il titolo che lo introduce.</span>`;
+  const order=DOOM_ORDER.map(o=>o.id);
+  const sorted=[...MULTIVERSE].sort((a,b)=>order.indexOf(a.unlockedBy)-order.indexOf(b.unlockedBy));
+  document.getElementById('gems-grid').innerHTML=sorted.map(m=>isOpen(m)?`
+    <div class="gem-card" onclick="openConcept('${m.id}')">
+      <div class="gem-dot" style="color:${m.color};background:${m.color}20">${m.emoji}</div>
+      <div class="gem-name" style="color:${m.color}">${m.name}</div>
+      <div class="gem-film">${findItem(m.unlockedBy).title}</div>
+    </div>`:`
+    <div class="gem-card concept-locked" onclick="showToast('🔒 Guarda ${findItem(m.unlockedBy).title.replace(/'/g,'’')} per sbloccarlo')">
+      <div class="gem-dot">🔒</div>
+      <div class="gem-name">???</div>
+      <div class="gem-film">Si sblocca con ${findItem(m.unlockedBy).title}</div>
+    </div>`).join('');
+}
+
+function openConcept(id){
+  const m=MULTIVERSE.find(x=>x.id===id);
+  if(!m)return;
+  document.getElementById('gem-modal').innerHTML=`
+    <div class="modal-handle"></div>
+    <div class="gem-modal-dot" style="color:${m.color};background:${m.color}20;font-size:36px">${m.emoji}</div>
+    <div class="gem-modal-name" style="color:${m.color}">${m.name}</div>
+    <div class="gem-modal-film">Introdotto in<br><strong>${findItem(m.unlockedBy).title}</strong></div>
+    <div class="gem-modal-section">
+      <div class="gem-modal-label">Cos'è</div>
+      <div class="gem-modal-text">${m.what}</div>
+    </div>
+    <div class="gem-modal-section">
+      <div class="gem-modal-label">Perché conta</div>
+      <div class="gem-modal-text">${m.why}</div>
+    </div>`;
+  document.getElementById('gem-overlay').classList.add('open');
+};
+
 function renderGems(){
+  if(mode==='doom'){renderMultiverse();return;}
   const unlocked=getUnlockedGems();
   const grid=document.getElementById('gems-grid');
   const sub=document.getElementById('gems-sub');
   if(unlocked.length===0){
     sub.innerHTML='';
-    grid.innerHTML=`<div class="gems-empty" style="grid-column:1/-1">Le gemme dell\'Infinito si sbloccano man mano che completate i film.<br><br>Continuate a guardare per scoprire i segreti dell\'universo Marvel! 🌌</div>`;
+    grid.innerHTML=`<div class="gems-empty" style="grid-column:1/-1">Le gemme dell\'Infinito si sbloccano man mano che completi i film.<br><br>Continua a guardare per scoprire i segreti dell\'universo Marvel! 🌌</div>`;
     return;
   }
   sub.textContent=`${unlocked.length} di 6 gemme scoperte`;
@@ -858,13 +1263,14 @@ function closeGem(){document.getElementById('gem-overlay').classList.remove('ope
 
 // ── STATS ──
 function updateStats(){
-  const w=films.filter(f=>f.status==='watched');
+  const L=activeList().filter(Boolean);
+  const w=L.filter(f=>f.status==='watched');
   const rated=w.filter(f=>f.stars);
   const avg=rated.length?(rated.reduce((a,f)=>a+f.stars,0)/rated.length).toFixed(1):'—';
   const best=rated.length?rated.reduce((a,b)=>a.stars>b.stars?a:b):null;
-  const phases=[...new Set(films.filter(f=>f.status!=='upcoming').map(f=>f.phase))];
+  const phases=[...new Set(L.filter(f=>f.status!=='upcoming'&&f.phase).map(f=>f.phase))];
   document.getElementById('s-watched').textContent=w.length;
-  document.getElementById('s-remain').textContent=films.length-w.length;
+  document.getElementById('s-remain').textContent=L.length-w.length;
   document.getElementById('s-avg').textContent=rated.length?`⭐ ${avg}`:'—';
   document.getElementById('s-phase').textContent=phases.length?`Phase ${Math.max(...phases)}`:'—';
   document.getElementById('s-best').textContent=best?`${best.title} (${best.stars}★)`:'—';
@@ -889,6 +1295,10 @@ function showToast(msg){
   t.textContent=msg;t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),2500);
 };
+
+applySave();
+applyMode();
+renderAll();
 </script>
 </body>
 </html>
