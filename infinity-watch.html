@@ -300,8 +300,14 @@ body.doom .infinity-only{display:none!important}
         <div class="stat-card full"><div class="stat-key" style="margin-bottom:6px">Miglior film</div><div style="font-size:15px;font-weight:500;color:var(--text)" id="s-best">—</div></div>
         <div class="stat-card full"><div class="stat-key" style="margin-bottom:8px">Voti dati</div><div id="s-ratings-list" style="font-size:13px;color:var(--muted);line-height:2">—</div></div>
         <div class="stat-card full">
-          <div class="stat-key" style="margin-bottom:8px">I progressi sono salvati solo su questo dispositivo. Ognuno ha il suo rewatch.</div>
-          <button class="action-btn sm" style="width:100%" onclick="importLegacy()">☁️ Importa dal vecchio salvataggio condiviso</button>
+          <div class="stat-key" style="margin-bottom:8px">I progressi sono salvati solo su questo dispositivo. Fai ogni tanto un backup e salvalo su iCloud Drive o Google Drive: se cancelli l'app, lo ricarichi e ritrovi tutto.</div>
+          <div class="modal-btns" style="margin-top:0">
+            <button class="action-btn primary sm" onclick="exportBackup()">💾 Salva backup</button>
+            <button class="action-btn sm" onclick="document.getElementById('backup-file').click()">📂 Ripristina</button>
+          </div>
+          <input type="file" id="backup-file" accept=".json,application/json" style="display:none" onchange="importBackup(this)">
+          <div class="stat-key" id="s-last-backup" style="margin-top:8px;font-size:11px">Nessun backup ancora</div>
+          <button class="action-btn sm" style="width:100%;margin-top:12px;color:var(--muted)" onclick="importLegacy()">☁️ Importa dal vecchio salvataggio condiviso</button>
         </div>
       </div>
     </div>
@@ -807,15 +813,48 @@ async function importLegacy(){
     if(!firebase.apps.length)firebase.initializeApp(LEGACY_FIREBASE);
     const db=firebase.database();
     const [fs,ds]=await Promise.all([db.ref('films').once('value'),db.ref('doomsday').once('value')]);
-    const fData=fs.val()||{},dData=ds.val()||{};
-    const next={films:{},doomsday:{}};
-    FILMS.forEach(f=>{if(fData[f.id])next.films[f.id]=pickProgress(fData[f.id]);});
-    DOOM_ITEMS.forEach(t=>{if(dData[t.id])next.doomsday[t.id]=pickProgress(dData[t.id]);});
-    save=next;persist();applySave();renderAll();updateStats();
-    showToast(`✓ Importati ${Object.keys(next.films).length+Object.keys(next.doomsday).length} titoli`);
+    const n=adoptSave(fs.val()||{},ds.val()||{});
+    showToast(`✓ Importati ${n} titoli`);
   }catch(e){
     showToast('⚠️ Importazione non riuscita: controlla le regole Firebase');
   }
+}
+
+function adoptSave(fData,dData){
+  const next={films:{},doomsday:{},lastBackup:save.lastBackup||null};
+  FILMS.forEach(f=>{if(fData[f.id])next.films[f.id]=pickProgress(fData[f.id]);});
+  DOOM_ITEMS.forEach(t=>{if(dData[t.id])next.doomsday[t.id]=pickProgress(dData[t.id]);});
+  save=next;persist();applySave();renderAll();updateStats();
+  return Object.keys(next.films).length+Object.keys(next.doomsday).length;
+}
+
+// ── BACKUP SU FILE ──
+function exportBackup(){
+  const now=new Date();
+  const name=`infinitywatch-backup-${now.toISOString().slice(0,10)}.json`;
+  const file=new File([JSON.stringify({app:'infinitywatch',v:1,savedAt:now.toISOString(),films:save.films,doomsday:save.doomsday})],name,{type:'application/json'});
+  const done=()=>{save.lastBackup=now.toISOString();persist();updateStats();};
+  if(navigator.canShare&&navigator.canShare({files:[file]})){
+    navigator.share({files:[file],title:'Backup InfinityWatch'}).then(done).catch(()=>{});
+  } else {
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(file);a.download=name;a.click();
+    setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+    done();showToast('💾 Backup scaricato');
+  }
+}
+function importBackup(input){
+  const file=input.files[0];
+  input.value='';
+  if(!file)return;
+  file.text().then(t=>{
+    const b=JSON.parse(t);
+    if(!b||b.app!=='infinitywatch'||!b.films||!b.doomsday)throw new Error('formato');
+    const when=b.savedAt?fmt(b.savedAt.slice(0,10)):'sconosciuta';
+    if(!confirm(`Ripristinare il backup del ${when}?\n\nSostituisce i progressi salvati su questo telefono.`))return;
+    adoptSave(b.films,b.doomsday);
+    showToast('✓ Backup ripristinato');
+  }).catch(()=>showToast('⚠️ Questo file non è un backup valido'));
 }
 
 function findItem(id){return films.find(x=>x.id===id)||doomState.find(x=>x.id===id);}
@@ -1269,6 +1308,7 @@ function updateStats(){
   const avg=rated.length?(rated.reduce((a,f)=>a+f.stars,0)/rated.length).toFixed(1):'—';
   const best=rated.length?rated.reduce((a,b)=>a.stars>b.stars?a:b):null;
   const phases=[...new Set(L.filter(f=>f.status!=='upcoming'&&f.phase).map(f=>f.phase))];
+  document.getElementById('s-last-backup').textContent=save.lastBackup?`Ultimo backup: ${fmt(save.lastBackup.slice(0,10))}`:'Nessun backup ancora';
   document.getElementById('s-watched').textContent=w.length;
   document.getElementById('s-remain').textContent=L.length-w.length;
   document.getElementById('s-avg').textContent=rated.length?`⭐ ${avg}`:'—';
