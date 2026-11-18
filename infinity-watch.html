@@ -215,7 +215,7 @@ body.doom .infinity-only{display:none!important}
 .concept-locked .gem-dot{animation:none;background:rgba(255,255,255,0.05);filter:grayscale(1)}
 .concept-locked .gem-name{color:var(--muted)}
 
-.lang-pick{position:relative;display:flex;align-items:center;gap:5px;color:var(--text);font-size:13px;font-weight:500;padding:6px 2px;cursor:pointer;flex-shrink:0}
+.lang-pick{position:relative;display:flex;align-items:center;gap:5px;color:var(--text);font-size:13px;font-weight:600;letter-spacing:0.5px;padding:6px 2px;cursor:pointer;flex-shrink:0}
 .lang-pick svg{width:20px;height:20px}
 .lang-pick .lang-chev{width:14px;height:14px;margin-left:-1px}
 .lang-pick:active{color:var(--purple2)}
@@ -252,7 +252,7 @@ body.doom .infinity-only{display:none!important}
         </div>
         <label class="lang-pick">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><ellipse cx="12" cy="12" rx="4.5" ry="9.5"/><path d="M12 2.5v19M2.5 12h19M4.6 6.8c4.5 2.3 10.3 2.3 14.8 0M4.6 17.2c4.5-2.3 10.3-2.3 14.8 0"/></svg>
-          <span id="lang-name">Italiano</span>
+          <span id="lang-name">IT</span>
           <svg class="lang-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
           <select id="lang-select" onchange="setLang(this.value)" aria-label="Language">
             <option value="it">Italiano</option>
@@ -1492,7 +1492,6 @@ function persist(){
   catch(e){showToast(t('toast_nosave'));}
 }
 // ── LINGUA ──
-const LANG_NAMES={it:'Italiano',en:'English',es:'Español',fr:'Français',pt:'Português'};
 var lang=(()=>{
   try{const s=localStorage.getItem('iw-lang');if(s&&I18N[s])return s;}catch(e){}
   const b=(navigator.language||'it').slice(0,2).toLowerCase();
@@ -1535,7 +1534,7 @@ function applyLang(){
   document.querySelectorAll('[data-i18n-html]').forEach(el=>{el.innerHTML=t(el.dataset.i18nHtml);});
   document.querySelectorAll('[data-i18n-ph]').forEach(el=>{el.placeholder=t(el.dataset.i18nPh);});
   document.getElementById('lang-select').value=lang;
-  document.getElementById('lang-name').textContent=LANG_NAMES[lang];
+  document.getElementById('lang-name').textContent=lang.toUpperCase();
 }
 function setLang(l){
   lang=l;
