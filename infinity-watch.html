@@ -215,6 +215,12 @@ body.doom .infinity-only{display:none!important}
 .concept-locked .gem-dot{animation:none;background:rgba(255,255,255,0.05);filter:grayscale(1)}
 .concept-locked .gem-name{color:var(--muted)}
 
+.lang-pick{position:relative;display:flex;align-items:center;gap:5px;color:var(--text);font-size:13px;font-weight:500;padding:6px 2px;cursor:pointer;flex-shrink:0}
+.lang-pick svg{width:20px;height:20px}
+.lang-pick .lang-chev{width:14px;height:14px;margin-left:-1px}
+.lang-pick:active{color:var(--purple2)}
+.lang-pick select{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:16px}
+
 /* EPISODES */
 .ep-list{display:flex;flex-direction:column;gap:6px}
 .ep-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:var(--r-md);background:rgba(255,255,255,0.03);border:0.5px solid var(--border);cursor:pointer}
@@ -244,6 +250,18 @@ body.doom .infinity-only{display:none!important}
           <img src="apple-touch-icon.png" alt="Avengers Logo" style="width: 34px; height: 34px; object-fit: cover; border-radius: 8px; margin-right: 10px; box-shadow: 0 0 10px rgba(60,207,110,0.5);">
           <div class="app-title"><span class="ttl infinity-only">Infinity<span>Watch</span></span><span class="ttl doom-inline">Road to <span>Doomsday</span></span></div>
         </div>
+        <label class="lang-pick">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><ellipse cx="12" cy="12" rx="4.5" ry="9.5"/><path d="M12 2.5v19M2.5 12h19M4.6 6.8c4.5 2.3 10.3 2.3 14.8 0M4.6 17.2c4.5-2.3 10.3-2.3 14.8 0"/></svg>
+          <span id="lang-name">Italiano</span>
+          <svg class="lang-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          <select id="lang-select" onchange="setLang(this.value)" aria-label="Language">
+            <option value="it">Italiano</option>
+            <option value="en">English</option>
+            <option value="es">Español</option>
+            <option value="fr">Français</option>
+            <option value="pt">Português</option>
+          </select>
+        </label>
       </div>
       <div class="mode-switch">
         <button id="mode-infinity" onclick="setMode('infinity')">♾️ InfinityWatch</button>
@@ -259,8 +277,8 @@ body.doom .infinity-only{display:none!important}
         <div class="pace-status"><span id="pace-status">—</span><span id="pace-rate" style="color:var(--muted)"></span></div>
       </div>
       <div class="order-toggle infinity-only">
-        <button class="order-btn active" id="btn-release" onclick="setOrder('release')">🎬 Ordine Uscita</button>
-        <button class="order-btn" id="btn-story" onclick="setOrder('story')">📅 Ordine Storia</button>
+        <button class="order-btn active" id="btn-release" onclick="setOrder('release')" data-i18n="order_release">🎬 Ordine Uscita</button>
+        <button class="order-btn" id="btn-story" onclick="setOrder('story')" data-i18n="order_story">📅 Ordine Storia</button>
       </div>
       <div class="heroes-strip infinity-only" id="heroes-strip-container">
         <!-- Generato via script -->
@@ -270,7 +288,7 @@ body.doom .infinity-only{display:none!important}
     </div>
     <div class="filter-banner" id="filter-banner">
       <span id="filter-label">Filtro attivo</span>
-      <button class="filter-clear" onclick="clearFilter()">✕ Rimuovi filtro</button>
+      <button class="filter-clear" onclick="clearFilter()" data-i18n="filter_clear">✕ Rimuovi filtro</button>
     </div>
     <div id="film-list"></div>
   </div>
@@ -278,7 +296,7 @@ body.doom .infinity-only{display:none!important}
   <!-- GEMS VIEW -->
   <div id="view-gems" class="view">
     <div class="header" style="padding-top:48px">
-      <div class="header-top"><div class="app-title"><span class="ttl infinity-only">Gemme <span>dell'Infinito</span></span><span class="ttl doom-inline">Il <span>Multiverso</span></span></div></div>
+      <div class="header-top"><div class="app-title"><span class="ttl infinity-only" data-i18n-html="gems_title_html">Gemme <span>dell'Infinito</span></span><span class="ttl doom-inline" data-i18n-html="mv_title_html">Il <span>Multiverso</span></span></div></div>
     </div>
     <div class="gems-section">
       <div class="gems-sub" id="gems-sub"></div>
@@ -289,25 +307,25 @@ body.doom .infinity-only{display:none!important}
   <!-- STATS VIEW -->
   <div id="view-stats" class="view">
     <div class="header" style="padding-top:48px">
-      <div class="header-top"><div class="app-title">Le <span>Stats</span></div></div>
+      <div class="header-top"><div class="app-title" data-i18n-html="stats_title_html">Le <span>Stats</span></div></div>
     </div>
     <div class="stats-section">
       <div class="stats-grid">
-        <div class="stat-card"><div class="stat-val" id="s-watched">0</div><div class="stat-key">Film visti</div></div>
-        <div class="stat-card"><div class="stat-val" id="s-remain">22</div><div class="stat-key">Da vedere</div></div>
-        <div class="stat-card"><div class="stat-val" id="s-avg">—</div><div class="stat-key">Voto medio</div></div>
-        <div class="stat-card"><div class="stat-val" id="s-phase">—</div><div class="stat-key">Fase attuale</div></div>
-        <div class="stat-card full"><div class="stat-key" style="margin-bottom:6px">Miglior film</div><div style="font-size:15px;font-weight:500;color:var(--text)" id="s-best">—</div></div>
-        <div class="stat-card full"><div class="stat-key" style="margin-bottom:8px">Voti dati</div><div id="s-ratings-list" style="font-size:13px;color:var(--muted);line-height:2">—</div></div>
+        <div class="stat-card"><div class="stat-val" id="s-watched">0</div><div class="stat-key" data-i18n="st_watched">Film visti</div></div>
+        <div class="stat-card"><div class="stat-val" id="s-remain">22</div><div class="stat-key" data-i18n="st_remain">Da vedere</div></div>
+        <div class="stat-card"><div class="stat-val" id="s-avg">—</div><div class="stat-key" data-i18n="st_avg">Voto medio</div></div>
+        <div class="stat-card"><div class="stat-val" id="s-phase">—</div><div class="stat-key" data-i18n="st_phase">Fase attuale</div></div>
+        <div class="stat-card full"><div class="stat-key" style="margin-bottom:6px" data-i18n="st_best">Miglior film</div><div style="font-size:15px;font-weight:500;color:var(--text)" id="s-best">—</div></div>
+        <div class="stat-card full"><div class="stat-key" style="margin-bottom:8px" data-i18n="st_ratings">Voti dati</div><div id="s-ratings-list" style="font-size:13px;color:var(--muted);line-height:2">—</div></div>
         <div class="stat-card full">
-          <div class="stat-key" style="margin-bottom:8px">I progressi sono salvati solo su questo dispositivo. Fai ogni tanto un backup e salvalo su iCloud Drive o Google Drive: se cancelli l'app, lo ricarichi e ritrovi tutto.</div>
+          <div class="stat-key" style="margin-bottom:8px" data-i18n="backup_info">I progressi sono salvati solo su questo dispositivo. Fai ogni tanto un backup e salvalo su iCloud Drive o Google Drive: se cancelli l'app, lo ricarichi e ritrovi tutto.</div>
           <div class="modal-btns" style="margin-top:0">
-            <button class="action-btn primary sm" onclick="exportBackup()">💾 Salva backup</button>
-            <button class="action-btn sm" onclick="document.getElementById('backup-file').click()">📂 Ripristina</button>
+            <button class="action-btn primary sm" onclick="exportBackup()" data-i18n="backup_save">💾 Salva backup</button>
+            <button class="action-btn sm" onclick="document.getElementById('backup-file').click()" data-i18n="backup_restore">📂 Ripristina</button>
           </div>
           <input type="file" id="backup-file" accept=".json,application/json" style="display:none" onchange="importBackup(this)">
           <div class="stat-key" id="s-last-backup" style="margin-top:8px;font-size:11px">Nessun backup ancora</div>
-          <button class="action-btn sm" style="width:100%;margin-top:12px;color:var(--muted)" onclick="importLegacy()">☁️ Importa dal vecchio salvataggio condiviso</button>
+          <button class="action-btn sm" style="width:100%;margin-top:12px;color:var(--muted)" onclick="importLegacy()" data-i18n="legacy_import">☁️ Importa dal vecchio salvataggio condiviso</button>
         </div>
       </div>
     </div>
@@ -318,15 +336,15 @@ body.doom .infinity-only{display:none!important}
 <div class="bottom-bar" id="bottom-bar">
   <button class="nav-btn active" id="nav-home" onclick="switchView('home')">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12l9-9 9 9M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>
-    Timeline
+    <span data-i18n="nav_timeline">Timeline</span>
   </button>
   <button class="nav-btn" id="nav-gems" onclick="switchView('gems')">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
-    <span class="infinity-only">Gemme</span><span class="doom-inline">Multiverso</span>
+    <span class="infinity-only" data-i18n="nav_gems">Gemme</span><span class="doom-inline" data-i18n="nav_mv">Multiverso</span>
   </button>
   <button class="nav-btn" id="nav-stats" onclick="switchView('stats')">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="12" width="4" height="9"/><rect x="10" y="6" width="4" height="15"/><rect x="17" y="9" width="4" height="12"/></svg>
-    Stats
+    <span data-i18n="nav_stats">Stats</span>
   </button>
 </div>
 
@@ -340,17 +358,17 @@ body.doom .infinity-only{display:none!important}
   <div class="edit-modal" id="edit-modal">
     <div class="modal-handle"></div>
     <div class="modal-title" id="edit-title" style="font-size:17px;font-weight:500;margin-bottom:16px;color:var(--text)">Modifica</div>
-    <p class="input-label">Voto</p>
+    <p class="input-label" data-i18n="edit_rating">Voto</p>
     <div class="stars-input"><button class="star-btn" onclick="setStar(1)">⭐</button><button class="star-btn" onclick="setStar(2)">⭐</button><button class="star-btn" onclick="setStar(3)">⭐</button><button class="star-btn" onclick="setStar(4)">⭐</button><button class="star-btn" onclick="setStar(5)">⭐</button></div>
-    <p class="input-label">Data visione</p>
+    <p class="input-label" data-i18n="edit_date">Data visione</p>
     <input type="date" id="edit-date">
     <div id="edit-min-wrap">
-    <p class="input-label">Minutaggio se interrotto (vuoto = visto per intero)</p>
-    <input type="number" id="edit-min" placeholder="es. 74" min="0" max="999">
+    <p class="input-label" data-i18n="edit_min">Minutaggio se interrotto (vuoto = visto per intero)</p>
+    <input type="number" id="edit-min" placeholder="es. 74" data-i18n-ph="edit_min_ph" min="0" max="999">
     </div>
     <div class="modal-btns">
-      <button class="action-btn" onclick="closeEdit()">Annulla</button>
-      <button class="action-btn primary" onclick="saveEdit()">✓ Salva</button>
+      <button class="action-btn" onclick="closeEdit()" data-i18n="cancel">Annulla</button>
+      <button class="action-btn primary" onclick="saveEdit()" data-i18n="save">✓ Salva</button>
     </div>
   </div>
 </div>
@@ -603,6 +621,8 @@ const SUMMARIES={
 
 const PARTIAL_SUMMARIES={
   3:{default:(min,dur)=>{
+    const P=lang!=='it'?(CONTENT[lang].p3||CONTENT.en.p3):null;
+    if(P)return P[min<=30?0:min<=60?1:min<=90?2:3];
     if(min<=30)return"Tony Stark ha dichiarato di essere Iron Man al mondo e sta gestendo la sua nuova vita pubblica. Pepper è diventata CEO di Stark Industries. Qualcosa non va però con il reattore Arc nel suo petto...";
     if(min<=60)return"Tony scopre che il palladio nel reattore Arc lo sta avvelenando lentamente. Ivan Vanko, figlio di un collaboratore di suo padre, ha costruito fruste energetiche e ha attaccato Tony al Gran Prix di Monaco davanti al mondo intero.";
     if(min<=90)return"Nick Fury ha rivelato a Tony il progetto Avengers e i file segreti di suo padre. Justin Hammer ha liberato Vanko per costruire droni militari. Tony cerca disperatamente un nuovo elemento prima che il palladio lo uccida.";
@@ -756,6 +776,693 @@ var doomState=DOOM_ITEMS.map(t=>doomDefaults(t,null));
 var mode='infinity';
 try{mode=localStorage.getItem('iw-mode')||'infinity';}catch(e){}
 
+// ── LINGUE: INTERFACCIA ──
+const I18N={};
+I18N.it={
+  order_release:"🎬 Ordine Uscita",order_story:"📅 Ordine Storia",
+  filter_clear:"✕ Rimuovi filtro",filter_label:x=>`Filtro: ${x}`,
+  gems_title_html:"Gemme <span>dell'Infinito</span>",mv_title_html:"Il <span>Multiverso</span>",stats_title_html:"Le <span>Stats</span>",
+  st_watched:"Visti",st_remain:"Da vedere",st_avg:"Voto medio",st_phase:"Fase attuale",st_best:"Il migliore",st_ratings:"Voti dati",
+  backup_info:"I progressi sono salvati solo su questo dispositivo. Fai ogni tanto un backup e salvalo su iCloud Drive o Google Drive: se cancelli l'app, lo ricarichi e ritrovi tutto.",
+  backup_save:"💾 Salva backup",backup_restore:"📂 Ripristina",backup_none:"Nessun backup ancora",backup_last:d=>`Ultimo backup: ${d}`,
+  legacy_import:"☁️ Importa dal vecchio salvataggio condiviso",
+  nav_timeline:"Timeline",nav_gems:"Gemme",nav_mv:"Multiverso",nav_stats:"Stats",
+  edit_rating:"Voto",edit_date:"Data visione",edit_min:"Minutaggio se interrotto (vuoto = visto per intero)",edit_min_ph:"es. 74",cancel:"Annulla",save:"✓ Salva",
+  progress:(w,n)=>`${w} di ${n} visti`,phase:n=>`Phase ${n}`,
+  grp_fox:"⬡ Universo X-Men · Fox",grp_infinity:"⬡ Saga dell'Infinito",grp_multiverse:"⬡ Saga del Multiverso",
+  s_watched:"Visto",s_watched_series:"Vista",s_todo:"Da vedere",s_todo_series:n=>`Da vedere · ${n} episodi`,s_eps:(a,b)=>`${a}/${b} episodi`,
+  tag_fox:"Fuori MCU",
+  cd_label:n=>`${n===1?'giorno':'giorni'} ad <strong>Avengers: Doomsday</strong><br>al cinema dal 16 dicembre 2026`,cd_out:"<strong>Avengers: Doomsday</strong> è al cinema! 🍿",
+  pace_text:(w,n)=>`${w} di ${n} titoli`,pace_done:"Tutto pronto per Doomsday! 🛡️",
+  pace_ahead:n=>`Avanti di ${n} ${n===1?'titolo':'titoli'} ✓`,pace_even:"In pari con la tabella di marcia ✓",
+  pace_behind:n=>`Indietro di ${n} ${n===1?'titolo':'titoli'}`,pace_rate:x=>`servono ${x} titoli/settimana`,
+  chip_eps:(n,m)=>`📺 ${n} episodi · ~${m} min`,chip_fox:"Fuori MCU · Fox",
+  sec_eps:"Episodi · tocca per segnare",sec_cast:"Cast principale",sec_heroes:"Eroi presenti · tocca per filtrare",sec_villains:"Villain",sec_pc:"🎬 Scena Post-Credit",
+  pc_seen_lbl:"Vista!",pc_unseen_lbl:"Non vista",pc_seen_btn:"✓ Vista",pc_mark_btn:"Segna come vista",pc_none:"Nessuna scena post-credit.",
+  btn_edit:"✏️ Modifica progressi",btn_mark:"✓ Segna come visto",
+  sum_until:m=>`📖 Trama · fino al min ${m}`,sum_rest:"[il resto è ancora da scoprire]",sum_minute:(m,d)=>`Hai visto il film fino al minuto ${m} di ${d}.`,
+  sum_full:"📖 Trama completa",sum_eps:"📖 Trama · episodi visti",ep_short:"Ep.",
+  toast_pc_seen:"🎬 Scena post-credit vista!",toast_pc_removed:"Rimossa dai visti",toast_saved:"💾 Salvato",toast_done:"🎉 Film completato!",
+  toast_marked:"✓ Segnato come visto",toast_season:"🎉 Stagione completata!",toast_ep:n=>`✓ Episodio ${n} visto`,toast_ep_removed:"Episodio rimosso dai visti",
+  toast_nosave:"⚠️ Impossibile salvare su questo dispositivo",
+  confirm_legacy:"Importare i progressi dal vecchio salvataggio condiviso?\n\nSostituiscono quelli salvati su questo telefono. Il vecchio salvataggio non viene modificato.",
+  toast_importing:"☁️ Importazione in corso…",toast_imported:n=>`✓ Importati ${n} titoli`,toast_import_fail:"⚠️ Importazione non riuscita: controlla le regole Firebase",
+  toast_backup_dl:"💾 Backup scaricato",confirm_restore:d=>`Ripristinare il backup del ${d}?\n\nSostituisce i progressi salvati su questo telefono.`,
+  unknown_date:"data sconosciuta",toast_restored:"✓ Backup ripristinato",toast_bad_backup:"⚠️ Questo file non è un backup valido",
+  gems_empty:"Le gemme dell'Infinito si sbloccano man mano che completi i film.<br><br>Continua a guardare per scoprire i segreti dell'universo Marvel! 🌌",
+  gems_count:n=>`${n} di 6 gemme scoperte`,gem_first:"Apparsa per la prima volta in",gem_powers:"Poteri",gem_origin:"Origine nel MCU",
+  mv_count:(n,m)=>`${n} di ${m} concetti sbloccati`,mv_hint:"Ogni concetto si svela solo quando completi il titolo che lo introduce.",
+  mv_unlock_with:x=>`Si sblocca con ${x}`,mv_toast:x=>`🔒 Guarda ${x} per sbloccarlo`,mv_intro:"Introdotto in",mv_what:"Cos'è",mv_why:"Perché conta"
+};
+I18N.en={
+  order_release:"🎬 Release Order",order_story:"📅 Story Order",
+  filter_clear:"✕ Clear filter",filter_label:x=>`Filter: ${x}`,
+  gems_title_html:"Infinity <span>Stones</span>",mv_title_html:"The <span>Multiverse</span>",stats_title_html:"Your <span>Stats</span>",
+  st_watched:"Watched",st_remain:"To watch",st_avg:"Average rating",st_phase:"Current phase",st_best:"Top pick",st_ratings:"Ratings",
+  backup_info:"Your progress is saved only on this device. Make a backup now and then and save it to iCloud Drive or Google Drive: if you delete the app, load it back and everything returns.",
+  backup_save:"💾 Save backup",backup_restore:"📂 Restore",backup_none:"No backup yet",backup_last:d=>`Last backup: ${d}`,
+  legacy_import:"☁️ Import from the old shared save",
+  nav_timeline:"Timeline",nav_gems:"Stones",nav_mv:"Multiverse",nav_stats:"Stats",
+  edit_rating:"Rating",edit_date:"Date watched",edit_min:"Minute you stopped at (empty = watched in full)",edit_min_ph:"e.g. 74",cancel:"Cancel",save:"✓ Save",
+  progress:(w,n)=>`${w} of ${n} watched`,phase:n=>`Phase ${n}`,
+  grp_fox:"⬡ X-Men Universe · Fox",grp_infinity:"⬡ The Infinity Saga",grp_multiverse:"⬡ The Multiverse Saga",
+  s_watched:"Watched",s_watched_series:"Watched",s_todo:"To watch",s_todo_series:n=>`To watch · ${n} episodes`,s_eps:(a,b)=>`${a}/${b} episodes`,
+  tag_fox:"Non-MCU",
+  cd_label:n=>`${n===1?'day':'days'} to <strong>Avengers: Doomsday</strong><br>in cinemas from 16 December 2026`,cd_out:"<strong>Avengers: Doomsday</strong> is in cinemas! 🍿",
+  pace_text:(w,n)=>`${w} of ${n} titles`,pace_done:"All set for Doomsday! 🛡️",
+  pace_ahead:n=>`${n} ${n===1?'title':'titles'} ahead ✓`,pace_even:"On schedule ✓",
+  pace_behind:n=>`${n} ${n===1?'title':'titles'} behind`,pace_rate:x=>`${x} titles/week needed`,
+  chip_eps:(n,m)=>`📺 ${n} episodes · ~${m} min`,chip_fox:"Non-MCU · Fox",
+  sec_eps:"Episodes · tap to mark",sec_cast:"Main cast",sec_heroes:"Heroes · tap to filter",sec_villains:"Villains",sec_pc:"🎬 Post-Credit Scene",
+  pc_seen_lbl:"Seen!",pc_unseen_lbl:"Not seen",pc_seen_btn:"✓ Seen",pc_mark_btn:"Mark as seen",pc_none:"No post-credit scene.",
+  btn_edit:"✏️ Edit progress",btn_mark:"✓ Mark as watched",
+  sum_until:m=>`📖 Plot · up to min ${m}`,sum_rest:"[the rest is yet to be discovered]",sum_minute:(m,d)=>`You watched up to minute ${m} of ${d}.`,
+  sum_full:"📖 Full plot",sum_eps:"📖 Plot · episodes watched",ep_short:"Ep.",
+  toast_pc_seen:"🎬 Post-credit scene seen!",toast_pc_removed:"Removed from seen",toast_saved:"💾 Saved",toast_done:"🎉 Film completed!",
+  toast_marked:"✓ Marked as watched",toast_season:"🎉 Season completed!",toast_ep:n=>`✓ Episode ${n} watched`,toast_ep_removed:"Episode removed from watched",
+  toast_nosave:"⚠️ Can't save on this device",
+  confirm_legacy:"Import progress from the old shared save?\n\nIt replaces the progress saved on this phone. The old save is not changed.",
+  toast_importing:"☁️ Importing…",toast_imported:n=>`✓ Imported ${n} titles`,toast_import_fail:"⚠️ Import failed: check the Firebase rules",
+  toast_backup_dl:"💾 Backup downloaded",confirm_restore:d=>`Restore the backup from ${d}?\n\nIt replaces the progress saved on this phone.`,
+  unknown_date:"an unknown date",toast_restored:"✓ Backup restored",toast_bad_backup:"⚠️ This file is not a valid backup",
+  gems_empty:"The Infinity Stones unlock as you finish the films.<br><br>Keep watching to uncover the secrets of the Marvel universe! 🌌",
+  gems_count:n=>`${n} of 6 stones found`,gem_first:"First appeared in",gem_powers:"Powers",gem_origin:"Origin in the MCU",
+  mv_count:(n,m)=>`${n} of ${m} concepts unlocked`,mv_hint:"Each concept is revealed only when you finish the title that introduces it.",
+  mv_unlock_with:x=>`Unlocks with ${x}`,mv_toast:x=>`🔒 Watch ${x} to unlock it`,mv_intro:"Introduced in",mv_what:"What it is",mv_why:"Why it matters"
+};
+I18N.es={
+  order_release:"🎬 Orden de estreno",order_story:"📅 Orden cronológico",
+  filter_clear:"✕ Quitar filtro",filter_label:x=>`Filtro: ${x}`,
+  gems_title_html:"Gemas del <span>Infinito</span>",mv_title_html:"El <span>Multiverso</span>",stats_title_html:"Tus <span>Stats</span>",
+  st_watched:"Vistos",st_remain:"Por ver",st_avg:"Nota media",st_phase:"Fase actual",st_best:"El mejor",st_ratings:"Notas dadas",
+  backup_info:"Tu progreso se guarda solo en este dispositivo. Haz una copia de vez en cuando y guárdala en iCloud Drive o Google Drive: si borras la app, la cargas y recuperas todo.",
+  backup_save:"💾 Guardar copia",backup_restore:"📂 Restaurar",backup_none:"Aún no hay copia",backup_last:d=>`Última copia: ${d}`,
+  legacy_import:"☁️ Importar del antiguo guardado compartido",
+  nav_timeline:"Timeline",nav_gems:"Gemas",nav_mv:"Multiverso",nav_stats:"Stats",
+  edit_rating:"Nota",edit_date:"Fecha vista",edit_min:"Minuto en que paraste (vacío = vista completa)",edit_min_ph:"ej. 74",cancel:"Cancelar",save:"✓ Guardar",
+  progress:(w,n)=>`${w} de ${n} vistos`,phase:n=>`Fase ${n}`,
+  grp_fox:"⬡ Universo X-Men · Fox",grp_infinity:"⬡ La Saga del Infinito",grp_multiverse:"⬡ La Saga del Multiverso",
+  s_watched:"Visto",s_watched_series:"Vista",s_todo:"Por ver",s_todo_series:n=>`Por ver · ${n} episodios`,s_eps:(a,b)=>`${a}/${b} episodios`,
+  tag_fox:"Fuera del MCU",
+  cd_label:n=>`${n===1?'día':'días'} para <strong>Avengers: Doomsday</strong><br>en cines desde el 16 de diciembre de 2026`,cd_out:"¡<strong>Avengers: Doomsday</strong> ya está en cines! 🍿",
+  pace_text:(w,n)=>`${w} de ${n} títulos`,pace_done:"¡Todo listo para Doomsday! 🛡️",
+  pace_ahead:n=>`${n} ${n===1?'título':'títulos'} por delante ✓`,pace_even:"Al día con el plan ✓",
+  pace_behind:n=>`${n} ${n===1?'título':'títulos'} de retraso`,pace_rate:x=>`hacen falta ${x} títulos/semana`,
+  chip_eps:(n,m)=>`📺 ${n} episodios · ~${m} min`,chip_fox:"Fuera del MCU · Fox",
+  sec_eps:"Episodios · toca para marcar",sec_cast:"Reparto principal",sec_heroes:"Héroes · toca para filtrar",sec_villains:"Villanos",sec_pc:"🎬 Escena post-créditos",
+  pc_seen_lbl:"¡Vista!",pc_unseen_lbl:"No vista",pc_seen_btn:"✓ Vista",pc_mark_btn:"Marcar como vista",pc_none:"Sin escena post-créditos.",
+  btn_edit:"✏️ Editar progreso",btn_mark:"✓ Marcar como visto",
+  sum_until:m=>`📖 Trama · hasta el min ${m}`,sum_rest:"[el resto está por descubrir]",sum_minute:(m,d)=>`Has visto hasta el minuto ${m} de ${d}.`,
+  sum_full:"📖 Trama completa",sum_eps:"📖 Trama · episodios vistos",ep_short:"Ep.",
+  toast_pc_seen:"🎬 ¡Escena post-créditos vista!",toast_pc_removed:"Quitada de vistas",toast_saved:"💾 Guardado",toast_done:"🎉 ¡Película completada!",
+  toast_marked:"✓ Marcado como visto",toast_season:"🎉 ¡Temporada completada!",toast_ep:n=>`✓ Episodio ${n} visto`,toast_ep_removed:"Episodio quitado de vistos",
+  toast_nosave:"⚠️ No se puede guardar en este dispositivo",
+  confirm_legacy:"¿Importar el progreso del antiguo guardado compartido?\n\nSustituye el progreso guardado en este teléfono. El guardado antiguo no se modifica.",
+  toast_importing:"☁️ Importando…",toast_imported:n=>`✓ ${n} títulos importados`,toast_import_fail:"⚠️ No se pudo importar: revisa las reglas de Firebase",
+  toast_backup_dl:"💾 Copia descargada",confirm_restore:d=>`¿Restaurar la copia del ${d}?\n\nSustituye el progreso guardado en este teléfono.`,
+  unknown_date:"fecha desconocida",toast_restored:"✓ Copia restaurada",toast_bad_backup:"⚠️ Este archivo no es una copia válida",
+  gems_empty:"Las Gemas del Infinito se desbloquean a medida que terminas las películas.<br><br>¡Sigue viendo para descubrir los secretos del universo Marvel! 🌌",
+  gems_count:n=>`${n} de 6 gemas descubiertas`,gem_first:"Apareció por primera vez en",gem_powers:"Poderes",gem_origin:"Origen en el MCU",
+  mv_count:(n,m)=>`${n} de ${m} conceptos desbloqueados`,mv_hint:"Cada concepto se revela solo cuando terminas el título que lo presenta.",
+  mv_unlock_with:x=>`Se desbloquea con ${x}`,mv_toast:x=>`🔒 Mira ${x} para desbloquearlo`,mv_intro:"Presentado en",mv_what:"Qué es",mv_why:"Por qué importa"
+};
+I18N.fr={
+  order_release:"🎬 Ordre de sortie",order_story:"📅 Ordre chronologique",
+  filter_clear:"✕ Retirer le filtre",filter_label:x=>`Filtre : ${x}`,
+  gems_title_html:"Pierres d'<span>Infinité</span>",mv_title_html:"Le <span>Multivers</span>",stats_title_html:"Tes <span>Stats</span>",
+  st_watched:"Vus",st_remain:"À voir",st_avg:"Note moyenne",st_phase:"Phase actuelle",st_best:"Le meilleur",st_ratings:"Notes données",
+  backup_info:"Ta progression est enregistrée uniquement sur cet appareil. Fais une sauvegarde de temps en temps et range-la sur iCloud Drive ou Google Drive : si tu supprimes l'app, tu la recharges et tu retrouves tout.",
+  backup_save:"💾 Sauvegarder",backup_restore:"📂 Restaurer",backup_none:"Aucune sauvegarde pour l'instant",backup_last:d=>`Dernière sauvegarde : ${d}`,
+  legacy_import:"☁️ Importer depuis l'ancienne sauvegarde partagée",
+  nav_timeline:"Timeline",nav_gems:"Pierres",nav_mv:"Multivers",nav_stats:"Stats",
+  edit_rating:"Note",edit_date:"Date de visionnage",edit_min:"Minute où tu t'es arrêté·e (vide = vu en entier)",edit_min_ph:"ex. 74",cancel:"Annuler",save:"✓ Enregistrer",
+  progress:(w,n)=>`${w} sur ${n} vus`,phase:n=>`Phase ${n}`,
+  grp_fox:"⬡ Univers X-Men · Fox",grp_infinity:"⬡ La Saga de l'Infini",grp_multiverse:"⬡ La Saga du Multivers",
+  s_watched:"Vu",s_watched_series:"Vue",s_todo:"À voir",s_todo_series:n=>`À voir · ${n} épisodes`,s_eps:(a,b)=>`${a}/${b} épisodes`,
+  tag_fox:"Hors MCU",
+  cd_label:n=>`${n===1?'jour':'jours'} avant <strong>Avengers: Doomsday</strong><br>au cinéma dès le 16 décembre 2026`,cd_out:"<strong>Avengers: Doomsday</strong> est au cinéma ! 🍿",
+  pace_text:(w,n)=>`${w} sur ${n} titres`,pace_done:"Fin prêt pour Doomsday ! 🛡️",
+  pace_ahead:n=>`${n} ${n===1?'titre':'titres'} d'avance ✓`,pace_even:"Dans les temps ✓",
+  pace_behind:n=>`${n} ${n===1?'titre':'titres'} de retard`,pace_rate:x=>`${x} titres/semaine nécessaires`,
+  chip_eps:(n,m)=>`📺 ${n} épisodes · ~${m} min`,chip_fox:"Hors MCU · Fox",
+  sec_eps:"Épisodes · touche pour cocher",sec_cast:"Distribution principale",sec_heroes:"Héros · touche pour filtrer",sec_villains:"Méchants",sec_pc:"🎬 Scène post-générique",
+  pc_seen_lbl:"Vue !",pc_unseen_lbl:"Pas vue",pc_seen_btn:"✓ Vue",pc_mark_btn:"Marquer comme vue",pc_none:"Pas de scène post-générique.",
+  btn_edit:"✏️ Modifier la progression",btn_mark:"✓ Marquer comme vu",
+  sum_until:m=>`📖 Intrigue · jusqu'à la min ${m}`,sum_rest:"[la suite reste à découvrir]",sum_minute:(m,d)=>`Tu as regardé jusqu'à la minute ${m} sur ${d}.`,
+  sum_full:"📖 Intrigue complète",sum_eps:"📖 Intrigue · épisodes vus",ep_short:"Ép.",
+  toast_pc_seen:"🎬 Scène post-générique vue !",toast_pc_removed:"Retirée des vues",toast_saved:"💾 Enregistré",toast_done:"🎉 Film terminé !",
+  toast_marked:"✓ Marqué comme vu",toast_season:"🎉 Saison terminée !",toast_ep:n=>`✓ Épisode ${n} vu`,toast_ep_removed:"Épisode retiré des vus",
+  toast_nosave:"⚠️ Impossible d'enregistrer sur cet appareil",
+  confirm_legacy:"Importer la progression depuis l'ancienne sauvegarde partagée ?\n\nElle remplace celle enregistrée sur ce téléphone. L'ancienne sauvegarde n'est pas modifiée.",
+  toast_importing:"☁️ Importation…",toast_imported:n=>`✓ ${n} titres importés`,toast_import_fail:"⚠️ Échec de l'importation : vérifie les règles Firebase",
+  toast_backup_dl:"💾 Sauvegarde téléchargée",confirm_restore:d=>`Restaurer la sauvegarde du ${d} ?\n\nElle remplace la progression enregistrée sur ce téléphone.`,
+  unknown_date:"date inconnue",toast_restored:"✓ Sauvegarde restaurée",toast_bad_backup:"⚠️ Ce fichier n'est pas une sauvegarde valide",
+  gems_empty:"Les Pierres d'Infinité se débloquent au fil des films terminés.<br><br>Continue à regarder pour percer les secrets de l'univers Marvel ! 🌌",
+  gems_count:n=>`${n} sur 6 pierres découvertes`,gem_first:"Première apparition dans",gem_powers:"Pouvoirs",gem_origin:"Origine dans le MCU",
+  mv_count:(n,m)=>`${n} sur ${m} concepts débloqués`,mv_hint:"Chaque concept se dévoile seulement quand tu termines le titre qui l'introduit.",
+  mv_unlock_with:x=>`Se débloque avec ${x}`,mv_toast:x=>`🔒 Regarde ${x} pour le débloquer`,mv_intro:"Introduit dans",mv_what:"Ce que c'est",mv_why:"Pourquoi c'est important"
+};
+I18N.pt={
+  order_release:"🎬 Ordem de lançamento",order_story:"📅 Ordem cronológica",
+  filter_clear:"✕ Remover filtro",filter_label:x=>`Filtro: ${x}`,
+  gems_title_html:"Joias do <span>Infinito</span>",mv_title_html:"O <span>Multiverso</span>",stats_title_html:"Suas <span>Stats</span>",
+  st_watched:"Vistos",st_remain:"Para ver",st_avg:"Nota média",st_phase:"Fase atual",st_best:"O melhor",st_ratings:"Notas dadas",
+  backup_info:"Seu progresso fica salvo só neste aparelho. Faça um backup de vez em quando e guarde no iCloud Drive ou no Google Drive: se apagar o app, é só carregar e recuperar tudo.",
+  backup_save:"💾 Salvar backup",backup_restore:"📂 Restaurar",backup_none:"Nenhum backup ainda",backup_last:d=>`Último backup: ${d}`,
+  legacy_import:"☁️ Importar do antigo salvamento compartilhado",
+  nav_timeline:"Timeline",nav_gems:"Joias",nav_mv:"Multiverso",nav_stats:"Stats",
+  edit_rating:"Nota",edit_date:"Data em que assistiu",edit_min:"Minuto em que parou (vazio = assistido inteiro)",edit_min_ph:"ex. 74",cancel:"Cancelar",save:"✓ Salvar",
+  progress:(w,n)=>`${w} de ${n} assistidos`,phase:n=>`Fase ${n}`,
+  grp_fox:"⬡ Universo X-Men · Fox",grp_infinity:"⬡ A Saga do Infinito",grp_multiverse:"⬡ A Saga do Multiverso",
+  s_watched:"Assistido",s_watched_series:"Assistida",s_todo:"Para ver",s_todo_series:n=>`Para ver · ${n} episódios`,s_eps:(a,b)=>`${a}/${b} episódios`,
+  tag_fox:"Fora do MCU",
+  cd_label:n=>`${n===1?'dia':'dias'} para <strong>Avengers: Doomsday</strong><br>nos cinemas a partir de 16 de dezembro de 2026`,cd_out:"<strong>Avengers: Doomsday</strong> chegou aos cinemas! 🍿",
+  pace_text:(w,n)=>`${w} de ${n} títulos`,pace_done:"Tudo pronto para Doomsday! 🛡️",
+  pace_ahead:n=>`${n} ${n===1?'título':'títulos'} adiantado ✓`,pace_even:"Em dia com o plano ✓",
+  pace_behind:n=>`${n} ${n===1?'título':'títulos'} atrasado`,pace_rate:x=>`faltam ${x} títulos/semana`,
+  chip_eps:(n,m)=>`📺 ${n} episódios · ~${m} min`,chip_fox:"Fora do MCU · Fox",
+  sec_eps:"Episódios · toque para marcar",sec_cast:"Elenco principal",sec_heroes:"Heróis · toque para filtrar",sec_villains:"Vilões",sec_pc:"🎬 Cena pós-créditos",
+  pc_seen_lbl:"Vista!",pc_unseen_lbl:"Não vista",pc_seen_btn:"✓ Vista",pc_mark_btn:"Marcar como vista",pc_none:"Sem cena pós-créditos.",
+  btn_edit:"✏️ Editar progresso",btn_mark:"✓ Marcar como assistido",
+  sum_until:m=>`📖 Enredo · até o min ${m}`,sum_rest:"[o resto ainda está por descobrir]",sum_minute:(m,d)=>`Você assistiu até o minuto ${m} de ${d}.`,
+  sum_full:"📖 Enredo completo",sum_eps:"📖 Enredo · episódios assistidos",ep_short:"Ep.",
+  toast_pc_seen:"🎬 Cena pós-créditos vista!",toast_pc_removed:"Removida das vistas",toast_saved:"💾 Salvo",toast_done:"🎉 Filme concluído!",
+  toast_marked:"✓ Marcado como assistido",toast_season:"🎉 Temporada concluída!",toast_ep:n=>`✓ Episódio ${n} assistido`,toast_ep_removed:"Episódio removido dos assistidos",
+  toast_nosave:"⚠️ Não foi possível salvar neste aparelho",
+  confirm_legacy:"Importar o progresso do antigo salvamento compartilhado?\n\nEle substitui o progresso salvo neste celular. O salvamento antigo não é alterado.",
+  toast_importing:"☁️ Importando…",toast_imported:n=>`✓ ${n} títulos importados`,toast_import_fail:"⚠️ Falha na importação: verifique as regras do Firebase",
+  toast_backup_dl:"💾 Backup baixado",confirm_restore:d=>`Restaurar o backup de ${d}?\n\nEle substitui o progresso salvo neste celular.`,
+  unknown_date:"data desconhecida",toast_restored:"✓ Backup restaurado",toast_bad_backup:"⚠️ Este arquivo não é um backup válido",
+  gems_empty:"As Joias do Infinito são desbloqueadas conforme você termina os filmes.<br><br>Continue assistindo para descobrir os segredos do universo Marvel! 🌌",
+  gems_count:n=>`${n} de 6 joias descobertas`,gem_first:"Apareceu pela primeira vez em",gem_powers:"Poderes",gem_origin:"Origem no MCU",
+  mv_count:(n,m)=>`${n} de ${m} conceitos desbloqueados`,mv_hint:"Cada conceito só é revelado quando você termina o título que o apresenta.",
+  mv_unlock_with:x=>`Desbloqueia com ${x}`,mv_toast:x=>`🔒 Assista ${x} para desbloquear`,mv_intro:"Apresentado em",mv_what:"O que é",mv_why:"Por que importa"
+};
+
+// ── LINGUE: CONTENUTI (l'italiano è nei dati originali) ──
+const CONTENT={en:{},es:{},fr:{},pt:{}};
+CONTENT.en.s={
+  1:"Tony Stark, billionaire genius and arms dealer, is captured in Afghanistan and forced to build a weapon. Instead he builds an armoured suit to escape. Back home he perfects the technology and confronts Obadiah Stane, the partner who betrayed him. At the end, in front of the world's cameras, he reveals his identity: «I am Iron Man».",
+  2:"Bruce Banner is on the run in Brazil, searching for a cure for his condition. General Ross tracks him down and sends a team. Banner returns to New York to finish his research but is captured. Ross enhances Blonsky, turning him into the Abomination. Hulk fights and defeats Blonsky in Harlem. At the end Tony Stark approaches Ross, hinting that a team is being assembled.",
+  3:"Tony Stark has to deal with the palladium in his Arc reactor slowly poisoning him. Ivan Vanko, son of his father's old partner, attacks Tony at the Monaco Grand Prix with energy whips. Nick Fury shows Tony his father's old files, which help him synthesise a new element. Tony and James Rhodes defeat Vanko during a technology expo. Black Widow makes her first appearance.",
+  4:"Thor, prince of Asgard, is exiled to Earth by his father Odin for his arrogance. He meets the scientist Jane Foster. Loki, his adoptive brother, discovers he is the son of the Frost Giant king and sends the Destroyer to kill Thor. Without his powers, Thor sacrifices himself to protect the innocent: Mjolnir returns to him. Thor defeats the Destroyer, but Loki vanishes into the cosmic void.",
+  5:"During the Second World War, Steve Rogers becomes Captain America thanks to the Super Soldier serum. With the Howling Commandos he fights HYDRA, led by Red Skull, who has recovered the Tesseract. Steve sacrifices himself by crashing the plane into the Arctic. He wakes up in present-day New York, 70 years later.",
+  6:"Nick Fury brings together Iron Man, Captain America, Thor, Hulk, Black Widow and Hawkeye to form the Avengers. The goal: stop Loki, who has stolen the Tesseract to open a portal for the Chitauri army. After clashing with each other, the team comes together in the Battle of New York. Tony steers a nuclear missile through the portal. Loki is captured. Thanos appears in the post-credit scene.",
+  7:"Tony Stark is threatened by the Mandarin. After his mansion is destroyed, he finds himself alone in Tennessee without a suit. He discovers the Mandarin is a front: the real villain is Aldrich Killian with Extremis. With Rhodes he saves the President. In the end he has the Arc reactor removed from his chest: «I am Iron Man», not the suit.",
+  8:"Malekith tries to use the Aether during the Convergence to plunge the universe back into darkness. Jane Foster accidentally absorbs the Aether. Thor and Loki team up to lure Malekith away from Asgard. In the final battle in London the Aether is drawn out of Jane and Malekith is defeated. Loki takes Odin's place on the throne of Asgard.",
+  9:"Steve Rogers discovers that S.H.I.E.L.D. has been infiltrated by HYDRA since its founding. The Winter Soldier is actually Bucky Barnes. With Natasha and Sam Wilson, Steve sabotages the three helicarriers of Project Insight. HYDRA is dismantled and S.H.I.E.L.D. dissolved. Bucky survives and starts to remember.",
+  10:"Peter Quill steals a mysterious orb and is hunted by Ronan. He forms a team with Gamora, Rocket, Groot and Drax. The orb contains the Power Stone. Ronan tries to use it to destroy Xandar. The Guardians join forces and together contain the stone's energy, defeating Ronan. Quill discovers he is half alien.",
+  11:"Hank Pym recruits Scott Lang to wear the Ant-Man suit and stop Darren Cross, who wants to sell the Yellowjacket technology to HYDRA. Scott learns to control ants. In the final battle he defeats Cross but has to shrink to the subatomic level to save his daughter, and manages to come back. Hope gets her own suit: she will become the Wasp.",
+  12:"Tony Stark creates Ultron, an AI meant to protect the world, which instead decides peace means wiping out humanity. After stealing vibranium, Ultron plans to lift Sokovia into the sky like a meteor. The Maximoff twins enter the scene. Vision is born. Pietro dies protecting Clint. Wanda destroys Ultron. Thor and Tony blow up the city in mid-air.",
+  13:"The Sokovia Accords split the Avengers: Tony in favour, Steve against. Zemo frames Bucky for a bombing and wakes the HYDRA Super Soldiers. The heroes clash at Leipzig airport. Zemo reveals to Tony that Bucky killed his parents: a brutal fight between Tony and Steve. Steve takes Bucky away. The rift is permanent. Spider-Man and Black Panther make their debut.",
+  14:"Peter Parker tries to impress Tony Stark while taking on the Vulture, a dealer of alien weapons. Tony takes his suit away after a disaster on a ferry. Peter discovers the Vulture is his date's father. He confronts him without the armour and stops the weapons heist. Tony offers him a place in the Avengers: Peter turns it down, he wants to stay the Friendly Neighborhood Spider-Man.",
+  15:"Stephen Strange, a brilliant neurosurgeon, badly injures his hands in an accident. He finds the Ancient One, who introduces him to the mystic arts. Kaecilius wants to open Earth to Dormammu of the Dark Dimension. The Ancient One dies in the conflict. Strange faces Dormammu, trapping him in a time loop with the Time Stone until he agrees to leave. Strange becomes the new Master of the Mystic Arts.",
+  16:"The Guardians discover that Ego, a living planet, is Peter's biological father. Ego wants to spread his consciousness across every planet in the universe, killing all other life, including Peter's mother. Nebula and Gamora face their trauma as daughters of Thanos. Yondu sacrifices himself to save Peter. The Guardians defeat Ego by destroying his core.",
+  17:"Thor is captured on Sakaar, where he finds Hulk as the arena champion. Hela, goddess of death, has taken Asgard. Thor convinces Hulk and a surviving Valkyrie to help him. They bring the Asgardian people to safety. To stop Hela, Thor unleashes Ragnarok: Surtur destroys Asgard along with Hela. Asgard is not a place, it is a people.",
+  18:"T'Challa returns to Wakanda to take the throne. Killmonger, his cousin, challenges him and wins. He wants to use vibranium weapons to start a worldwide revolution. T'Challa survives, challenges Killmonger again and defeats him. Wakanda decides to open up to the world and share its technology. In the post-credit scene Bucky is recovering in Wakanda.",
+  19:"Thanos gathers the six Infinity Stones. The Avengers and the Guardians try to stop him on several fronts but fail. Thor nearly kills Thanos but doesn't aim for the head. Doctor Strange hands the Time Stone to Thanos to save Tony. With all six stones, Thanos snaps his fingers: half of all life turns to dust, including many heroes. Only the six original Avengers survive.",
+  20:"Scott Lang and Hope open a quantum tunnel to rescue Janet van Dyne. Ghost wants to use Janet to stabilise herself. They manage to bring Janet back. In the post-credit scene, while Scott is in the Quantum Realm, the Pyms and Hope vanish in Thanos's snap. Scott is left trapped.",
+  21:"Carol Danvers, a Kree agent with no memory, lands on Earth in 1995 and meets Nick Fury. She discovers she was a pilot and that the Skrulls are innocent refugees. The real threat is the Kree Supreme Intelligence. Carol unleashes her powers without limits and defeats the Kree. She leaves Fury a pager for emergencies. In the post-credit scene she answers Fury's call after the snap.",
+  22:"Five years after the snap, Scott Lang discovers that time flows differently in the Quantum Realm. The Avengers build a time machine and split up to recover the stones from the past. Natasha sacrifices herself for the Soul Stone. Hulk brings everyone back with the gauntlet. The Thanos of 2014 attacks. Every hero returns for the final battle. Tony snaps his fingers, sacrificing himself. Steve goes back in time to return the stones and stays with Peggy, passing the shield to Sam."
+};
+CONTENT.en.pc={
+  1:"Nick Fury introduces himself to Tony Stark with an extraordinary proposal: he is putting together a group of remarkable people. The Marvel universe just got much bigger. 🌟",
+  2:"Tony Stark pays an unexpected visit to General Ross: someone is assembling a team of extraordinary individuals. The MCU puzzle starts to come together! 🔧",
+  3:"A mysterious hammer has been found in a crater in New Mexico. Something huge is about to arrive from the skies... ⚡",
+  4:"A glowing cube of immense cosmic power is discovered by a mysterious figure. The Tesseract is in the wrong hands and the universe trembles... 🔵",
+  5:"Nick Fury meets a man out of his time who needs a purpose. An epic modern adventure is about to begin for the soldier from the past! 🛡️",
+  6:"A mysterious, terrifying being smiles in the cosmic darkness. Someone far more powerful than Loki was behind it all from the start. The true villain of the universe shows himself for the first time... 💜",
+  7:"Tony tells all these adventures to someone unexpected during a therapy session... it turns out superheroes have their problems too! 😄",
+  8:"A dark, fluid substance is handed to mysterious keepers to be kept safe far from Asgard. Something enormous stirs in the darkness... 🔴",
+  9:"Two people with extraordinary powers are being held prisoner. A girl with telekinetic powers and a lightning-fast boy: the Maximoffs. The Avengers' future is about to get a lot more complicated... ⚡",
+  10:"A space duck in a jacket and tie raises a glass on a starship... Howard the Duck appears in the MCU! And the Guardians are ready for their next adventure. 🦆",
+  11:"Hope van Dyne finally gets her suit: elegant, sophisticated, incredibly powerful. The Wasp is ready. Meanwhile Cap and Sam Wilson have found someone they know... 🐝",
+  12:"A golden hand grabs an empty gauntlet and mutters: «Fine, I'll do it myself.» Thanos is about to begin his hunt. Something immense approaches on the edge of the universe... 💜",
+  13:"Bucky Barnes goes into cryosleep in Wakanda, the most advanced country in the world. Black Panther promises protection. A secret kingdom opens up to an alliance... 🐾",
+  14:"Captain America gives advice about patience that turns out incredibly ironic in context... and Toomes, in prison, shows he still has principles. 😏",
+  15:"Thor arrives at the New York Sanctum Sanctorum with a request for Doctor Strange: he is looking for his father Odin on Earth. A cosmic alliance is formed... ⚡🔮",
+  16:"Five post-credit scenes! Teenage Groot is magnificently lazy, Stakar reunites his original team and, above all, Adam Warlock is announced. An immense cosmic force is getting ready... ✨",
+  17:"The Asgardians' ship is intercepted by an enormous spacecraft in the darkness of space. Who has come to spread terror among the survivors of the destroyed kingdom? The darkest hour draws near... 💀",
+  18:"Wakanda opens its doors at the UN, bringing its advanced technology to the whole world. And in a Wakandan village, a man with a white arm wakes up... 🤍",
+  19:"In the chaos of the snap, a pager sends one last signal before switching off: a star with eight points on a red and blue background. Someone very powerful has just been called for help... ⭐",
+  20:"While Scott is in the Quantum Realm gathering healing energy, Hank, Janet and Hope vanish into nothing. Scott is trapped. Thanos's snap has hit them too. Scott is alone in the Quantum Realm... ⚛️",
+  21:"Captain Marvel answers Fury's pager and comes face to face with the surviving Avengers. Where is Fury? And what happens now? The MCU's most powerful heroine has finally arrived! 💙",
+  22:"No traditional post-credit scene, just the sound of a hammer forging something. The sound of Tony Stark building his first suit. A silent tribute to the end of an era. 🔨"
+};
+
+CONTENT.en.t={103:"Shang-Chi and the Legend of the Ten Rings",105:"Loki · Season 1",106:"Doctor Strange in the Multiverse of Madness",108:"Loki · Season 2",112:"The Fantastic Four: First Steps"};
+Object.assign(CONTENT.en.s,{
+  101:"Rogue, a girl who absorbs the life force of anyone she touches, runs away from home and meets Logan, a mutant with claws and healing powers who doesn't remember his past. Both end up at Professor Xavier's school, a refuge for mutants and home of the X-Men. Magneto, Xavier's old friend, wants to turn the world leaders gathered on Ellis Island into mutants with a machine powered by Rogue herself. The X-Men stop him on the Statue of Liberty, Logan saves Rogue and Magneto ends up in a plastic prison. Logan sets off for Alkali Lake in search of his past.",
+  102:"Nightcrawler, under mind control, attacks the President of the United States. Colonel William Stryker uses the attack to raid Xavier's school and kidnap the Professor, planning to use a copy of Cerebro to kill every mutant on Earth. The X-Men team up with Magneto and Mystique. Logan discovers Stryker is the man who grafted adamantium onto him. Magneto twists the plan to target humans, but the X-Men save Xavier. The Alkali Lake dam bursts and Jean Grey sacrifices herself to save the team. Xavier shows the President the truth and asks for peace between humans and mutants.",
+  103:"Shang-Chi works as a valet in San Francisco with his friend Katy, until the Ten Rings attack him on a bus to steal his mother's pendant. He turns out to be the son of Wenwu, a thousand-year-old warrior made immortal by the Ten Rings. Wenwu, convinced his dead wife is calling him from Ta Lo, a village hidden in another dimension, wants to break its seal. In truth the voice belongs to the Dweller-in-Darkness, imprisoned there. Wenwu frees the creature and dies passing the rings to his son. Shang-Chi, Katy and Xialing, with the Great Protector dragon, defeat the Dweller. Xialing takes control of the Ten Rings.",
+  104:"After Mysterio revealed to the world that Peter Parker is Spider-Man, the lives of Peter, MJ and Ned fall apart. Peter asks Doctor Strange for a spell to make everyone forget his identity, but keeps interrupting it and the spell breaks: villains from other universes who know Peter Parker arrive from the Multiverse, such as Green Goblin, Doctor Octopus and Electro. Peter decides to cure them instead of sending them back to die, but Green Goblin kills Aunt May. Two Spider-Men from other universes arrive, played by Tobey Maguire and Andrew Garfield: together the three Peters cure the villains at the Statue of Liberty. To save reality, Peter asks Strange to make everyone forget Peter Parker. Not even MJ and Ned remember him: Peter starts over alone, in a hand-sewn suit.",
+  105:"The 2012 Loki, who escaped with the Tesseract in Endgame, is captured by the TVA, the organisation that protects the Sacred Timeline by pruning every branch. With agent Mobius he hunts Sylvie, a variant of himself who is attacking the TVA. Loki and Sylvie discover the agents are variants without their memories and the Time-Keepers are automatons. Through the Void they reach the castle at the end of time, where He Who Remains reveals he created the TVA to prevent a war between his own variants. Sylvie kills him: the Sacred Timeline bursts into a Multiverse and a more dangerous variant of him prepares to take power.",
+  106:"America Chavez, a girl who can travel between universes, is chased by a demon. Doctor Strange and Wong save her and ask Wanda Maximoff for help, but discover she is the hunter: corrupted by the Darkhold, she wants America's power to reach a universe where her children exist. Wanda attacks Kamar-Taj. Strange and America flee to Earth-838, where the Illuminati explain incursions, collisions between universes caused by a Strange of that world, before being wiped out by Wanda. Strange possesses the body of a dead variant of himself to return to the fight. America, finally in control of her power, shows Wanda her sons afraid of her. Wanda understands, destroys the Darkhold and seems to die in the collapse. Strange grows a third eye.",
+  107:"King T'Challa dies of an illness and Wakanda is in mourning. The world wants vibranium, and an underwater search draws the attention of Namor, king of the hidden civilisation of Talokan, which also has vibranium. Namor demands that Wakanda hand over Riri Williams, the young scientist who built the detector. Shuri and Okoye find her, but Namor kidnaps Shuri and Riri. Nakia frees them, Talokan attacks Wakanda and Queen Ramonda dies. Shuri recreates the heart-shaped herb and becomes the new Black Panther. In the sea battle she defeats Namor but spares him, choosing peace. Nakia reveals she has a son by T'Challa.",
+  108:"After the death of He Who Remains, the TVA is on the verge of collapse and Loki is slipping through time against his will. With Mobius and the technician O.B. he tries to save the Temporal Loom, overloaded by the infinite branches. Renslayer and Miss Minutes look for Victor Timely, a variant of He Who Remains, who is brought to the TVA. The Loom explodes and his friends disintegrate. Loki learns to control time and spends centuries trying to save the Loom. He realises the only solution is to sacrifice himself: he destroys the machine and becomes the keeper of the timelines himself, at the end of time. The branches form a great tree and the TVA now protects the Multiverse.",
+  109:"Wade Wilson, the Deadpool of the Fox universe, learns from the TVA that his world will die because its anchor being, that universe's Wolverine, is dead. Mr. Paradox wants to speed up its end. Wade looks for another Wolverine variant and finds the worst of them all, a Logan full of regrets. Paradox sends them to the Void, ruled by Cassandra Nova, Charles Xavier's twin with immense powers. There they meet forgotten heroes from old Fox films, such as Elektra, Blade, X-23, Gambit and a Human Torch played by Chris Evans. Back at the TVA, Deadpool and Wolverine stop the machine Paradox and Cassandra want to use to destroy universes. Cassandra dies and Logan becomes the new anchor of Wade's world.",
+  110:"Thaddeus Ross, now President of the United States, asks Sam Wilson to rebuild the Avengers. During a summit at the White House, Isaiah Bradley and other agents, under mind control, try to kill Ross. Sam investigates to clear Isaiah and discovers Samuel Sterns, a scientist transformed by gamma rays who wants revenge on Ross. Also at stake is the adamantium found on Celestial Island, fought over by nations. Sterns has been poisoning Ross for years: during a speech the President turns into Red Hulk. Sam faces him and brings him back to himself. Ross turns himself in and Sam announces the return of the Avengers.",
+  111:"Yelena Belova, still grieving her sister Natasha, works for Valentina Allegra de Fontaine. Valentina, under investigation, sends her into a vault with US Agent, Ghost and Taskmaster so they will eliminate each other. Taskmaster dies. The survivors find Bob, the only test subject of the Sentry project, and escape with the help of Red Guardian and Bucky Barnes. Valentina activates Bob as Sentry, but his dark side, the Void, wraps New York in shadow and traps people in their traumas. The team steps into the darkness and saves Bob with empathy, not force. Valentina presents them to the world as the new Avengers to save face.",
+  112:"On Earth-828, a retro future inspired by the 1960s, the Fantastic Four have been beloved heroes for four years, since cosmic rays transformed them. Sue discovers she is pregnant. Silver Surfer arrives, herald of Galactus, the devourer of worlds who wants to eat the Earth. The Fantastic Four travel into space to negotiate, but Galactus asks for their unborn son in exchange. They escape and Franklin is born. The world turns against them, but Sue convinces everyone to resist. In the final clash Sue sacrifices herself pushing Galactus into a portal with Silver Surfer's help, and baby Franklin brings her back to life. A year later, someone in a metal mask visits Franklin."
+});
+Object.assign(CONTENT.en.pc,{
+  101:"No post-credit scene: in 2000 it wasn't a habit yet. But this is the film that kicked off modern superhero cinema. 🧬",
+  102:"No post-credit scene. But stay until the last shot before the credits: there's a detail in the water fans have never forgotten. 🔥",
+  103:"Two scenes. In the first, Shang-Chi and Katy are summoned by a familiar face along with two Avengers on a video call: the Ten Rings are sending a signal... towards something very far away. In the second, someone takes up the legacy of the Ten Rings. 💍",
+  104:"Two scenes. In a faraway bar, an unexpected guest is sent back home... but leaves something behind. Then a preview: Doctor Strange has to deal with the consequences of playing with the Multiverse. 🕸️",
+  105:"No true post-credit scene, but a TVA stamp on the end credits promises Loki will return in season 2. 🐍",
+  106:"Two scenes. A mysterious woman tears open a rift and asks Strange for help: there's an incursion to fix, and he caused it. The second is pure Sam Raimi comedy. 🍕",
+  107:"A mid-credits scene, gentle and important: Nakia has a secret that brings hope to the future of Wakanda. 💜",
+  108:"No post-credit scene: the ending speaks for itself. 🌳",
+  109:"A scene after the credits: an unexpected character from the Void gets something off his chest, in the most foul-mouthed way possible. 😂",
+  110:"A meeting in prison: someone warns Sam that it's not only this world in danger. Other worlds are coming. 🌍",
+  111:"Two scenes. In the second, fourteen months later, the new team argues about names and trademarks... until an alarm detects a spaceship from another dimension on its way. 🚀",
+  112:"A mid-credits scene that leads straight to the cinema on 16 December: someone in a metal mask pays the family a visit. Destiny has a name. 🛡️ Then a small 1960s-style treat. 📺"
+});
+CONTENT.en.ep={
+  105:[
+    ["Glorious Purpose","The 2012 Loki escapes with the Tesseract during the Endgame time heist and lands in the Gobi desert, where he is arrested by the TVA for crimes against the Sacred Timeline. He learns he is a variant, sees his own fate already written and agrees to help agent Mobius catch a dangerous variant who is killing Minutemen."],
+    ["The Variant","Loki realises the variant hides inside apocalypses, where nothing can alter the timeline. In 2050 at Roxxcart the variant reveals herself: she is a female Loki, who plants reset charges across the whole timeline, creating dozens of branches. With the TVA in chaos, she escapes through a portal and Loki follows."],
+    ["Lamentis","Loki and the variant, who calls herself Sylvie, are stranded on Lamentis-1, a moon about to be destroyed. They talk about love and their own nature. Sylvie reveals that all TVA agents are variants whose memories have been wiped. The ark that was meant to save them is destroyed before their eyes."],
+    ["The Nexus Event","The TVA rescues them a moment before the end. Mobius discovers the TVA is lying and is pruned by Ravonna. Loki and Sylvie reach the Time-Keepers and find out they are only automatons. Ravonna prunes Loki, who wakes up in an unknown place surrounded by other variants of himself."],
+    ["Journey into Mystery","Loki is in the Void at the end of time, where everything that gets pruned ends up. He meets other variants, including Classic Loki, Kid Loki and Alligator Loki, and the monstrous cloud Alioth that devours everything. Sylvie prunes herself to reach him. Together they enchant Alioth, and a castle appears beyond the cloud."],
+    ["For All Time. Always.","In the castle they are greeted by He Who Remains: he created the TVA to prevent a war between his own variants in different universes. He offers a choice: take his place, or kill him and unleash chaos. Sylvie pushes Loki through a portal and kills He Who Remains. The Sacred Timeline branches out of control. Loki returns to the TVA, but Mobius doesn't recognise him and in place of the Time-Keepers there's a statue of a variant of He Who Remains."]
+  ],
+  108:[
+    ["Ouroboros","Loki is involuntarily slipping between the TVA's past, present and future. With Mobius he reaches O.B., the technician who repairs the Temporal Loom, the machine that holds the timelines together. An improvised suit stops the slipping, but the Loom is under strain from the infinite branches. Meanwhile Sylvie lives quietly in 1982 Oklahoma."],
+    ["Breaking Brad","Loki and Mobius hunt X-5, a former Minuteman who became a film star in 1977. They find out where Sylvie is hiding and track her down at a 1982 fast food restaurant. Meanwhile Renslayer and Miss Minutes look for a weapon against the TVA."],
+    ["1893","At the 1893 Chicago World's Fair everyone is looking for Victor Timely, a young inventor and variant of He Who Remains. Renslayer and Miss Minutes want to use him, Loki and Mobius want to take him to the TVA, Sylvie wants to eliminate him. In the end Timely is brought to the TVA."],
+    ["Heart of the TVA","Timely agrees to help repair the Temporal Loom. Renslayer is sent to the Void. Timely approaches the Loom to install his invention, but the machine explodes: before Loki's eyes, Mobius, O.B. and B-15 disintegrate."],
+    ["Science/Fiction","Loki finds himself slipping between branches where his friends live normal lives with no memory of the TVA. One by one he brings them back. He learns to control his jumps in time, but the branches are dying."],
+    ["Glorious Purpose","Loki repeats every attempt to save the Loom for centuries, without success. He realises the only way is to take its place. He destroys the machine and holds the timelines together with his own hands, seated on a throne at the end of time: the branches become a great tree. The TVA now protects the Multiverse instead of pruning it."]
+  ]
+};
+
+CONTENT.en.gem={
+  space:["Space Stone","It lets you move instantly anywhere in the universe and open dimensional portals. It is held inside the Tesseract, a glowing cube of immense power.","The Tesseract was found by HYDRA during the Second World War. It holds the Space Stone, able to cross space in an instant."],
+  mind:["Mind Stone","It amplifies the bearer's mental abilities and allows control over other minds. It can interact with other stones and boost their effects.","Hidden inside Loki's sceptre during the invasion of New York, the Mind Stone stayed concealed until its true powers were discovered."],
+  reality:["Reality Stone","It lets you alter reality at will, transform matter and create illusions indistinguishable from reality itself.","Known as the Aether, this dark, fluid substance was sought by Malekith to plunge the universe back into primordial darkness during the Convergence."],
+  power:["Power Stone","It holds infinite destructive energy capable of wiping out entire planets. Anyone who touches it without protection is disintegrated by its energy.","Held inside the Orb, this purple stone was sought by Ronan for Thanos. The Guardians handed it to the Nova Corps on Xandar for safekeeping."],
+  time:["Time Stone","It lets you manipulate time: go back to the past, move into the future or create time loops. It is kept inside the Eye of Agamotto.","Guarded for centuries by the Masters of the Mystic Arts of Kamar-Taj, the Time Stone is kept inside the Eye of Agamotto, the Sorcerer Supreme's amulet."],
+  soul:["Soul Stone","It governs the souls of the living and the dead. It lets you enter a pocket universe inside the stone itself, where trapped souls dwell.","Hidden on Vormir, a remote planet watched over by a mysterious keeper, this stone demands the greatest sacrifice to be obtained."]
+};
+CONTENT.en.mv={
+  mutants:["Mutants","People born with a gene, the X-gene, that gives them extraordinary powers. Unlike heroes created by experiments or accidents, mutants are born this way, and that is why they are often feared and discriminated against.","The X-Men live in a different universe from the Avengers. Keep their faces in mind."],
+  branches:["Branching timelines","If you travel to the past and change something, you don't rewrite your own future: you create a new timeline, a branch that splits off from the main one.","It is the rule that makes everything else possible: every choice can create an alternate reality."],
+  tva:["TVA","The Time Variance Authority is an organisation that exists outside of time. It watches over the timeline and prunes every branch that strays from the set path.","Bureaucracy, stamps and clocks: the TVA is the guardian of the Multiverse, and it decides what exists and what doesn't."],
+  sacred:["Sacred Timeline","The only sequence of events considered correct. Anything that strays from it is called a Nexus event and is erased.","Understanding who wrote it, and why, is one of the central mysteries of the Multiverse Saga."],
+  variants:["Variants","Different versions of the same person, born in different timelines. They can look different, have another personality, even be another species.","In the Multiverse nobody is unique: the same face can be a hero in one world and an enemy in another."],
+  multiverse:["The Multiverse","An infinite set of parallel universes, each with its own history. They usually stay apart, but magic or technology can open gateways.","When the barriers between universes crack, anyone can arrive from anywhere."],
+  incursions:["Incursions","When two universes collide, one of them is destroyed. That is an incursion: the greatest catastrophe possible in the Multiverse.","It is the danger looming over everything that is coming."],
+  loom:["The Temporal Loom","The machine at the heart of the TVA that weaves the timelines and keeps them stable.","It shows how fragile the balance holding realities together really is."],
+  anchor:["Anchor beings","In every universe there is someone so important that, if they die, their whole world slowly begins to fade away.","Some lives carry entire universes on their shoulders."],
+  earth828:["Earth-828","Every Earth in the Multiverse has a number. The Avengers' Earth is Earth-616, the Fantastic Four's is Earth-828, a world with a 1960s look.","Two Earths, two teams of heroes, one date at the cinema."]
+};
+CONTENT.en.p3=[
+  "Tony Stark has told the world he is Iron Man and is handling his new public life. Pepper has become CEO of Stark Industries. But something is wrong with the Arc reactor in his chest...",
+  "Tony discovers that the palladium in his Arc reactor is slowly poisoning him. Ivan Vanko, son of a former collaborator of his father, has built energy whips and attacked Tony at the Monaco Grand Prix in front of the whole world.",
+  "Nick Fury has told Tony about the Avengers initiative and his father's secret files. Justin Hammer has freed Vanko to build military drones. Tony desperately searches for a new element before the palladium kills him.",
+  "Tony has synthesised a new element for the Arc reactor. Black Widow has made her appearance. Vanko completes the drones and prepares the final counterattack during the Stark Expo."
+];
+CONTENT.en.n={"Il Soldato d'Inverno":"The Winter Soldier","(voce)":"(voice)","(giovane)":"(young)","Il Mandarino":"The Mandarin","Ronan il Distruttore":"Ronan the Accuser","Visione":"Vision","Zia May":"Aunt May","Avvoltoio":"Vulture","L'Antico":"The Ancient One","Ego il Pianeta Vivente":"Ego the Living Planet","Hela, dea della morte":"Hela, goddess of death","Valchiria":"Valkyrie","I Figli di Thanos":"The Children of Thanos","Goose (il gatto)":"Goose (the cat)","L'Intelligenza Suprema Kree":"The Kree Supreme Intelligence","Vespa":"Wasp","Odino":"Odin","Ciclope":"Cyclops","Tempesta":"Storm","Mystica":"Mystique","Rospo":"Toad","Il Divoratore di Anime":"The Dweller-in-Darkness","Cacciatrice":"Hunter","Regina Ramonda":"Queen Ramonda","Presidente":"President","Donna Invisibile":"Invisible Woman","Torcia Umana":"Human Torch","La Cosa":"The Thing","Il Darkhold":"The Darkhold"};
+
+CONTENT.es.s={
+  1:"Tony Stark, genio multimillonario y fabricante de armas, es capturado en Afganistán y obligado a construir un arma. En su lugar crea una armadura para escapar. De vuelta en casa perfecciona la tecnología y se enfrenta a Obadiah Stane, el socio que lo traicionó. Al final, ante las cámaras de todo el mundo, revela su identidad: «Yo soy Iron Man».",
+  2:"Bruce Banner vive huyendo en Brasil buscando una cura para su condición. El general Ross lo localiza y envía un equipo. Banner vuelve a Nueva York para terminar su investigación, pero es capturado. Ross potencia a Blonsky y lo convierte en la Abominación. Hulk lucha y derrota a Blonsky en Harlem. Al final Tony Stark contacta con Ross y menciona la formación de un equipo.",
+  3:"Tony Stark tiene que lidiar con el paladio de su reactor Arc, que lo está envenenando. Ivan Vanko, hijo de un antiguo socio de su padre, ataca a Tony en el Gran Premio de Mónaco con látigos de energía. Nick Fury le muestra los viejos archivos de su padre, que lo ayudan a sintetizar un nuevo elemento. Tony y James Rhodes derrotan a Vanko durante una exposición tecnológica. La Viuda Negra aparece por primera vez.",
+  4:"Thor, príncipe de Asgard, es desterrado a la Tierra por su padre Odín por su arrogancia. Conoce a la científica Jane Foster. Loki, su hermano adoptivo, descubre que es hijo del rey de los Gigantes de Hielo y envía al Destructor a eliminar a Thor. Sin poderes, Thor se sacrifica para proteger a los inocentes: Mjolnir vuelve a él. Thor derrota al Destructor, pero Loki desaparece en el vacío cósmico.",
+  5:"Durante la Segunda Guerra Mundial, Steve Rogers se convierte en Capitán América gracias al suero del Supersoldado. Con los Comandos Aulladores combate a HYDRA, liderada por Cráneo Rojo, que ha recuperado el Teseracto. Steve se sacrifica estrellando el avión en el Ártico. Despierta en el Nueva York actual, 70 años después.",
+  6:"Nick Fury reúne a Iron Man, Capitán América, Thor, Hulk, la Viuda Negra y Ojo de Halcón para formar los Vengadores. El objetivo: detener a Loki, que ha robado el Teseracto para abrir un portal al ejército chitauri. Tras chocar entre ellos, el equipo se une en la batalla de Nueva York. Tony desvía un misil nuclear a través del portal. Loki es capturado. En la escena post-créditos aparece Thanos.",
+  7:"Tony Stark es amenazado por el Mandarín. Tras la destrucción de su mansión, se encuentra solo en Tennessee sin armadura. Descubre que el Mandarín es una fachada: el verdadero villano es Aldrich Killian con Extremis. Con Rhodes salva al Presidente. Al final se hace quitar el reactor Arc del pecho: «Yo soy Iron Man», no la armadura.",
+  8:"Malekith intenta usar el Éter durante la Convergencia para devolver el universo a la oscuridad. Jane Foster absorbe el Éter por accidente. Thor y Loki colaboran para alejar a Malekith de Asgard. En la batalla final en Londres extraen el Éter de Jane y Malekith es derrotado. Loki ocupa el lugar de Odín en el trono de Asgard.",
+  9:"Steve Rogers descubre que S.H.I.E.L.D. está infiltrada por HYDRA desde su fundación. El Soldado de Invierno es en realidad Bucky Barnes. Con Natasha y Sam Wilson, Steve sabotea los tres helitransportes del Proyecto Insight. HYDRA es desmantelada y S.H.I.E.L.D. disuelta. Bucky sobrevive y empieza a recordar.",
+  10:"Peter Quill roba un orbe misterioso y es perseguido por Ronan. Forma un equipo con Gamora, Rocket, Groot y Drax. El orbe contiene la Gema del Poder. Ronan intenta usarla para destruir Xandar. Los Guardianes unen fuerzas y logran contener juntos la energía de la gema, derrotando a Ronan. Quill descubre que es medio alienígena.",
+  11:"Hank Pym recluta a Scott Lang para llevar el traje de Ant-Man y detener a Darren Cross, que quiere vender la tecnología Yellowjacket a HYDRA. Scott aprende a controlar a las hormigas. En la batalla final derrota a Cross, pero tiene que encogerse a nivel subatómico para salvar a su hija, y consigue volver. Hope recibe su traje: será la Avispa.",
+  12:"Tony Stark crea a Ultrón, una IA pensada para proteger el mundo, que en cambio interpreta la paz como la eliminación de la humanidad. Tras robar vibranium, Ultrón planea elevar Sokovia como un meteorito. Entran en escena los gemelos Maximoff. Nace Visión. Pietro muere protegiendo a Clint. Wanda destruye a Ultrón. Thor y Tony hacen estallar la ciudad en el aire.",
+  13:"Los Acuerdos de Sokovia dividen a los Vengadores: Tony a favor, Steve en contra. Zemo culpa a Bucky de un atentado y despierta a los Supersoldados de HYDRA. Los héroes se enfrentan en el aeropuerto de Leipzig. Zemo revela a Tony que Bucky mató a sus padres: duelo brutal entre Tony y Steve. Steve se lleva a Bucky. La ruptura es definitiva. Debutan Spider-Man y Black Panther.",
+  14:"Peter Parker intenta impresionar a Tony Stark mientras se enfrenta al Buitre, un traficante de armas alienígenas. Tony le quita el traje tras un desastre en un ferri. Peter descubre que el Buitre es el padre de la chica que le gusta. Se enfrenta a él sin armadura y frustra el robo de armas. Tony le ofrece un puesto en los Vengadores: Peter lo rechaza, quiere seguir siendo el amigable vecino Spider-Man.",
+  15:"Stephen Strange, brillante neurocirujano, se lesiona gravemente las manos en un accidente. Encuentra a la Anciana, que lo inicia en las artes místicas. Kaecilius quiere abrir la Tierra a Dormammu de la Dimensión Oscura. La Anciana muere en el conflicto. Strange se enfrenta a Dormammu atrapándolo en un bucle temporal con la Gema del Tiempo hasta que acepta marcharse. Strange se convierte en el nuevo Maestro de las Artes Místicas.",
+  16:"Los Guardianes descubren que Ego, un planeta viviente, es el padre biológico de Peter. Ego quiere extender su conciencia a todos los planetas del universo, matando cualquier otra vida, incluida la madre de Peter. Nebula y Gamora afrontan sus traumas como hijas de Thanos. Yondu se sacrifica para salvar a Peter. Los Guardianes derrotan a Ego destruyendo su núcleo.",
+  17:"Thor es capturado en Sakaar, donde encuentra a Hulk como campeón de la arena. Hela, diosa de la muerte, ha tomado Asgard. Thor convence a Hulk y a una Valquiria superviviente para que lo ayuden. Ponen a salvo al pueblo asgardiano. Para detener a Hela, Thor desata el Ragnarok: Surtur destruye Asgard junto con Hela. Asgard no es un lugar, es un pueblo.",
+  18:"T'Challa vuelve a Wakanda para ocupar el trono. Killmonger, su primo, lo desafía y gana. Quiere usar las armas de vibranium para revolucionar el mundo. T'Challa sobrevive, desafía de nuevo a Killmonger y lo derrota. Wakanda decide abrirse al mundo y compartir su tecnología. En la escena post-créditos Bucky se recupera en Wakanda.",
+  19:"Thanos reúne las seis Gemas del Infinito. Los Vengadores y los Guardianes intentan detenerlo en varios frentes, pero fracasan. Thor casi mata a Thanos, pero no apunta a la cabeza. Doctor Strange entrega la Gema del Tiempo a Thanos para salvar a Tony. Con las seis gemas, Thanos chasquea los dedos: la mitad de toda la vida se convierte en ceniza, incluidos muchos héroes. Solo sobreviven los seis Vengadores originales.",
+  20:"Scott Lang y Hope abren un túnel cuántico para rescatar a Janet van Dyne. Ghost quiere usar a Janet para estabilizarse. Logran sacar a Janet. En la escena post-créditos, mientras Scott está en el reino cuántico, los Pym y Hope desaparecen por el chasquido de Thanos. Scott queda atrapado.",
+  21:"Carol Danvers, agente kree sin memoria, aterriza en la Tierra en 1995 y conoce a Nick Fury. Descubre que era piloto y que los skrulls son refugiados inocentes. La verdadera amenaza es la Inteligencia Suprema Kree. Carol libera sus poderes sin límites y derrota a los kree. Deja a Fury un buscapersonas para emergencias. En la escena post-créditos responde a la llamada de Fury tras el chasquido.",
+  22:"Cinco años después del chasquido, Scott Lang descubre que en el reino cuántico el tiempo fluye de otra manera. Los Vengadores construyen una máquina del tiempo y se dividen para recuperar las gemas en el pasado. Natasha se sacrifica por la Gema del Alma. Hulk devuelve la vida a todos con el guantelete. El Thanos de 2014 ataca. Todos los héroes vuelven para la batalla final. Tony chasquea los dedos y se sacrifica. Steve viaja al pasado a devolver las gemas y se queda con Peggy, pasándole el escudo a Sam."
+};
+CONTENT.es.pc={
+  1:"Nick Fury se presenta ante Tony Stark con una propuesta extraordinaria: está reuniendo a un grupo de personas excepcionales. El universo Marvel acaba de hacerse mucho más grande. 🌟",
+  2:"Tony Stark hace una visita inesperada al general Ross: alguien está formando un equipo de individuos extraordinarios. ¡El rompecabezas del MCU empieza a encajar! 🔧",
+  3:"Han encontrado un martillo misterioso en un cráter de Nuevo México. Algo enorme está a punto de llegar desde el cielo... ⚡",
+  4:"Un cubo luminoso de inmenso poder cósmico es descubierto por un individuo misterioso. El Teseracto está en las manos equivocadas y el universo tiembla... 🔵",
+  5:"Nick Fury se encuentra con un hombre fuera de su tiempo que necesita un propósito. ¡Una épica aventura moderna está a punto de empezar para el soldado del pasado! 🛡️",
+  6:"Una entidad misteriosa y aterradora sonríe en la oscuridad cósmica. Alguien mucho más poderoso que Loki estaba detrás de todo desde el principio. El verdadero villano del universo se muestra por primera vez... 💜",
+  7:"Tony le cuenta todas estas aventuras a alguien inesperado durante una sesión de terapia... ¡y resulta que los superhéroes también tienen sus problemas! 😄",
+  8:"Una sustancia oscura y fluida se entrega a unos custodios misteriosos para mantenerla a salvo lejos de Asgard. Algo enorme se agita en la oscuridad... 🔴",
+  9:"Dos personas con poderes extraordinarios están prisioneras. Una chica con poderes telequinéticos y un chico velocísimo: los Maximoff. El futuro de los Vengadores está a punto de complicarse muchísimo... ⚡",
+  10:"Un pato espacial con chaqueta y corbata brinda en una nave estelar... ¡Howard el Pato aparece en el MCU! Y los Guardianes están listos para su próxima aventura. 🦆",
+  11:"Hope van Dyne por fin recibe su traje: elegante, sofisticado, potentísimo. La Avispa está lista. Mientras tanto, Cap y Sam Wilson han encontrado a alguien que conocen... 🐝",
+  12:"Una mano dorada coge un guantelete vacío y murmura: «Bueno, lo haré yo mismo». Thanos está a punto de empezar su cacería. Algo inmenso se acerca en el horizonte del universo... 💜",
+  13:"Bucky Barnes entra en criogenia en Wakanda, el país más avanzado del mundo. Black Panther promete protección. Un reino secreto se abre a una alianza... 🐾",
+  14:"El Capitán América da un consejo sobre la paciencia que resulta increíblemente irónico en ese contexto... y Toomes, en la cárcel, demuestra que aún tiene principios. 😏",
+  15:"Thor llega al Sanctum Sanctorum de Nueva York con una petición para Doctor Strange: busca a su padre Odín en la Tierra. Se forma una alianza cósmica... ⚡🔮",
+  16:"¡Cinco escenas post-créditos! Groot adolescente es magníficamente vago, Stakar reúne a su equipo original y, sobre todo, se anuncia a Adam Warlock. Una inmensa fuerza cósmica se prepara... ✨",
+  17:"La nave de los asgardianos es interceptada por una nave enorme en la oscuridad del espacio. ¿Quién llega a sembrar el terror entre los supervivientes del reino destruido? Se acerca la hora más oscura... 💀",
+  18:"Wakanda abre sus puertas en la ONU y lleva su tecnología avanzada al mundo entero. Y en una aldea wakandiana, un hombre con un brazo blanco despierta... 🤍",
+  19:"En el caos del chasquido, un buscapersonas envía una última señal antes de apagarse: una estrella de ocho puntas sobre fondo rojo y azul. Alguien muy poderoso acaba de ser llamado en auxilio... ⭐",
+  20:"Mientras Scott está en el reino cuántico recogiendo energía curativa, Hank, Janet y Hope desaparecen en la nada. Scott está atrapado. El chasquido de Thanos también los ha alcanzado. Scott está solo en el reino cuántico... ⚛️",
+  21:"Capitana Marvel responde al buscapersonas de Fury y se encuentra cara a cara con los Vengadores supervivientes. ¿Dónde está Fury? ¿Y qué pasará ahora? ¡La heroína más poderosa del MCU por fin ha llegado! 💙",
+  22:"No hay escena post-créditos tradicional, solo el sonido de un martillo forjando algo. El sonido de Tony Stark construyendo su primera armadura. Un homenaje silencioso al final de una era. 🔨"
+};
+
+CONTENT.es.t={105:"Loki · Temporada 1",108:"Loki · Temporada 2"};
+Object.assign(CONTENT.es.s,{
+  101:"Rogue, una chica que absorbe la fuerza vital de quien toca, huye de casa y conoce a Logan, un mutante con garras y capacidad de curación que no recuerda su pasado. Ambos acaban en la escuela del Profesor Xavier, refugio de mutantes y base de los X-Men. Magneto, viejo amigo de Xavier, quiere convertir en mutantes a los líderes mundiales reunidos en la isla de Ellis con una máquina alimentada por la propia Rogue. Los X-Men lo detienen en la Estatua de la Libertad, Logan salva a Rogue y Magneto acaba en una prisión de plástico. Logan parte hacia Alkali Lake en busca de su pasado.",
+  102:"Nightcrawler, controlado mentalmente, ataca al Presidente de los Estados Unidos. El coronel William Stryker usa el atentado para asaltar la escuela de Xavier y secuestrar al Profesor, con el objetivo de usar una copia de Cerebro para matar a todos los mutantes del mundo. Los X-Men se alían con Magneto y Mística. Logan descubre que Stryker es el hombre que le injertó el adamantium. Magneto da la vuelta al plan para atacar a los humanos, pero los X-Men salvan a Xavier. La presa de Alkali Lake se rompe y Jean Grey se sacrifica para salvar al equipo. Xavier muestra la verdad al Presidente y pide paz entre humanos y mutantes.",
+  103:"Shang-Chi trabaja como aparcacoches en San Francisco con su amiga Katy, hasta que los Diez Anillos lo atacan en un autobús para robarle el colgante de su madre. Resulta que es hijo de Wenwu, guerrero milenario inmortal gracias a los Diez Anillos. Wenwu, convencido de que su esposa muerta lo llama desde Ta Lo, una aldea oculta en otra dimensión, quiere romper su sello. En realidad la voz es del Devorador de Almas, encerrado allí. Wenwu libera a la criatura y muere pasando los anillos a su hijo. Shang-Chi, Katy y Xialing, con el dragón Gran Protector, derrotan al Devorador. Xialing toma el mando de los Diez Anillos.",
+  104:"Después de que Mysterio revelara al mundo que Peter Parker es Spider-Man, la vida de Peter, MJ y Ned se derrumba. Peter pide a Doctor Strange un hechizo para que todos olviden su identidad, pero lo interrumpe varias veces y el hechizo se rompe: del Multiverso llegan villanos de otros universos que conocen a Peter Parker, como el Duende Verde, Doctor Octopus y Electro. Peter decide curarlos en vez de devolverlos a morir, pero el Duende Verde mata a la tía May. Llegan dos Spider-Man de otros universos, interpretados por Tobey Maguire y Andrew Garfield: juntos, los tres Peter curan a los villanos en la Estatua de la Libertad. Para salvar la realidad, Peter pide a Strange que todos olviden a Peter Parker. Ni MJ ni Ned lo recuerdan: Peter empieza de nuevo solo, con un traje cosido a mano.",
+  105:"El Loki de 2012, huido con el Teseracto en Endgame, es capturado por la TVA, la organización que protege la Línea Temporal Sagrada podando cada ramificación. Con el agente Mobius persigue a Sylvie, una variante suya que ataca la TVA. Loki y Sylvie descubren que los agentes son variantes sin memoria y que los Guardianes del Tiempo son autómatas. A través del Vacío llegan al castillo del fin de los tiempos, donde Aquel que Permanece revela que creó la TVA para impedir una guerra entre sus variantes. Sylvie lo mata: la Línea Temporal Sagrada estalla en un Multiverso y una variante suya más peligrosa se prepara para tomar el poder.",
+  106:"America Chavez, una chica capaz de viajar entre universos, es perseguida por un demonio. Doctor Strange y Wong la salvan y piden ayuda a Wanda Maximoff, pero descubren que la cazadora es ella: corrompida por el Darkhold, quiere el poder de America para llegar a un universo donde sus hijos existen. Wanda ataca Kamar-Taj. Strange y America huyen a la Tierra-838, donde los Illuminati explican las incursiones, choques entre universos causados por un Strange de ese mundo, antes de ser exterminados por Wanda. Strange posee el cuerpo de una variante suya muerta para volver a la lucha. America, por fin dueña de su poder, muestra a Wanda a sus hijos asustados de ella. Wanda comprende, destruye el Darkhold y parece morir en el derrumbe. A Strange le aparece un tercer ojo.",
+  107:"El rey T'Challa muere de una enfermedad y Wakanda está de luto. El mundo quiere el vibranium, y una búsqueda submarina atrae la atención de Namor, rey de la civilización oculta de Talokan, que también tiene vibranium. Namor exige a Wakanda que le entregue a Riri Williams, la joven científica que construyó el detector. Shuri y Okoye la encuentran, pero Namor secuestra a Shuri y a Riri. Nakia las libera, Talokan ataca Wakanda y la reina Ramonda muere. Shuri recrea la hierba en forma de corazón y se convierte en la nueva Black Panther. En la batalla en el mar derrota a Namor pero le perdona la vida, eligiendo la paz. Nakia revela que tiene un hijo de T'Challa.",
+  108:"Tras la muerte de Aquel que Permanece, la TVA está al borde del colapso y Loki se desliza en el tiempo sin quererlo. Con Mobius y el técnico O.B. intenta salvar el Telar Temporal, sobrecargado por las infinitas ramificaciones. Renslayer y Miss Minutes buscan a Victor Timely, variante de Aquel que Permanece, que es llevado a la TVA. El Telar explota y sus amigos se desintegran. Loki aprende a controlar el tiempo y durante siglos intenta salvar el Telar. Comprende que la única solución es sacrificarse: destruye la máquina y se convierte él mismo en el guardián de las líneas temporales, al final de los tiempos. Las ramificaciones forman un gran árbol y la TVA ahora protege el Multiverso.",
+  109:"Wade Wilson, el Deadpool del universo Fox, se entera por la TVA de que su mundo morirá porque su ser ancla, el Wolverine de ese universo, ha muerto. Mr. Paradox quiere acelerar su fin. Wade busca otra variante de Wolverine y encuentra la peor de todas, un Logan lleno de remordimientos. Paradox los manda al Vacío, reino de Cassandra Nova, gemela de Charles Xavier con poderes inmensos. Allí conocen a héroes olvidados de viejas películas de Fox, como Elektra, Blade, X-23, Gambito y una Antorcha Humana interpretada por Chris Evans. De vuelta en la TVA, Deadpool y Wolverine detienen la máquina con la que Paradox y Cassandra quieren destruir los universos. Cassandra muere y Logan se convierte en el nuevo ancla del mundo de Wade.",
+  110:"Thaddeus Ross, ahora Presidente de los Estados Unidos, pide a Sam Wilson que reconstruya los Vengadores. Durante una cumbre en la Casa Blanca, Isaiah Bradley y otros agentes, controlados mentalmente, intentan matar a Ross. Sam investiga para exculpar a Isaiah y descubre a Samuel Sterns, científico transformado por los rayos gamma que quiere vengarse de Ross. También está en juego el adamantium encontrado en la Isla Celestial, disputado entre naciones. Sterns lleva años envenenando a Ross: durante un discurso el Presidente se transforma en Red Hulk. Sam se enfrenta a él y consigue que vuelva en sí. Ross se entrega y Sam anuncia el regreso de los Vengadores.",
+  111:"Yelena Belova, aún de luto por su hermana Natasha, trabaja para Valentina Allegra de Fontaine. Valentina, investigada, la envía a una cámara acorazada con US Agent, Ghost y Taskmaster para que se eliminen entre sí. Taskmaster muere. Los supervivientes encuentran a Bob, único sujeto del proyecto Sentry, y escapan con la ayuda de Red Guardian y Bucky Barnes. Valentina activa a Bob como Sentry, pero su lado oscuro, el Vacío, envuelve Nueva York en sombras y atrapa a la gente en sus traumas. El equipo entra en la oscuridad y salva a Bob con empatía, no con fuerza. Valentina los presenta al mundo como los nuevos Vengadores para salvar las apariencias.",
+  112:"En la Tierra-828, un futuro retro inspirado en los años sesenta, los 4 Fantásticos son héroes queridos desde hace cuatro años, cuando los rayos cósmicos los transformaron. Sue descubre que está embarazada. Llega Silver Surfer, heraldo de Galactus, el devorador de mundos que quiere comerse la Tierra. Los 4 Fantásticos viajan al espacio a negociar, pero Galactus pide a cambio a su hijo aún no nacido. Escapan y nace Franklin. El mundo se vuelve contra ellos, pero Sue convence a todos para resistir. En el enfrentamiento final Sue se sacrifica empujando a Galactus a un portal con la ayuda de Silver Surfer, y el pequeño Franklin la devuelve a la vida. Un año después, alguien con una máscara de metal visita a Franklin."
+});
+Object.assign(CONTENT.es.pc,{
+  101:"Sin escena post-créditos: en el año 2000 aún no era costumbre. Pero esta es la película que dio inicio al cine de superhéroes moderno. 🧬",
+  102:"Sin escena post-créditos. Pero quédate hasta el último plano antes de los créditos: hay un detalle en el agua que los fans nunca han olvidado. 🔥",
+  103:"Dos escenas. En la primera, Shang-Chi y Katy son convocados por una cara conocida junto a dos Vengadores en videollamada: los Diez Anillos están enviando una señal... hacia algo muy lejano. En la segunda, alguien recoge el legado de los Diez Anillos. 💍",
+  104:"Dos escenas. En un bar lejano, un huésped inesperado es enviado de vuelta a casa... pero deja algo atrás. Luego un adelanto: Doctor Strange tiene que lidiar con las consecuencias de jugar con el Multiverso. 🕸️",
+  105:"No hay una escena post-créditos propiamente dicha, pero un sello de la TVA en los créditos promete que Loki volverá en la temporada 2. 🐍",
+  106:"Dos escenas. Una mujer misteriosa abre una brecha y pide ayuda a Strange: hay una incursión que arreglar, y la ha causado él. La segunda es pura comedia al estilo Sam Raimi. 🍕",
+  107:"Una escena a mitad de los créditos, delicada e importante: Nakia guarda un secreto que trae esperanza al futuro de Wakanda. 💜",
+  108:"Sin escena post-créditos: el final habla por sí solo. 🌳",
+  109:"Una escena tras los créditos: un personaje inesperado del Vacío se desahoga de la forma más malhablada posible. 😂",
+  110:"Un encuentro en prisión: alguien advierte a Sam de que no solo este mundo está en peligro. Otros mundos están llegando. 🌍",
+  111:"Dos escenas. En la segunda, catorce meses después, el nuevo equipo discute sobre nombres y marcas registradas... hasta que una alarma detecta una nave de otra dimensión en camino. 🚀",
+  112:"Una escena a mitad de los créditos que lleva directamente al cine el 16 de diciembre: alguien con una máscara de metal visita a la familia. El destino tiene nombre. 🛡️ Luego un pequeño regalo al estilo de los años sesenta. 📺"
+});
+CONTENT.es.ep={
+  105:[
+    ["Glorioso propósito","El Loki de 2012 huye con el Teseracto durante el viaje en el tiempo de Endgame y acaba en el desierto de Gobi, donde la TVA lo arresta por crímenes contra la Línea Temporal Sagrada. Descubre que es una variante, ve su propio destino ya escrito y acepta ayudar al agente Mobius a capturar a una variante peligrosa que mata a los Minutemen."],
+    ["La variante","Loki comprende que la variante se esconde dentro de los apocalipsis, donde nada puede alterar la línea temporal. En 2050, en Roxxcart, la variante se muestra: es una Loki mujer, que coloca bombas de reinicio en toda la línea temporal creando decenas de ramificaciones. Con la TVA en el caos, huye por un portal y Loki la sigue."],
+    ["Lamentis","Loki y la variante, que se hace llamar Sylvie, quedan atrapados en Lamentis-1, una luna a punto de ser destruida. Hablan del amor y de su naturaleza. Sylvie revela que todos los agentes de la TVA son variantes a las que se les ha borrado la memoria. El arca que debía salvarlos es destruida ante sus ojos."],
+    ["El evento Nexus","La TVA los rescata un instante antes del final. Mobius descubre que la TVA miente y Ravonna lo poda. Loki y Sylvie llegan ante los Guardianes del Tiempo y descubren que solo son autómatas. Ravonna poda a Loki, que despierta en un lugar desconocido rodeado de otras variantes de sí mismo."],
+    ["Viaje al misterio","Loki está en el Vacío al final de los tiempos, donde acaba todo lo que se poda. Conoce a otras variantes, como Loki Clásico, Loki Niño y Loki Caimán, y a la monstruosa nube Alioth que lo devora todo. Sylvie se poda a sí misma para alcanzarlo. Juntos encantan a Alioth y más allá de la nube aparece un castillo."],
+    ["Por todos los tiempos. Siempre.","En el castillo los recibe Aquel que Permanece: creó la TVA para evitar una guerra entre sus variantes en distintos universos. Ofrece una elección: ocupar su lugar o matarlo y desatar el caos. Sylvie empuja a Loki a un portal y mata a Aquel que Permanece. La Línea Temporal Sagrada se ramifica sin control. Loki vuelve a la TVA, pero Mobius no lo reconoce y en lugar de los Guardianes del Tiempo hay una estatua de una variante de Aquel que Permanece."]
+  ],
+  108:[
+    ["Ouroboros","Loki se desliza sin querer entre el pasado, el presente y el futuro de la TVA. Con Mobius llega hasta O.B., el técnico que repara el Telar Temporal, la máquina que mantiene unidas las líneas temporales. Un traje improvisado detiene los deslizamientos, pero el Telar está al límite por las infinitas ramificaciones. Mientras tanto Sylvie vive tranquila en el Oklahoma de 1982."],
+    ["Breaking Brad","Loki y Mobius dan caza a X-5, un antiguo Minuteman convertido en estrella de cine en 1977. Descubren dónde se esconde Sylvie y la encuentran en un local de comida rápida de 1982. Mientras tanto Renslayer y Miss Minutes buscan un arma contra la TVA."],
+    ["1893","En la Exposición Universal de Chicago de 1893 todos buscan a Victor Timely, joven inventor y variante de Aquel que Permanece. Renslayer y Miss Minutes quieren usarlo, Loki y Mobius quieren llevarlo a la TVA, Sylvie quiere eliminarlo. Al final Timely es llevado a la TVA."],
+    ["El corazón de la TVA","Timely acepta ayudar a reparar el Telar Temporal. Renslayer es enviada al Vacío. Timely se acerca al Telar para instalar su invento, pero la máquina explota: ante los ojos de Loki, Mobius, O.B. y B-15 se desintegran."],
+    ["Ciencia/Ficción","Loki se encuentra deslizándose entre ramificaciones donde sus amigos viven vidas normales sin recordar la TVA. Uno a uno los trae de vuelta. Aprende a controlar sus saltos en el tiempo, pero las ramificaciones se están muriendo."],
+    ["Glorioso propósito","Loki repite durante siglos cada intento de salvar el Telar, sin éxito. Comprende que la única manera es ocupar su lugar. Destruye la máquina y sostiene las líneas temporales con sus propias manos, sentado en un trono al final de los tiempos: las ramificaciones se convierten en un gran árbol. La TVA ahora protege el Multiverso en lugar de podarlo."]
+  ]
+};
+
+CONTENT.es.gem={
+  space:["Gema del Espacio","Permite desplazarse al instante a cualquier punto del universo y abrir portales dimensionales. Está contenida en el Teseracto, un cubo luminoso de inmenso poder.","HYDRA encontró el Teseracto durante la Segunda Guerra Mundial. En su interior guarda la Gema del Espacio, capaz de atravesar el espacio en un instante."],
+  mind:["Gema de la Mente","Amplifica las capacidades mentales de quien la porta y permite controlar la mente ajena. Puede interactuar con otras gemas y potenciar sus efectos.","Oculta en el cetro de Loki durante la invasión de Nueva York, la Gema de la Mente permaneció escondida hasta que se descubrieron sus verdaderos poderes."],
+  reality:["Gema de la Realidad","Permite alterar la realidad a voluntad, transformar la materia y crear ilusiones indistinguibles de la propia realidad.","Conocida como el Éter, esta sustancia oscura y fluida fue buscada por Malekith para devolver el universo a la oscuridad primordial durante la Convergencia."],
+  power:["Gema del Poder","Contiene una energía destructiva infinita capaz de aniquilar planetas enteros. Quien la toca sin protección queda desintegrado por su energía.","Contenida en el Orbe, esta gema morada fue buscada por Ronan para Thanos. Los Guardianes la entregaron a los Nova Corps en Xandar para mantenerla a salvo."],
+  time:["Gema del Tiempo","Permite manipular el tiempo: volver al pasado, avanzar al futuro o crear bucles temporales. Se guarda en el Ojo de Agamotto.","Custodiada durante siglos por los Maestros de las Artes Místicas de Kamar-Taj, la Gema del Tiempo se guarda en el Ojo de Agamotto, el medallón del Hechicero Supremo."],
+  soul:["Gema del Alma","Gobierna las almas de los vivos y de los muertos. Permite entrar en un universo de bolsillo dentro de la propia gema, donde residen las almas atrapadas.","Escondida en Vormir, un planeta remoto vigilado por un misterioso custodio, esta gema exige el mayor de los sacrificios para ser obtenida."]
+};
+CONTENT.es.mv={
+  mutants:["Mutantes","Personas nacidas con un gen, el gen X, que les da poderes extraordinarios. A diferencia de los héroes creados por experimentos o accidentes, los mutantes nacen así, y por eso a menudo son temidos y discriminados.","Los X-Men viven en un universo distinto al de los Vengadores. Recuerda bien sus caras."],
+  branches:["Líneas temporales ramificadas","Si viajas al pasado y cambias algo, no reescribes tu futuro: creas una nueva línea temporal, una rama que se separa de la principal.","Es la regla que hace posible todo lo demás: cada decisión puede generar una realidad alternativa."],
+  tva:["TVA","La Autoridad de Variación Temporal es una organización que existe fuera del tiempo. Vigila la línea temporal y poda cada rama que se desvía del camino establecido.","Burocracia, sellos y relojes: la TVA es la guardiana del Multiverso, y decide qué existe y qué no."],
+  sacred:["Línea Temporal Sagrada","La única secuencia de acontecimientos considerada correcta. Todo lo que se aleja de ella se llama evento Nexus y se borra.","Entender quién la escribió, y por qué, es uno de los misterios centrales de la Saga del Multiverso."],
+  variants:["Variantes","Versiones distintas de la misma persona, nacidas en líneas temporales diferentes. Pueden tener otro aspecto, otro carácter e incluso ser de otra especie.","En el Multiverso nadie es único: la misma cara puede ser un héroe en un mundo y un enemigo en otro."],
+  multiverse:["El Multiverso","Un conjunto infinito de universos paralelos, cada uno con su propia historia. Normalmente permanecen separados, pero la magia o la tecnología pueden abrir pasos entre ellos.","Cuando las barreras entre universos se agrietan, cualquiera puede llegar desde cualquier parte."],
+  incursions:["Incursiones","Cuando dos universos chocan, uno de los dos es destruido. Eso es una incursión: la mayor catástrofe posible en el Multiverso.","Es el peligro que se cierne sobre todo lo que está por llegar."],
+  loom:["El Telar Temporal","La máquina en el corazón de la TVA que teje las líneas temporales y las mantiene estables.","Muestra lo frágil que es el equilibrio que mantiene unidas las realidades."],
+  anchor:["Seres ancla","En cada universo existe una persona tan importante que, si muere, todo su mundo empieza a apagarse lentamente.","Algunas vidas sostienen universos enteros sobre sus hombros."],
+  earth828:["Tierra-828","Cada Tierra del Multiverso tiene un número. La de los Vengadores es la Tierra-616, la de los 4 Fantásticos es la Tierra-828, un mundo con estética de los años sesenta.","Dos Tierras, dos equipos de héroes, una sola cita en el cine."]
+};
+CONTENT.es.p3=[
+  "Tony Stark ha revelado al mundo que es Iron Man y está gestionando su nueva vida pública. Pepper se ha convertido en CEO de Stark Industries. Pero algo no va bien con el reactor Arc de su pecho...",
+  "Tony descubre que el paladio del reactor Arc lo está envenenando lentamente. Ivan Vanko, hijo de un colaborador de su padre, ha construido látigos de energía y ha atacado a Tony en el Gran Premio de Mónaco ante el mundo entero.",
+  "Nick Fury le ha revelado a Tony la iniciativa Vengadores y los archivos secretos de su padre. Justin Hammer ha liberado a Vanko para construir drones militares. Tony busca desesperadamente un nuevo elemento antes de que el paladio lo mate.",
+  "Tony ha sintetizado un nuevo elemento para el reactor Arc. La Viuda Negra ha hecho su aparición. Vanko termina los drones y se prepara para el contraataque final durante la Stark Expo."
+];
+CONTENT.es.n={"Il Soldato d'Inverno":"El Soldado de Invierno","(voce)":"(voz)","(giovane)":"(joven)","Il Mandarino":"El Mandarín","Ronan il Distruttore":"Ronan el Acusador","Visione":"Visión","Zia May":"Tía May","Avvoltoio":"Buitre","L'Antico":"La Anciana","Ego il Pianeta Vivente":"Ego, el Planeta Viviente","Hela, dea della morte":"Hela, diosa de la muerte","Valchiria":"Valquiria","I Figli di Thanos":"Los Hijos de Thanos","Goose (il gatto)":"Goose (el gato)","L'Intelligenza Suprema Kree":"La Inteligencia Suprema Kree","Vespa":"Avispa","Odino":"Odín","Ciclope":"Cíclope","Tempesta":"Tormenta","Mystica":"Mística","Rospo":"Sapo","Il Divoratore di Anime":"El Devorador de Almas","Cacciatrice":"Cazadora","Regina Ramonda":"Reina Ramonda","Donna Invisibile":"Mujer Invisible","Torcia Umana":"Antorcha Humana","La Cosa":"La Cosa","Il Darkhold":"El Darkhold"};
+
+CONTENT.fr.s={
+  1:"Tony Stark, génie milliardaire et marchand d'armes, est capturé en Afghanistan et forcé de construire une arme. À la place, il fabrique une armure pour s'échapper. De retour chez lui, il perfectionne la technologie et affronte Obadiah Stane, l'associé qui l'a trahi. À la fin, devant les caméras du monde entier, il révèle son identité : « Je suis Iron Man ».",
+  2:"Bruce Banner vit en fuite au Brésil en cherchant un remède à son état. Le général Ross le retrouve et envoie une équipe. Banner revient à New York pour terminer ses recherches, mais il est capturé. Ross renforce Blonsky et le transforme en Abomination. Hulk affronte et bat Blonsky à Harlem. À la fin, Tony Stark contacte Ross et évoque la formation d'une équipe.",
+  3:"Tony Stark doit faire face au palladium de son réacteur Arc qui l'empoisonne. Ivan Vanko, fils d'un ancien associé de son père, attaque Tony au Grand Prix de Monaco avec des fouets énergétiques. Nick Fury montre à Tony les vieux dossiers de son père, qui l'aident à synthétiser un nouvel élément. Tony et James Rhodes battent Vanko pendant une exposition technologique. La Veuve Noire fait sa première apparition.",
+  4:"Thor, prince d'Asgard, est banni sur Terre par son père Odin pour son arrogance. Il rencontre la scientifique Jane Foster. Loki, son frère adoptif, découvre qu'il est le fils du roi des Géants des glaces et envoie le Destructeur éliminer Thor. Privé de ses pouvoirs, Thor se sacrifie pour protéger les innocents : Mjolnir lui revient. Thor bat le Destructeur, mais Loki disparaît dans le vide cosmique.",
+  5:"Pendant la Seconde Guerre mondiale, Steve Rogers devient Captain America grâce au sérum du Super-Soldat. Avec les Commandos Hurlants, il combat HYDRA, dirigée par Crâne Rouge, qui a récupéré le Tesseract. Steve se sacrifie en écrasant l'avion dans l'Arctique. Il se réveille dans le New York d'aujourd'hui, 70 ans plus tard.",
+  6:"Nick Fury réunit Iron Man, Captain America, Thor, Hulk, la Veuve Noire et Œil de Faucon pour former les Avengers. L'objectif : arrêter Loki, qui a volé le Tesseract pour ouvrir un portail à l'armée Chitauri. Après s'être affrontés entre eux, les héros trouvent leur cohésion lors de la bataille de New York. Tony détourne un missile nucléaire à travers le portail. Loki est capturé. Thanos apparaît dans la scène post-générique.",
+  7:"Tony Stark est menacé par le Mandarin. Après la destruction de sa villa, il se retrouve seul dans le Tennessee, sans armure. Il découvre que le Mandarin n'est qu'une façade : le vrai méchant est Aldrich Killian avec Extremis. Avec Rhodes, il sauve le Président. À la fin, il se fait retirer le réacteur Arc de la poitrine : « Je suis Iron Man », pas l'armure.",
+  8:"Malekith cherche à utiliser l'Éther pendant la Convergence pour replonger l'univers dans les ténèbres. Jane Foster absorbe l'Éther par accident. Thor et Loki s'allient pour attirer Malekith hors d'Asgard. Lors de la bataille finale à Londres, l'Éther est extrait de Jane et Malekith est vaincu. Loki prend la place d'Odin sur le trône d'Asgard.",
+  9:"Steve Rogers découvre que le S.H.I.E.L.D. est infiltré par HYDRA depuis sa fondation. Le Soldat de l'Hiver est en réalité Bucky Barnes. Avec Natasha et Sam Wilson, Steve sabote les trois héliporteurs du Projet Insight. HYDRA est démantelée, le S.H.I.E.L.D. dissous. Bucky survit et commence à se souvenir.",
+  10:"Peter Quill vole un orbe mystérieux et se retrouve traqué par Ronan. Il forme une équipe avec Gamora, Rocket, Groot et Drax. L'orbe contient la Pierre du Pouvoir. Ronan tente de l'utiliser pour détruire Xandar. Les Gardiens unissent leurs forces et contiennent ensemble l'énergie de la pierre, battant Ronan. Quill découvre qu'il est à moitié extraterrestre.",
+  11:"Hank Pym recrute Scott Lang pour porter le costume d'Ant-Man et arrêter Darren Cross, qui veut vendre la technologie Yellowjacket à HYDRA. Scott apprend à contrôler les fourmis. Lors de la bataille finale, il bat Cross mais doit rétrécir au niveau subatomique pour sauver sa fille, et parvient à revenir. Hope reçoit son costume : elle deviendra la Guêpe.",
+  12:"Tony Stark crée Ultron, une IA censée protéger le monde, qui décide au contraire que la paix passe par l'élimination de l'humanité. Après avoir volé du vibranium, Ultron prévoit de soulever la Sokovie comme une météorite. Les jumeaux Maximoff entrent en scène. Vision naît. Pietro meurt en protégeant Clint. Wanda détruit Ultron. Thor et Tony font exploser la ville en plein ciel.",
+  13:"Les Accords de Sokovie divisent les Avengers : Tony pour, Steve contre. Zemo fait accuser Bucky d'un attentat et réveille les Super-Soldats d'HYDRA. Les héros s'affrontent à l'aéroport de Leipzig. Zemo révèle à Tony que Bucky a tué ses parents : duel brutal entre Tony et Steve. Steve emmène Bucky. La fracture est définitive. Spider-Man et Black Panther font leurs débuts.",
+  14:"Peter Parker cherche à impressionner Tony Stark tout en affrontant le Vautour, un trafiquant d'armes extraterrestres. Tony lui retire son costume après une catastrophe sur un ferry. Peter découvre que le Vautour est le père de la fille qui lui plaît. Il l'affronte sans armure et déjoue le vol d'armes. Tony lui propose une place chez les Avengers : Peter refuse, il veut rester le sympathique Spider-Man du quartier.",
+  15:"Stephen Strange, brillant neurochirurgien, se blesse gravement les mains dans un accident. Il trouve l'Ancien, qui l'initie aux arts mystiques. Kaecilius veut ouvrir la Terre à Dormammu de la Dimension noire. L'Ancien meurt dans le conflit. Strange affronte Dormammu en l'enfermant dans une boucle temporelle avec la Pierre du Temps jusqu'à ce qu'il accepte de partir. Strange devient le nouveau Maître des arts mystiques.",
+  16:"Les Gardiens découvrent qu'Ego, une planète vivante, est le père biologique de Peter. Ego veut étendre sa conscience à toutes les planètes de l'univers, en tuant toute autre forme de vie, y compris la mère de Peter. Nebula et Gamora affrontent leurs traumatismes de filles de Thanos. Yondu se sacrifie pour sauver Peter. Les Gardiens battent Ego en détruisant son noyau.",
+  17:"Thor est capturé sur Sakaar, où il retrouve Hulk en champion de l'arène. Hela, déesse de la mort, s'est emparée d'Asgard. Thor convainc Hulk et une Valkyrie survivante de l'aider. Ils mettent le peuple asgardien à l'abri. Pour arrêter Hela, Thor déclenche le Ragnarok : Surtur détruit Asgard avec Hela. Asgard n'est pas un lieu, c'est un peuple.",
+  18:"T'Challa revient au Wakanda pour monter sur le trône. Killmonger, son cousin, le défie et gagne. Il veut utiliser les armes en vibranium pour révolutionner le monde. T'Challa survit, défie de nouveau Killmonger et le bat. Le Wakanda décide de s'ouvrir au monde et de partager sa technologie. Dans la scène post-générique, Bucky est soigné au Wakanda.",
+  19:"Thanos rassemble les six Pierres d'Infinité. Les Avengers et les Gardiens tentent de l'arrêter sur plusieurs fronts, mais échouent. Thor blesse Thanos presque mortellement, mais ne vise pas la tête. Doctor Strange donne la Pierre du Temps à Thanos pour sauver Tony. Avec les six pierres, Thanos claque des doigts : la moitié de toute vie part en poussière, dont de nombreux héros. Seuls les six Avengers d'origine survivent.",
+  20:"Scott Lang et Hope ouvrent un tunnel quantique pour récupérer Janet van Dyne. Ghost veut se servir de Janet pour se stabiliser. Ils parviennent à ramener Janet. Dans la scène post-générique, pendant que Scott est dans le royaume quantique, les Pym et Hope disparaissent à cause du claquement de Thanos. Scott reste piégé.",
+  21:"Carol Danvers, agente Kree sans mémoire, atterrit sur Terre en 1995 et rencontre Nick Fury. Elle découvre qu'elle était pilote et que les Skrulls sont des réfugiés innocents. La vraie menace est l'Intelligence Suprême Kree. Carol libère ses pouvoirs sans limites et bat les Kree. Elle laisse à Fury un bipeur pour les urgences. Dans la scène post-générique, elle répond à l'appel de Fury après le claquement.",
+  22:"Cinq ans après le claquement, Scott Lang découvre que le temps s'écoule différemment dans le royaume quantique. Les Avengers construisent une machine à voyager dans le temps et se séparent pour récupérer les pierres dans le passé. Natasha se sacrifie pour la Pierre de l'Âme. Hulk ramène tout le monde à la vie avec le gant. Le Thanos de 2014 attaque. Tous les héros reviennent pour la bataille finale. Tony claque des doigts et se sacrifie. Steve retourne dans le passé rendre les pierres et reste avec Peggy, transmettant le bouclier à Sam."
+};
+CONTENT.fr.pc={
+  1:"Nick Fury se présente à Tony Stark avec une proposition extraordinaire : il rassemble un groupe de personnes hors du commun. L'univers Marvel vient de s'agrandir énormément. 🌟",
+  2:"Tony Stark rend une visite inattendue au général Ross : quelqu'un forme une équipe d'individus extraordinaires. Le puzzle du MCU commence à se mettre en place ! 🔧",
+  3:"Un marteau mystérieux a été trouvé dans un cratère au Nouveau-Mexique. Quelque chose d'énorme est sur le point d'arriver du ciel... ⚡",
+  4:"Un cube lumineux d'une immense puissance cosmique est découvert par un individu mystérieux. Le Tesseract est entre de mauvaises mains et l'univers tremble... 🔵",
+  5:"Nick Fury rencontre un homme hors de son époque qui a besoin d'un but. Une aventure moderne épique va commencer pour le soldat venu du passé ! 🛡️",
+  6:"Une entité mystérieuse et terrifiante sourit dans l'obscurité cosmique. Quelqu'un de bien plus puissant que Loki tirait les ficelles depuis le début. Le vrai méchant de l'univers se montre pour la première fois... 💜",
+  7:"Tony raconte toutes ces aventures à quelqu'un d'inattendu pendant une séance de thérapie... et on découvre que les super-héros aussi ont leurs problèmes ! 😄",
+  8:"Une substance sombre et fluide est confiée à de mystérieux gardiens pour être mise à l'abri loin d'Asgard. Quelque chose d'énorme s'agite dans les ténèbres... 🔴",
+  9:"Deux personnes aux pouvoirs extraordinaires sont retenues prisonnières. Une fille aux pouvoirs télékinétiques et un garçon ultra-rapide : les Maximoff. L'avenir des Avengers va se compliquer énormément... ⚡",
+  10:"Un canard de l'espace en veste et cravate trinque sur un vaisseau... Howard le Canard fait son apparition dans le MCU ! Et les Gardiens sont prêts pour leur prochaine aventure. 🦆",
+  11:"Hope van Dyne reçoit enfin son costume : élégant, sophistiqué, ultra-puissant. La Guêpe est prête. Pendant ce temps, Cap et Sam Wilson ont trouvé quelqu'un qu'ils connaissent... 🐝",
+  12:"Une main dorée saisit un gant vide et murmure : « Très bien, je vais le faire moi-même. » Thanos s'apprête à commencer sa chasse. Quelque chose d'immense approche à l'horizon de l'univers... 💜",
+  13:"Bucky Barnes est cryogénisé au Wakanda, le pays le plus avancé du monde. Black Panther promet sa protection. Un royaume secret s'ouvre à une alliance... 🐾",
+  14:"Captain America donne un conseil sur la patience qui s'avère incroyablement ironique dans ce contexte... et Toomes, en prison, montre qu'il a encore des principes. 😏",
+  15:"Thor arrive au Sanctum Sanctorum de New York avec une requête pour Doctor Strange : il cherche son père Odin sur Terre. Une alliance cosmique se forme... ⚡🔮",
+  16:"Cinq scènes post-génériques ! Groot ado est magnifiquement paresseux, Stakar réunit son équipe d'origine et surtout, Adam Warlock est annoncé. Une immense force cosmique se prépare... ✨",
+  17:"Le vaisseau des Asgardiens est intercepté par un immense vaisseau dans l'obscurité de l'espace. Qui vient semer la terreur parmi les survivants du royaume détruit ? L'heure la plus sombre approche... 💀",
+  18:"Le Wakanda ouvre ses portes à l'ONU et offre sa technologie avancée au monde entier. Et dans un village wakandais, un homme au bras blanc se réveille... 🤍",
+  19:"Dans le chaos du claquement, un bipeur envoie un dernier signal avant de s'éteindre : une étoile à huit branches sur fond rouge et bleu. Quelqu'un de très puissant vient d'être appelé à l'aide... ⭐",
+  20:"Pendant que Scott est dans le royaume quantique pour récolter de l'énergie guérisseuse, Hank, Janet et Hope disparaissent dans le néant. Scott est piégé. Le claquement de Thanos les a frappés eux aussi. Scott est seul dans le royaume quantique... ⚛️",
+  21:"Captain Marvel répond au bipeur de Fury et se retrouve face aux Avengers survivants. Où est Fury ? Et que va-t-il se passer maintenant ? L'héroïne la plus puissante du MCU est enfin arrivée ! 💙",
+  22:"Pas de scène post-générique classique, seulement le bruit d'un marteau qui forge quelque chose. Le bruit de Tony Stark construisant sa première armure. Un hommage silencieux à la fin d'une ère. 🔨"
+};
+
+CONTENT.fr.t={105:"Loki · Saison 1",108:"Loki · Saison 2"};
+Object.assign(CONTENT.fr.s,{
+  101:"Malicia, une jeune fille qui absorbe la force vitale de quiconque elle touche, fugue et rencontre Logan, un mutant doté de griffes et d'un pouvoir de guérison qui ne se souvient pas de son passé. Tous deux arrivent à l'école du Professeur Xavier, refuge pour mutants et base des X-Men. Magneto, vieil ami de Xavier, veut transformer en mutants les dirigeants du monde réunis à Ellis Island grâce à une machine alimentée par Malicia elle-même. Les X-Men l'arrêtent sur la Statue de la Liberté, Logan sauve Malicia et Magneto finit dans une prison en plastique. Logan part vers Alkali Lake à la recherche de son passé.",
+  102:"Diablo, contrôlé mentalement, attaque le Président des États-Unis. Le colonel William Stryker se sert de l'attentat pour attaquer l'école de Xavier et enlever le Professeur, dans le but d'utiliser une copie de Cerebro pour tuer tous les mutants du monde. Les X-Men s'allient à Magneto et Mystique. Logan découvre que Stryker est l'homme qui lui a greffé l'adamantium. Magneto retourne le plan contre les humains, mais les X-Men sauvent Xavier. Le barrage d'Alkali Lake cède et Jean Grey se sacrifie pour sauver l'équipe. Xavier montre la vérité au Président et demande la paix entre humains et mutants.",
+  103:"Shang-Chi travaille comme voiturier à San Francisco avec son amie Katy, jusqu'à ce que les Dix Anneaux l'attaquent dans un bus pour voler le pendentif de sa mère. Il s'avère être le fils de Wenwu, guerrier millénaire rendu immortel par les Dix Anneaux. Wenwu, persuadé que sa femme décédée l'appelle depuis Ta Lo, un village caché dans une autre dimension, veut briser son sceau. En réalité, la voix est celle du Dévoreur d'âmes, emprisonné là-bas. Wenwu libère la créature et meurt en transmettant les anneaux à son fils. Shang-Chi, Katy et Xialing, avec le dragon Grand Protecteur, battent le Dévoreur. Xialing prend la tête des Dix Anneaux.",
+  104:"Après que Mysterio a révélé au monde que Peter Parker est Spider-Man, la vie de Peter, MJ et Ned s'effondre. Peter demande à Doctor Strange un sort pour que tout le monde oublie son identité, mais l'interrompt plusieurs fois et le sort se brise : du Multivers arrivent des méchants d'autres univers qui connaissent Peter Parker, comme le Bouffon Vert, Docteur Octopus et Electro. Peter décide de les soigner plutôt que de les renvoyer mourir, mais le Bouffon Vert tue Tante May. Deux Spider-Man d'autres univers arrivent, joués par Tobey Maguire et Andrew Garfield : ensemble, les trois Peter soignent les méchants sur la Statue de la Liberté. Pour sauver la réalité, Peter demande à Strange de faire oublier Peter Parker à tout le monde. Même MJ et Ned ne se souviennent plus de lui : Peter repart seul, avec un costume cousu main.",
+  105:"Le Loki de 2012, enfui avec le Tesseract dans Endgame, est capturé par la TVA, l'organisation qui protège la Chronologie sacrée en élaguant chaque ramification. Avec l'agent Mobius, il traque Sylvie, une variante de lui-même qui attaque la TVA. Loki et Sylvie découvrent que les agents sont des variants privés de mémoire et que les Gardiens du Temps sont des automates. À travers le Néant, ils atteignent le château de la fin des temps, où Celui qui demeure révèle avoir créé la TVA pour empêcher une guerre entre ses propres variants. Sylvie le tue : la Chronologie sacrée éclate en un Multivers et un variant plus dangereux s'apprête à prendre le pouvoir.",
+  106:"America Chavez, une jeune fille capable de voyager entre les univers, est poursuivie par un démon. Doctor Strange et Wong la sauvent et demandent l'aide de Wanda Maximoff, mais découvrent que c'est elle la chasseuse : corrompue par le Darkhold, elle veut le pouvoir d'America pour rejoindre un univers où ses enfants existent. Wanda attaque Kamar-Taj. Strange et America fuient sur Terre-838, où les Illuminati expliquent les incursions, des collisions entre univers causées par un Strange de ce monde, avant d'être exterminés par Wanda. Strange prend possession du corps d'un de ses variants mort pour revenir au combat. America, enfin maîtresse de son pouvoir, montre à Wanda ses fils qui ont peur d'elle. Wanda comprend, détruit le Darkhold et semble mourir dans l'effondrement. Strange se voit pousser un troisième œil.",
+  107:"Le roi T'Challa meurt de maladie et le Wakanda est en deuil. Le monde veut le vibranium, et une recherche sous-marine attire l'attention de Namor, roi de la civilisation cachée de Talokan, qui possède lui aussi du vibranium. Namor exige que le Wakanda lui livre Riri Williams, la jeune scientifique qui a construit le détecteur. Shuri et Okoye la retrouvent, mais Namor enlève Shuri et Riri. Nakia les libère, Talokan attaque le Wakanda et la reine Ramonda meurt. Shuri recrée l'herbe en forme de cœur et devient la nouvelle Black Panther. Lors de la bataille en mer, elle bat Namor mais l'épargne, choisissant la paix. Nakia révèle qu'elle a un fils de T'Challa.",
+  108:"Après la mort de Celui qui demeure, la TVA est au bord de l'effondrement et Loki glisse dans le temps malgré lui. Avec Mobius et le technicien O.B., il tente de sauver le Métier temporel, surchargé par les ramifications infinies. Renslayer et Miss Minutes cherchent Victor Timely, variant de Celui qui demeure, qui est amené à la TVA. Le Métier explose et ses amis se désintègrent. Loki apprend à maîtriser le temps et essaie pendant des siècles de sauver le Métier. Il comprend que la seule solution est de se sacrifier : il détruit la machine et devient lui-même le gardien des lignes temporelles, à la fin des temps. Les ramifications forment un grand arbre et la TVA protège désormais le Multivers.",
+  109:"Wade Wilson, le Deadpool de l'univers Fox, apprend par la TVA que son monde va mourir parce que son être d'ancrage, le Wolverine de cet univers, est mort. Mr. Paradox veut accélérer sa fin. Wade cherche un autre variant de Wolverine et trouve le pire de tous, un Logan rongé par les regrets. Paradox les envoie dans le Néant, royaume de Cassandra Nova, jumelle de Charles Xavier aux pouvoirs immenses. Là, ils rencontrent des héros oubliés de vieux films Fox, comme Elektra, Blade, X-23, Gambit et une Torche Humaine jouée par Chris Evans. De retour à la TVA, Deadpool et Wolverine arrêtent la machine avec laquelle Paradox et Cassandra veulent détruire les univers. Cassandra meurt et Logan devient le nouvel ancrage du monde de Wade.",
+  110:"Thaddeus Ross, désormais Président des États-Unis, demande à Sam Wilson de reconstruire les Avengers. Lors d'un sommet à la Maison-Blanche, Isaiah Bradley et d'autres agents, contrôlés mentalement, tentent de tuer Ross. Sam enquête pour innocenter Isaiah et découvre Samuel Sterns, un scientifique transformé par les rayons gamma qui veut se venger de Ross. L'enjeu est aussi l'adamantium trouvé sur l'île Céleste, que se disputent les nations. Sterns empoisonne Ross depuis des années : pendant un discours, le Président se transforme en Red Hulk. Sam l'affronte et parvient à le ramener à lui. Ross se rend et Sam annonce le retour des Avengers.",
+  111:"Yelena Belova, toujours en deuil de sa sœur Natasha, travaille pour Valentina Allegra de Fontaine. Valentina, visée par une enquête, l'envoie dans une chambre forte avec US Agent, Ghost et Taskmaster pour qu'ils s'éliminent entre eux. Taskmaster meurt. Les survivants trouvent Bob, unique cobaye du projet Sentry, et s'échappent avec l'aide de Red Guardian et Bucky Barnes. Valentina active Bob en tant que Sentry, mais sa part d'ombre, le Néant, plonge New York dans l'obscurité et enferme les gens dans leurs traumatismes. L'équipe entre dans les ténèbres et sauve Bob par l'empathie, pas par la force. Valentina les présente au monde comme les nouveaux Avengers pour sauver la face.",
+  112:"Sur Terre-828, un futur rétro inspiré des années soixante, les Quatre Fantastiques sont des héros adorés depuis quatre ans, depuis que les rayons cosmiques les ont transformés. Sue découvre qu'elle est enceinte. Silver Surfer arrive, héraut de Galactus, le dévoreur de mondes qui veut manger la Terre. Les Quatre Fantastiques partent dans l'espace pour négocier, mais Galactus demande en échange leur fils à naître. Ils s'échappent et Franklin naît. Le monde se retourne contre eux, mais Sue convainc tout le monde de résister. Lors du combat final, Sue se sacrifie en poussant Galactus dans un portail avec l'aide de Silver Surfer, et le petit Franklin la ramène à la vie. Un an plus tard, quelqu'un portant un masque de métal rend visite à Franklin."
+});
+Object.assign(CONTENT.fr.pc,{
+  101:"Pas de scène post-générique : en 2000, ce n'était pas encore une habitude. Mais c'est le film qui a lancé le cinéma de super-héros moderne. 🧬",
+  102:"Pas de scène post-générique. Mais reste jusqu'au dernier plan avant le générique : il y a un détail dans l'eau que les fans n'ont jamais oublié. 🔥",
+  103:"Deux scènes. Dans la première, Shang-Chi et Katy sont convoqués par un visage familier avec deux Avengers en visio : les Dix Anneaux envoient un signal... vers quelque chose de très lointain. Dans la seconde, quelqu'un reprend l'héritage des Dix Anneaux. 💍",
+  104:"Deux scènes. Dans un bar lointain, un invité inattendu est renvoyé chez lui... mais laisse quelque chose derrière lui. Puis un avant-goût : Doctor Strange doit faire face aux conséquences de ses jeux avec le Multivers. 🕸️",
+  105:"Pas de véritable scène post-générique, mais un tampon de la TVA sur le générique promet le retour de Loki dans la saison 2. 🐍",
+  106:"Deux scènes. Une femme mystérieuse ouvre une brèche et demande l'aide de Strange : il y a une incursion à réparer, et c'est lui qui l'a causée. La seconde est de la pure comédie à la Sam Raimi. 🍕",
+  107:"Une scène en milieu de générique, délicate et importante : Nakia a un secret qui apporte de l'espoir pour l'avenir du Wakanda. 💜",
+  108:"Pas de scène post-générique : la fin parle d'elle-même. 🌳",
+  109:"Une scène après le générique : un personnage inattendu du Néant vide son sac, de la manière la plus grossière possible. 😂",
+  110:"Une rencontre en prison : quelqu'un prévient Sam que ce monde n'est pas le seul en danger. D'autres mondes arrivent. 🌍",
+  111:"Deux scènes. Dans la seconde, quatorze mois plus tard, la nouvelle équipe se dispute sur les noms et les marques déposées... jusqu'à ce qu'une alarme détecte un vaisseau venu d'une autre dimension. 🚀",
+  112:"Une scène en milieu de générique qui mène tout droit au cinéma le 16 décembre : quelqu'un portant un masque de métal rend visite à la famille. Le destin a un nom. 🛡️ Puis un petit bonus façon années soixante. 📺"
+});
+CONTENT.fr.ep={
+  105:[
+    ["Glorieux dessein","Le Loki de 2012 s'enfuit avec le Tesseract pendant le voyage dans le temps d'Endgame et atterrit dans le désert de Gobi, où il est arrêté par la TVA pour crimes contre la Chronologie sacrée. Il découvre qu'il est un variant, voit son destin déjà écrit et accepte d'aider l'agent Mobius à capturer un variant dangereux qui tue des Minutemen."],
+    ["Le Variant","Loki comprend que le variant se cache dans les apocalypses, où rien ne peut altérer la chronologie. En 2050, à Roxxcart, le variant se dévoile : c'est une Loki femme, qui pose des bombes de réinitialisation sur toute la chronologie, créant des dizaines de ramifications. La TVA en plein chaos, elle s'enfuit par un portail et Loki la suit."],
+    ["Lamentis","Loki et le variant, qui se fait appeler Sylvie, sont bloqués sur Lamentis-1, une lune sur le point d'être détruite. Ils parlent d'amour et de leur nature. Sylvie révèle que tous les agents de la TVA sont des variants dont on a effacé la mémoire. L'arche qui devait les sauver est détruite sous leurs yeux."],
+    ["L'Évènement Nexus","La TVA les récupère juste avant la fin. Mobius découvre que la TVA ment et se fait élaguer par Ravonna. Loki et Sylvie arrivent devant les Gardiens du Temps et découvrent que ce ne sont que des automates. Ravonna élague Loki, qui se réveille dans un lieu inconnu entouré d'autres variants de lui-même."],
+    ["Voyage vers le mystère","Loki est dans le Néant, à la fin des temps, là où finit tout ce qui est élagué. Il rencontre d'autres variants, dont Loki Classique, Loki Enfant et Loki Alligator, et le monstrueux nuage Alioth qui dévore tout. Sylvie se fait élaguer pour le rejoindre. Ensemble, ils enchantent Alioth et un château apparaît au-delà du nuage."],
+    ["Pour toujours. À jamais.","Dans le château, ils sont accueillis par Celui qui demeure : il a créé la TVA pour éviter une guerre entre ses variants dans différents univers. Il propose un choix : prendre sa place, ou le tuer et déclencher le chaos. Sylvie pousse Loki dans un portail et tue Celui qui demeure. La Chronologie sacrée se ramifie sans contrôle. Loki retourne à la TVA, mais Mobius ne le reconnaît pas et, à la place des Gardiens du Temps, se dresse la statue d'un variant de Celui qui demeure."]
+  ],
+  108:[
+    ["Ouroboros","Loki glisse malgré lui entre le passé, le présent et le futur de la TVA. Avec Mobius, il rejoint O.B., le technicien qui répare le Métier temporel, la machine qui maintient les lignes temporelles ensemble. Une combinaison improvisée arrête les glissements, mais le Métier est à bout à cause des ramifications infinies. Pendant ce temps, Sylvie vit tranquille dans l'Oklahoma de 1982."],
+    ["Breaking Brad","Loki et Mobius traquent X-5, un ancien Minuteman devenu star de cinéma en 1977. Ils découvrent où se cache Sylvie et la retrouvent dans un fast-food de 1982. Pendant ce temps, Renslayer et Miss Minutes cherchent une arme contre la TVA."],
+    ["1893","À l'Exposition universelle de Chicago de 1893, tout le monde cherche Victor Timely, jeune inventeur et variant de Celui qui demeure. Renslayer et Miss Minutes veulent l'utiliser, Loki et Mobius veulent l'amener à la TVA, Sylvie veut l'éliminer. Finalement, Timely est amené à la TVA."],
+    ["Le Cœur de la TVA","Timely accepte d'aider à réparer le Métier temporel. Renslayer est envoyée dans le Néant. Timely s'approche du Métier pour installer son invention, mais la machine explose : sous les yeux de Loki, Mobius, O.B. et B-15 se désintègrent."],
+    ["Science/Fiction","Loki se retrouve à glisser entre des ramifications où ses amis mènent des vies normales sans aucun souvenir de la TVA. Un à un, il les ramène. Il apprend à maîtriser ses sauts dans le temps, mais les ramifications sont en train de mourir."],
+    ["Glorieux dessein","Pendant des siècles, Loki répète chaque tentative pour sauver le Métier, sans succès. Il comprend que la seule solution est de prendre sa place. Il détruit la machine et tient les lignes temporelles de ses propres mains, assis sur un trône à la fin des temps : les ramifications deviennent un grand arbre. La TVA protège désormais le Multivers au lieu de l'élaguer."]
+  ]
+};
+
+CONTENT.fr.gem={
+  space:["Pierre de l'Espace","Elle permet de se déplacer instantanément en tout point de l'univers et d'ouvrir des portails dimensionnels. Elle est contenue dans le Tesseract, un cube lumineux d'une immense puissance.","Le Tesseract a été trouvé par HYDRA pendant la Seconde Guerre mondiale. Il renferme la Pierre de l'Espace, capable de traverser l'espace en un instant."],
+  mind:["Pierre de l'Esprit","Elle amplifie les capacités mentales de son porteur et permet de contrôler l'esprit d'autrui. Elle peut interagir avec les autres pierres et décupler leurs effets.","Cachée dans le sceptre de Loki pendant l'invasion de New York, la Pierre de l'Esprit est restée dissimulée jusqu'à ce que ses vrais pouvoirs soient découverts."],
+  reality:["Pierre de Réalité","Elle permet d'altérer la réalité à volonté, de transformer la matière et de créer des illusions impossibles à distinguer de la réalité.","Connue sous le nom d'Éther, cette substance sombre et fluide a été convoitée par Malekith pour replonger l'univers dans les ténèbres originelles pendant la Convergence."],
+  power:["Pierre du Pouvoir","Elle renferme une énergie destructrice infinie capable d'anéantir des planètes entières. Quiconque la touche sans protection est désintégré par son énergie.","Contenue dans l'Orbe, cette pierre violette a été convoitée par Ronan pour le compte de Thanos. Les Gardiens l'ont confiée au Nova Corps sur Xandar pour la mettre à l'abri."],
+  time:["Pierre du Temps","Elle permet de manipuler le temps : revenir dans le passé, avancer dans le futur ou créer des boucles temporelles. Elle est gardée dans l'Œil d'Agamotto.","Protégée pendant des siècles par les Maîtres des arts mystiques de Kamar-Taj, la Pierre du Temps est conservée dans l'Œil d'Agamotto, le médaillon du Sorcier suprême."],
+  soul:["Pierre de l'Âme","Elle régit les âmes des vivants et des morts. Elle permet d'entrer dans un univers de poche à l'intérieur de la pierre, où résident les âmes prisonnières.","Cachée sur Vormir, une planète lointaine veillée par un mystérieux gardien, cette pierre exige le plus grand des sacrifices pour être obtenue."]
+};
+CONTENT.fr.mv={
+  mutants:["Mutants","Des personnes nées avec un gène, le gène X, qui leur donne des pouvoirs extraordinaires. Contrairement aux héros nés d'expériences ou d'accidents, les mutants naissent ainsi, et c'est pour ça qu'ils sont souvent craints et discriminés.","Les X-Men vivent dans un autre univers que celui des Avengers. Retiens bien leurs visages."],
+  branches:["Lignes temporelles ramifiées","Si tu voyages dans le passé et que tu changes quelque chose, tu ne réécris pas ton futur : tu crées une nouvelle ligne temporelle, une branche qui se détache de la principale.","C'est la règle qui rend tout le reste possible : chaque choix peut créer une réalité alternative."],
+  tva:["TVA","Le Tribunal des Variations Anachroniques est une organisation qui existe hors du temps. Il surveille la chronologie et élague chaque branche qui s'écarte du chemin établi.","Bureaucratie, tampons et horloges : la TVA est la gardienne du Multivers, et décide de ce qui existe et de ce qui n'existe pas."],
+  sacred:["Chronologie sacrée","La seule suite d'évènements considérée comme juste. Tout ce qui s'en écarte s'appelle un évènement Nexus et est effacé.","Comprendre qui l'a écrite, et pourquoi, est l'un des mystères centraux de la Saga du Multivers."],
+  variants:["Variants","Des versions différentes d'une même personne, nées dans des lignes temporelles différentes. Elles peuvent avoir une autre apparence, un autre caractère, voire être d'une autre espèce.","Dans le Multivers, personne n'est unique : le même visage peut être un héros dans un monde et un ennemi dans un autre."],
+  multiverse:["Le Multivers","Un ensemble infini d'univers parallèles, chacun avec sa propre histoire. D'habitude ils restent séparés, mais la magie ou la technologie peuvent ouvrir des passages.","Quand les barrières entre univers se fissurent, n'importe qui peut arriver de n'importe où."],
+  incursions:["Incursions","Quand deux univers entrent en collision, l'un des deux est détruit. C'est une incursion : la pire catastrophe possible dans le Multivers.","C'est le danger qui plane sur tout ce qui arrive."],
+  loom:["Le Métier temporel","La machine au cœur de la TVA qui tisse les lignes temporelles et les maintient stables.","Il montre à quel point l'équilibre qui relie les réalités est fragile."],
+  anchor:["Êtres d'ancrage","Dans chaque univers existe une personne si importante que, si elle meurt, tout son monde commence lentement à s'éteindre.","Certaines vies portent des univers entiers sur leurs épaules."],
+  earth828:["Terre-828","Chaque Terre du Multivers porte un numéro. Celle des Avengers est la Terre-616, celle des Quatre Fantastiques est la Terre-828, un monde à l'esthétique des années soixante.","Deux Terres, deux équipes de héros, un seul rendez-vous au cinéma."]
+};
+CONTENT.fr.p3=[
+  "Tony Stark a annoncé au monde qu'il est Iron Man et gère sa nouvelle vie publique. Pepper est devenue PDG de Stark Industries. Mais quelque chose cloche avec le réacteur Arc dans sa poitrine...",
+  "Tony découvre que le palladium du réacteur Arc l'empoisonne lentement. Ivan Vanko, fils d'un ancien collaborateur de son père, a fabriqué des fouets énergétiques et a attaqué Tony au Grand Prix de Monaco devant le monde entier.",
+  "Nick Fury a révélé à Tony l'initiative Avengers et les dossiers secrets de son père. Justin Hammer a libéré Vanko pour construire des drones militaires. Tony cherche désespérément un nouvel élément avant que le palladium ne le tue.",
+  "Tony a synthétisé un nouvel élément pour le réacteur Arc. La Veuve Noire a fait son apparition. Vanko termine les drones et prépare la contre-attaque finale pendant la Stark Expo."
+];
+CONTENT.fr.n={"Il Soldato d'Inverno":"Le Soldat de l'Hiver","(voce)":"(voix)","(giovane)":"(jeune)","Il Mandarino":"Le Mandarin","Ronan il Distruttore":"Ronan l'Accusateur","Visione":"Vision","Zia May":"Tante May","Avvoltoio":"Vautour","L'Antico":"L'Ancien","Ego il Pianeta Vivente":"Ego, la Planète Vivante","Hela, dea della morte":"Hela, déesse de la mort","Valchiria":"Valkyrie","I Figli di Thanos":"Les Enfants de Thanos","Goose (il gatto)":"Goose (le chat)","L'Intelligenza Suprema Kree":"L'Intelligence Suprême Kree","Vespa":"Guêpe","Odino":"Odin","Ciclope":"Cyclope","Tempesta":"Tornade","Mystica":"Mystique","Rospo":"Crapaud","Rogue":"Malicia","Nightcrawler":"Diablo","Il Divoratore di Anime":"Le Dévoreur d'âmes","Cacciatrice":"Chasseuse","Regina Ramonda":"Reine Ramonda","Presidente":"Président","Donna Invisibile":"Femme Invisible","Torcia Umana":"Torche Humaine","La Cosa":"La Chose","Il Darkhold":"Le Darkhold"};
+
+CONTENT.pt.s={
+  1:"Tony Stark, gênio bilionário e fabricante de armas, é capturado no Afeganistão e forçado a construir uma arma. Em vez disso, cria uma armadura para fugir. De volta para casa, aperfeiçoa a tecnologia e enfrenta Obadiah Stane, o sócio que o traiu. No final, diante das câmeras do mundo inteiro, revela sua identidade: «Eu sou o Homem de Ferro».",
+  2:"Bruce Banner vive fugindo no Brasil em busca de uma cura para sua condição. O general Ross o encontra e envia uma equipe. Banner volta a Nova York para concluir a pesquisa, mas é capturado. Ross fortalece Blonsky e o transforma no Abominável. Hulk luta e derrota Blonsky no Harlem. No final, Tony Stark procura Ross e fala da formação de uma equipe.",
+  3:"Tony Stark precisa lidar com o paládio do reator Arc, que o está envenenando. Ivan Vanko, filho de um antigo sócio de seu pai, ataca Tony no Grande Prêmio de Mônaco com chicotes de energia. Nick Fury mostra a Tony os velhos arquivos do pai, que o ajudam a sintetizar um novo elemento. Tony e James Rhodes derrotam Vanko durante uma exposição de tecnologia. A Viúva Negra aparece pela primeira vez.",
+  4:"Thor, príncipe de Asgard, é banido para a Terra pelo pai, Odin, por sua arrogância. Conhece a cientista Jane Foster. Loki, seu irmão adotivo, descobre que é filho do rei dos Gigantes de Gelo e envia o Destruidor para eliminar Thor. Sem poderes, Thor se sacrifica para proteger os inocentes: o Mjolnir volta para ele. Thor derrota o Destruidor, mas Loki desaparece no vazio cósmico.",
+  5:"Durante a Segunda Guerra Mundial, Steve Rogers se torna o Capitão América graças ao soro do Supersoldado. Com o Comando Selvagem, combate a HYDRA, liderada pelo Caveira Vermelha, que recuperou o Tesseract. Steve se sacrifica derrubando o avião no Ártico. Ele acorda na Nova York atual, 70 anos depois.",
+  6:"Nick Fury reúne Homem de Ferro, Capitão América, Thor, Hulk, Viúva Negra e Gavião Arqueiro para formar os Vingadores. O objetivo: deter Loki, que roubou o Tesseract para abrir um portal ao exército Chitauri. Depois de brigarem entre si, os heróis se unem na batalha de Nova York. Tony desvia um míssil nuclear pelo portal. Loki é capturado. Na cena pós-créditos aparece Thanos.",
+  7:"Tony Stark é ameaçado pelo Mandarim. Depois que sua mansão é destruída, ele se vê sozinho no Tennessee, sem armadura. Descobre que o Mandarim é uma fachada: o verdadeiro vilão é Aldrich Killian com o Extremis. Com Rhodes, salva o Presidente. No final, tira o reator Arc do peito: «Eu sou o Homem de Ferro», não a armadura.",
+  8:"Malekith tenta usar o Éter durante a Convergência para mergulhar o universo de volta na escuridão. Jane Foster absorve o Éter por acidente. Thor e Loki se unem para atrair Malekith para longe de Asgard. Na batalha final em Londres, o Éter é extraído de Jane e Malekith é derrotado. Loki toma o lugar de Odin no trono de Asgard.",
+  9:"Steve Rogers descobre que a S.H.I.E.L.D. foi infiltrada pela HYDRA desde a fundação. O Soldado Invernal é na verdade Bucky Barnes. Com Natasha e Sam Wilson, Steve sabota os três porta-aviões do Projeto Insight. A HYDRA é desmantelada e a S.H.I.E.L.D. dissolvida. Bucky sobrevive e começa a se lembrar.",
+  10:"Peter Quill rouba um orbe misterioso e passa a ser caçado por Ronan. Forma uma equipe com Gamora, Rocket, Groot e Drax. O orbe contém a Joia do Poder. Ronan tenta usá-la para destruir Xandar. Os Guardiões unem forças e, juntos, contêm a energia da joia, derrotando Ronan. Quill descobre que é meio alienígena.",
+  11:"Hank Pym recruta Scott Lang para vestir o traje do Homem-Formiga e deter Darren Cross, que quer vender a tecnologia Jaqueta Amarela para a HYDRA. Scott aprende a controlar as formigas. Na batalha final derrota Cross, mas precisa encolher até o nível subatômico para salvar a filha, e consegue voltar. Hope recebe seu traje: ela será a Vespa.",
+  12:"Tony Stark cria Ultron, uma IA pensada para proteger o mundo, que em vez disso conclui que paz significa eliminar a humanidade. Depois de roubar vibranium, Ultron planeja erguer Sokovia como um meteoro. Os gêmeos Maximoff entram em cena. Nasce o Visão. Pietro morre protegendo Clint. Wanda destrói Ultron. Thor e Tony explodem a cidade no ar.",
+  13:"Os Acordos de Sokovia dividem os Vingadores: Tony a favor, Steve contra. Zemo incrimina Bucky por um atentado e desperta os Supersoldados da HYDRA. Os heróis se enfrentam no aeroporto de Leipzig. Zemo revela a Tony que Bucky matou seus pais: duelo brutal entre Tony e Steve. Steve leva Bucky embora. A ruptura é definitiva. Estreiam o Homem-Aranha e o Pantera Negra.",
+  14:"Peter Parker tenta impressionar Tony Stark enquanto enfrenta o Abutre, um traficante de armas alienígenas. Tony toma seu traje depois de um desastre numa balsa. Peter descobre que o Abutre é o pai da garota de quem gosta. Enfrenta-o sem armadura e impede o roubo das armas. Tony lhe oferece um lugar nos Vingadores: Peter recusa, quer continuar sendo o amigão da vizinhança.",
+  15:"Stephen Strange, brilhante neurocirurgião, fere gravemente as mãos num acidente. Encontra a Anciã, que o inicia nas artes místicas. Kaecilius quer abrir a Terra para Dormammu da Dimensão Sombria. A Anciã morre no conflito. Strange enfrenta Dormammu prendendo-o num loop temporal com a Joia do Tempo até que ele aceite ir embora. Strange se torna o novo Mestre das Artes Místicas.",
+  16:"Os Guardiões descobrem que Ego, um planeta vivo, é o pai biológico de Peter. Ego quer espalhar sua consciência por todos os planetas do universo, matando qualquer outra vida, inclusive a mãe de Peter. Nebulosa e Gamora enfrentam seus traumas de filhas de Thanos. Yondu se sacrifica para salvar Peter. Os Guardiões derrotam Ego destruindo seu núcleo.",
+  17:"Thor é capturado em Sakaar, onde encontra Hulk como campeão da arena. Hela, deusa da morte, tomou Asgard. Thor convence Hulk e uma Valquíria sobrevivente a ajudá-lo. Eles levam o povo asgardiano para um lugar seguro. Para deter Hela, Thor desencadeia o Ragnarok: Surtur destrói Asgard junto com Hela. Asgard não é um lugar, é um povo.",
+  18:"T'Challa volta a Wakanda para assumir o trono. Killmonger, seu primo, o desafia e vence. Quer usar as armas de vibranium para revolucionar o mundo. T'Challa sobrevive, desafia Killmonger de novo e o derrota. Wakanda decide se abrir ao mundo e compartilhar sua tecnologia. Na cena pós-créditos, Bucky está se recuperando em Wakanda.",
+  19:"Thanos reúne as seis Joias do Infinito. Os Vingadores e os Guardiões tentam detê-lo em várias frentes, mas fracassam. Thor quase mata Thanos, mas não mira na cabeça. Doutor Estranho entrega a Joia do Tempo a Thanos para salvar Tony. Com as seis joias, Thanos estala os dedos: metade de toda a vida vira pó, incluindo muitos heróis. Só os seis Vingadores originais sobrevivem.",
+  20:"Scott Lang e Hope abrem um túnel quântico para resgatar Janet van Dyne. Fantasma quer usar Janet para se estabilizar. Eles conseguem trazer Janet de volta. Na cena pós-créditos, enquanto Scott está no reino quântico, os Pym e Hope desaparecem no estalo de Thanos. Scott fica preso.",
+  21:"Carol Danvers, agente Kree sem memória, cai na Terra em 1995 e conhece Nick Fury. Descobre que era piloto e que os Skrulls são refugiados inocentes. A verdadeira ameaça é a Inteligência Suprema Kree. Carol liberta seus poderes sem limites e derrota os Kree. Deixa com Fury um pager para emergências. Na cena pós-créditos, ela atende ao chamado de Fury depois do estalo.",
+  22:"Cinco anos depois do estalo, Scott Lang descobre que no reino quântico o tempo passa de outro jeito. Os Vingadores constroem uma máquina do tempo e se dividem para recuperar as joias no passado. Natasha se sacrifica pela Joia da Alma. Hulk traz todos de volta com a manopla. O Thanos de 2014 ataca. Todos os heróis voltam para a batalha final. Tony estala os dedos e se sacrifica. Steve volta ao passado para devolver as joias e fica com Peggy, passando o escudo para Sam."
+};
+CONTENT.pt.pc={
+  1:"Nick Fury se apresenta a Tony Stark com uma proposta extraordinária: está reunindo um grupo de pessoas excepcionais. O universo Marvel acaba de ficar muito maior. 🌟",
+  2:"Tony Stark faz uma visita inesperada ao general Ross: alguém está montando uma equipe de indivíduos extraordinários. O quebra-cabeça do MCU começa a se encaixar! 🔧",
+  3:"Um martelo misterioso foi encontrado numa cratera no Novo México. Algo enorme está prestes a chegar dos céus... ⚡",
+  4:"Um cubo luminoso de imenso poder cósmico é descoberto por um indivíduo misterioso. O Tesseract está nas mãos erradas e o universo treme... 🔵",
+  5:"Nick Fury encontra um homem fora do seu tempo que precisa de um propósito. Uma aventura moderna épica está para começar para o soldado vindo do passado! 🛡️",
+  6:"Uma entidade misteriosa e aterradora sorri na escuridão cósmica. Alguém muito mais poderoso que Loki estava por trás de tudo desde o início. O verdadeiro vilão do universo aparece pela primeira vez... 💜",
+  7:"Tony conta todas essas aventuras para alguém inesperado durante uma sessão de terapia... e descobrimos que super-heróis também têm seus problemas! 😄",
+  8:"Uma substância escura e fluida é entregue a guardiões misteriosos para ser mantida em segurança longe de Asgard. Algo enorme se agita na escuridão... 🔴",
+  9:"Duas pessoas com poderes extraordinários estão presas. Uma garota com poderes telecinéticos e um garoto ultrarrápido: os Maximoff. O futuro dos Vingadores está prestes a se complicar muito... ⚡",
+  10:"Um pato espacial de paletó e gravata faz um brinde numa nave... Howard, o Pato, aparece no MCU! E os Guardiões estão prontos para a próxima aventura. 🦆",
+  11:"Hope van Dyne finalmente recebe seu traje: elegante, sofisticado, poderosíssimo. A Vespa está pronta. Enquanto isso, Cap e Sam Wilson encontraram alguém que conhecem... 🐝",
+  12:"Uma mão dourada pega uma manopla vazia e murmura: «Tudo bem, eu mesmo faço.» Thanos está prestes a começar sua caçada. Algo imenso se aproxima no horizonte do universo... 💜",
+  13:"Bucky Barnes entra em criogenia em Wakanda, o país mais avançado do mundo. Pantera Negra promete proteção. Um reino secreto se abre para uma aliança... 🐾",
+  14:"O Capitão América dá um conselho sobre paciência que fica incrivelmente irônico no contexto... e Toomes, na prisão, mostra que ainda tem princípios. 😏",
+  15:"Thor chega ao Sanctum Sanctorum de Nova York com um pedido para o Doutor Estranho: está procurando o pai, Odin, na Terra. Forma-se uma aliança cósmica... ⚡🔮",
+  16:"Cinco cenas pós-créditos! O Groot adolescente é magnificamente preguiçoso, Stakar reúne sua equipe original e, acima de tudo, Adam Warlock é anunciado. Uma imensa força cósmica se prepara... ✨",
+  17:"A nave dos asgardianos é interceptada por uma nave enorme na escuridão do espaço. Quem chega para espalhar o terror entre os sobreviventes do reino destruído? A hora mais sombria se aproxima... 💀",
+  18:"Wakanda abre as portas na ONU e leva sua tecnologia avançada ao mundo inteiro. E numa aldeia wakandana, um homem com um braço branco acorda... 🤍",
+  19:"No caos do estalo, um pager envia um último sinal antes de se apagar: uma estrela de oito pontas sobre fundo vermelho e azul. Alguém muito poderoso acaba de ser chamado para ajudar... ⭐",
+  20:"Enquanto Scott está no reino quântico coletando energia curativa, Hank, Janet e Hope desaparecem no nada. Scott está preso. O estalo de Thanos também os atingiu. Scott está sozinho no reino quântico... ⚛️",
+  21:"Capitã Marvel atende ao pager de Fury e fica cara a cara com os Vingadores sobreviventes. Onde está Fury? E o que vai acontecer agora? A heroína mais poderosa do MCU finalmente chegou! 💙",
+  22:"Não há cena pós-créditos tradicional, só o som de um martelo forjando algo. O som de Tony Stark construindo sua primeira armadura. Uma homenagem silenciosa ao fim de uma era. 🔨"
+};
+
+CONTENT.pt.t={105:"Loki · Temporada 1",108:"Loki · Temporada 2"};
+Object.assign(CONTENT.pt.s,{
+  101:"Vampira, uma garota que absorve a força vital de quem toca, foge de casa e conhece Logan, um mutante com garras e capacidade de cura que não se lembra do passado. Os dois vão parar na escola do Professor Xavier, refúgio para mutantes e base dos X-Men. Magneto, velho amigo de Xavier, quer transformar em mutantes os líderes mundiais reunidos na Ilha Ellis com uma máquina alimentada pela própria Vampira. Os X-Men o detêm na Estátua da Liberdade, Logan salva Vampira e Magneto acaba numa prisão de plástico. Logan parte para o Lago Alkali em busca do seu passado.",
+  102:"Noturno, controlado mentalmente, ataca o Presidente dos Estados Unidos. O coronel William Stryker usa o atentado para invadir a escola de Xavier e sequestrar o Professor, com o objetivo de usar uma cópia do Cérebro para matar todos os mutantes do mundo. Os X-Men se aliam a Magneto e Mística. Logan descobre que Stryker é o homem que implantou o adamantium nele. Magneto vira o plano contra os humanos, mas os X-Men salvam Xavier. A represa do Lago Alkali se rompe e Jean Grey se sacrifica para salvar a equipe. Xavier mostra a verdade ao Presidente e pede paz entre humanos e mutantes.",
+  103:"Shang-Chi trabalha como manobrista em São Francisco com a amiga Katy, até que os Dez Anéis o atacam num ônibus para roubar o pingente da mãe. Ele é filho de Wenwu, guerreiro milenar que se tornou imortal graças aos Dez Anéis. Wenwu, convencido de que a esposa morta o chama de Ta Lo, uma aldeia escondida em outra dimensão, quer romper o selo do lugar. Na verdade a voz é do Devorador de Almas, aprisionado lá. Wenwu liberta a criatura e morre passando os anéis ao filho. Shang-Chi, Katy e Xialing, com o dragão Grande Protetor, derrotam o Devorador. Xialing assume o comando dos Dez Anéis.",
+  104:"Depois que Mysterio revelou ao mundo que Peter Parker é o Homem-Aranha, a vida de Peter, MJ e Ned desmorona. Peter pede ao Doutor Estranho um feitiço para que todos esqueçam sua identidade, mas o interrompe várias vezes e o feitiço se rompe: do Multiverso chegam vilões de outros universos que conhecem Peter Parker, como o Duende Verde, o Doutor Octopus e Electro. Peter decide curá-los em vez de mandá-los de volta para morrer, mas o Duende Verde mata a Tia May. Chegam dois Homens-Aranha de outros universos, vividos por Tobey Maguire e Andrew Garfield: juntos, os três Peters curam os vilões na Estátua da Liberdade. Para salvar a realidade, Peter pede a Strange que todos esqueçam Peter Parker. Nem MJ nem Ned se lembram dele: Peter recomeça sozinho, com um traje costurado à mão.",
+  105:"O Loki de 2012, que fugiu com o Tesseract em Ultimato, é capturado pela AVT, a organização que protege a Linha do Tempo Sagrada podando cada ramificação. Com o agente Mobius, ele caça Sylvie, uma variante sua que ataca a AVT. Loki e Sylvie descobrem que os agentes são variantes sem memória e que os Guardiões do Tempo são autômatos. Pelo Vazio, chegam ao castelo do fim dos tempos, onde Aquele que Permanece revela ter criado a AVT para impedir uma guerra entre suas próprias variantes. Sylvie o mata: a Linha do Tempo Sagrada explode num Multiverso e uma variante dele ainda mais perigosa se prepara para tomar o poder.",
+  106:"America Chavez, uma garota capaz de viajar entre universos, é perseguida por um demônio. Doutor Estranho e Wong a salvam e pedem ajuda a Wanda Maximoff, mas descobrem que a caçadora é ela: corrompida pelo Darkhold, quer o poder de America para chegar a um universo onde seus filhos existem. Wanda ataca Kamar-Taj. Strange e America fogem para a Terra-838, onde os Illuminati explicam as incursões, colisões entre universos causadas por um Strange daquele mundo, antes de serem exterminados por Wanda. Strange possui o corpo de uma variante sua morta para voltar à luta. America, enfim dona do próprio poder, mostra a Wanda os filhos com medo dela. Wanda entende, destrói o Darkhold e parece morrer no desabamento. Strange ganha um terceiro olho.",
+  107:"O rei T'Challa morre de uma doença e Wakanda está de luto. O mundo quer o vibranium, e uma busca submarina chama a atenção de Namor, rei da civilização escondida de Talokan, que também tem vibranium. Namor exige que Wakanda entregue Riri Williams, a jovem cientista que construiu o detector. Shuri e Okoye a encontram, mas Namor sequestra Shuri e Riri. Nakia as liberta, Talokan ataca Wakanda e a rainha Ramonda morre. Shuri recria a erva em forma de coração e se torna a nova Pantera Negra. Na batalha no mar, derrota Namor mas poupa sua vida, escolhendo a paz. Nakia revela que tem um filho de T'Challa.",
+  108:"Depois da morte de Aquele que Permanece, a AVT está à beira do colapso e Loki desliza no tempo sem querer. Com Mobius e o técnico O.B., tenta salvar o Tear Temporal, sobrecarregado pelas infinitas ramificações. Renslayer e Miss Minutes procuram Victor Timely, variante de Aquele que Permanece, que é levado para a AVT. O Tear explode e seus amigos se desintegram. Loki aprende a controlar o tempo e passa séculos tentando salvar o Tear. Entende que a única solução é se sacrificar: destrói a máquina e se torna ele mesmo o guardião das linhas do tempo, no fim dos tempos. As ramificações formam uma grande árvore e a AVT agora protege o Multiverso.",
+  109:"Wade Wilson, o Deadpool do universo Fox, descobre pela AVT que seu mundo vai morrer porque seu ser-âncora, o Wolverine daquele universo, morreu. Mr. Paradox quer acelerar o fim. Wade procura outra variante de Wolverine e encontra a pior de todas, um Logan cheio de arrependimentos. Paradox os manda para o Vazio, reino de Cassandra Nova, gêmea de Charles Xavier com poderes imensos. Lá encontram heróis esquecidos de antigos filmes da Fox, como Elektra, Blade, X-23, Gambit e um Tocha Humana vivido por Chris Evans. De volta à AVT, Deadpool e Wolverine detêm a máquina com que Paradox e Cassandra querem destruir os universos. Cassandra morre e Logan se torna a nova âncora do mundo de Wade.",
+  110:"Thaddeus Ross, agora Presidente dos Estados Unidos, pede a Sam Wilson que reconstrua os Vingadores. Durante uma cúpula na Casa Branca, Isaiah Bradley e outros agentes, controlados mentalmente, tentam matar Ross. Sam investiga para inocentar Isaiah e descobre Samuel Sterns, cientista transformado pelos raios gama que quer se vingar de Ross. Também está em jogo o adamantium encontrado na Ilha Celestial, disputado entre as nações. Sterns envenena Ross há anos: durante um discurso, o Presidente se transforma no Hulk Vermelho. Sam o enfrenta e consegue trazê-lo de volta a si. Ross se entrega e Sam anuncia a volta dos Vingadores.",
+  111:"Yelena Belova, ainda de luto pela irmã Natasha, trabalha para Valentina Allegra de Fontaine. Valentina, sob investigação, a manda para um cofre com US Agent, Fantasma e Treinadora para que eliminem uns aos outros. A Treinadora morre. Os sobreviventes encontram Bob, única cobaia do projeto Sentinela, e fogem com a ajuda do Guardião Vermelho e de Bucky Barnes. Valentina ativa Bob como Sentinela, mas seu lado sombrio, o Vácuo, cobre Nova York de sombras e prende as pessoas em seus traumas. A equipe entra na escuridão e salva Bob com empatia, não com força. Valentina os apresenta ao mundo como os novos Vingadores para salvar as aparências.",
+  112:"Na Terra-828, um futuro retrô inspirado nos anos sessenta, o Quarteto Fantástico é uma equipe de heróis amados há quatro anos, desde que os raios cósmicos os transformaram. Sue descobre que está grávida. Chega a Surfista Prateada, arauto de Galactus, o devorador de mundos que quer comer a Terra. O Quarteto vai ao espaço negociar, mas Galactus pede em troca o filho que ainda não nasceu. Eles fogem e Franklin nasce. O mundo se volta contra eles, mas Sue convence todos a resistir. No confronto final, Sue se sacrifica empurrando Galactus para um portal com a ajuda da Surfista Prateada, e o pequeno Franklin a traz de volta à vida. Um ano depois, alguém com uma máscara de metal visita Franklin."
+});
+Object.assign(CONTENT.pt.pc,{
+  101:"Sem cena pós-créditos: em 2000 ainda não era costume. Mas este é o filme que deu início ao cinema de super-heróis moderno. 🧬",
+  102:"Sem cena pós-créditos. Mas fique até o último plano antes dos créditos: há um detalhe na água que os fãs nunca esqueceram. 🔥",
+  103:"Duas cenas. Na primeira, Shang-Chi e Katy são chamados por um rosto conhecido junto com dois Vingadores por videochamada: os Dez Anéis estão enviando um sinal... para algo muito distante. Na segunda, alguém assume o legado dos Dez Anéis. 💍",
+  104:"Duas cenas. Num bar distante, um hóspede inesperado é mandado de volta para casa... mas deixa algo para trás. Depois, uma prévia: o Doutor Estranho precisa lidar com as consequências de brincar com o Multiverso. 🕸️",
+  105:"Não há uma cena pós-créditos de verdade, mas um carimbo da AVT nos créditos promete que Loki voltará na temporada 2. 🐍",
+  106:"Duas cenas. Uma mulher misteriosa abre uma fenda e pede ajuda a Strange: há uma incursão para resolver, e foi ele quem a causou. A segunda é pura comédia no estilo Sam Raimi. 🍕",
+  107:"Uma cena no meio dos créditos, delicada e importante: Nakia guarda um segredo que traz esperança para o futuro de Wakanda. 💜",
+  108:"Sem cena pós-créditos: o final fala por si. 🌳",
+  109:"Uma cena depois dos créditos: um personagem inesperado do Vazio desabafa, do jeito mais boca-suja possível. 😂",
+  110:"Um encontro na prisão: alguém avisa Sam que não é só este mundo que está em perigo. Outros mundos estão chegando. 🌍",
+  111:"Duas cenas. Na segunda, catorze meses depois, a nova equipe discute sobre nomes e marcas registradas... até que um alarme detecta uma nave de outra dimensão a caminho. 🚀",
+  112:"Uma cena no meio dos créditos que leva direto ao cinema em 16 de dezembro: alguém com uma máscara de metal faz uma visita à família. O destino tem nome. 🛡️ Depois, um pequeno mimo no estilo anos sessenta. 📺"
+});
+CONTENT.pt.ep={
+  105:[
+    ["Propósito glorioso","O Loki de 2012 foge com o Tesseract durante a viagem no tempo de Ultimato e cai no deserto de Gobi, onde é preso pela AVT por crimes contra a Linha do Tempo Sagrada. Descobre que é uma variante, vê seu destino já escrito e aceita ajudar o agente Mobius a capturar uma variante perigosa que está matando Minutemen."],
+    ["A variante","Loki percebe que a variante se esconde dentro dos apocalipses, onde nada pode alterar a linha do tempo. Em 2050, em Roxxcart, a variante se revela: é uma Loki mulher, que planta bombas de reinício por toda a linha do tempo, criando dezenas de ramificações. Com a AVT no caos, ela foge por um portal e Loki vai atrás."],
+    ["Lamentis","Loki e a variante, que se chama Sylvie, ficam presos em Lamentis-1, uma lua prestes a ser destruída. Conversam sobre amor e sobre a própria natureza. Sylvie revela que todos os agentes da AVT são variantes que tiveram a memória apagada. A arca que deveria salvá-los é destruída diante dos seus olhos."],
+    ["O evento Nexus","A AVT os resgata um instante antes do fim. Mobius descobre que a AVT mente e é podado por Ravonna. Loki e Sylvie chegam diante dos Guardiões do Tempo e descobrem que são apenas autômatos. Ravonna poda Loki, que acorda num lugar desconhecido cercado por outras variantes de si mesmo."],
+    ["Jornada ao mistério","Loki está no Vazio, no fim dos tempos, para onde vai tudo o que é podado. Conhece outras variantes, como o Loki Clássico, o Loki Criança e o Loki Jacaré, e a monstruosa nuvem Alioth, que devora tudo. Sylvie se poda para alcançá-lo. Juntos eles encantam Alioth, e além da nuvem aparece um castelo."],
+    ["Por todo o tempo. Sempre.","No castelo são recebidos por Aquele que Permanece: ele criou a AVT para evitar uma guerra entre suas variantes em diferentes universos. Oferece uma escolha: assumir seu lugar, ou matá-lo e libertar o caos. Sylvie empurra Loki para um portal e mata Aquele que Permanece. A Linha do Tempo Sagrada se ramifica sem controle. Loki volta à AVT, mas Mobius não o reconhece e, no lugar dos Guardiões do Tempo, há uma estátua de uma variante de Aquele que Permanece."]
+  ],
+  108:[
+    ["Ouroboros","Loki desliza sem querer entre o passado, o presente e o futuro da AVT. Com Mobius, chega até O.B., o técnico que conserta o Tear Temporal, a máquina que mantém as linhas do tempo unidas. Um traje improvisado interrompe os deslizes, mas o Tear está no limite por causa das infinitas ramificações. Enquanto isso, Sylvie vive tranquila no Oklahoma de 1982."],
+    ["Breaking Brad","Loki e Mobius caçam X-5, um ex-Minuteman que virou astro de cinema em 1977. Descobrem onde Sylvie está escondida e a encontram numa lanchonete de 1982. Enquanto isso, Renslayer e Miss Minutes procuram uma arma contra a AVT."],
+    ["1893","Na Feira Mundial de Chicago de 1893, todos procuram Victor Timely, jovem inventor e variante de Aquele que Permanece. Renslayer e Miss Minutes querem usá-lo, Loki e Mobius querem levá-lo para a AVT, Sylvie quer eliminá-lo. No fim, Timely é levado para a AVT."],
+    ["O coração da AVT","Timely aceita ajudar a consertar o Tear Temporal. Renslayer é mandada para o Vazio. Timely se aproxima do Tear para instalar sua invenção, mas a máquina explode: diante dos olhos de Loki, Mobius, O.B. e B-15 se desintegram."],
+    ["Ciência/Ficção","Loki se vê deslizando entre ramificações onde seus amigos levam vidas normais sem lembrar da AVT. Um por um, ele os traz de volta. Aprende a controlar seus saltos no tempo, mas as ramificações estão morrendo."],
+    ["Propósito glorioso","Durante séculos, Loki repete cada tentativa de salvar o Tear, sem sucesso. Entende que o único jeito é tomar o lugar dele. Destrói a máquina e segura as linhas do tempo com as próprias mãos, sentado num trono no fim dos tempos: as ramificações se tornam uma grande árvore. A AVT agora protege o Multiverso em vez de podá-lo."]
+  ]
+};
+
+CONTENT.pt.gem={
+  space:["Joia do Espaço","Permite se deslocar instantaneamente para qualquer ponto do universo e abrir portais dimensionais. Fica dentro do Tesseract, um cubo luminoso de imenso poder.","O Tesseract foi encontrado pela HYDRA durante a Segunda Guerra Mundial. Dentro dele está a Joia do Espaço, capaz de atravessar o espaço num instante."],
+  mind:["Joia da Mente","Amplifica as capacidades mentais de quem a usa e permite controlar a mente dos outros. Pode interagir com outras joias e potencializar seus efeitos.","Escondida no cetro de Loki durante a invasão de Nova York, a Joia da Mente ficou oculta até que seus verdadeiros poderes fossem descobertos."],
+  reality:["Joia da Realidade","Permite alterar a realidade à vontade, transformar a matéria e criar ilusões impossíveis de distinguir da própria realidade.","Conhecida como Éter, essa substância escura e fluida foi cobiçada por Malekith para mergulhar o universo de volta na escuridão primordial durante a Convergência."],
+  power:["Joia do Poder","Contém uma energia destrutiva infinita, capaz de aniquilar planetas inteiros. Quem a toca sem proteção é desintegrado pela sua energia.","Guardada dentro do Orbe, essa joia roxa foi cobiçada por Ronan a mando de Thanos. Os Guardiões a entregaram à Tropa Nova em Xandar para mantê-la em segurança."],
+  time:["Joia do Tempo","Permite manipular o tempo: voltar ao passado, avançar para o futuro ou criar loops temporais. Fica guardada no Olho de Agamotto.","Protegida por séculos pelos Mestres das Artes Místicas de Kamar-Taj, a Joia do Tempo fica no Olho de Agamotto, o medalhão do Mago Supremo."],
+  soul:["Joia da Alma","Governa as almas dos vivos e dos mortos. Permite entrar num universo de bolso dentro da própria joia, onde vivem as almas aprisionadas.","Escondida em Vormir, um planeta distante vigiado por um guardião misterioso, essa joia exige o maior dos sacrifícios para ser obtida."]
+};
+CONTENT.pt.mv={
+  mutants:["Mutantes","Pessoas que nascem com um gene, o gene X, que lhes dá poderes extraordinários. Diferente dos heróis criados por experimentos ou acidentes, os mutantes já nascem assim, e por isso muitas vezes são temidos e discriminados.","Os X-Men vivem num universo diferente do dos Vingadores. Guarde bem o rosto deles."],
+  branches:["Linhas do tempo ramificadas","Se você viaja ao passado e muda algo, não reescreve o seu futuro: cria uma nova linha do tempo, um ramo que se separa da principal.","É a regra que torna todo o resto possível: cada escolha pode gerar uma realidade alternativa."],
+  tva:["AVT","A Autoridade de Variância Temporal é uma organização que existe fora do tempo. Vigia a linha do tempo e poda cada ramo que se desvia do caminho estabelecido.","Burocracia, carimbos e relógios: a AVT é a guardiã do Multiverso, e decide o que existe e o que não existe."],
+  sacred:["Linha do Tempo Sagrada","A única sequência de acontecimentos considerada certa. Tudo o que se afasta dela é chamado de evento Nexus e é apagado.","Entender quem a escreveu, e por quê, é um dos mistérios centrais da Saga do Multiverso."],
+  variants:["Variantes","Versões diferentes da mesma pessoa, nascidas em linhas do tempo diferentes. Podem ter outra aparência, outra personalidade, até ser de outra espécie.","No Multiverso ninguém é único: o mesmo rosto pode ser herói num mundo e inimigo em outro."],
+  multiverse:["O Multiverso","Um conjunto infinito de universos paralelos, cada um com sua própria história. Normalmente ficam separados, mas a magia ou a tecnologia podem abrir passagens.","Quando as barreiras entre universos racham, qualquer um pode chegar de qualquer lugar."],
+  incursions:["Incursões","Quando dois universos colidem, um deles é destruído. Isso é uma incursão: a maior catástrofe possível no Multiverso.","É o perigo que paira sobre tudo o que está por vir."],
+  loom:["O Tear Temporal","A máquina no coração da AVT que tece as linhas do tempo e as mantém estáveis.","Mostra como é frágil o equilíbrio que mantém as realidades unidas."],
+  anchor:["Seres-âncora","Em cada universo existe uma pessoa tão importante que, se ela morrer, o mundo inteiro dela começa a se apagar aos poucos.","Algumas vidas carregam universos inteiros nas costas."],
+  earth828:["Terra-828","Cada Terra do Multiverso tem um número. A dos Vingadores é a Terra-616, a do Quarteto Fantástico é a Terra-828, um mundo com estética dos anos sessenta.","Duas Terras, duas equipes de heróis, um só encontro no cinema."]
+};
+CONTENT.pt.p3=[
+  "Tony Stark contou ao mundo que é o Homem de Ferro e está lidando com sua nova vida pública. Pepper virou CEO da Stark Industries. Mas tem algo errado com o reator Arc no peito dele...",
+  "Tony descobre que o paládio do reator Arc o está envenenando aos poucos. Ivan Vanko, filho de um colaborador do pai dele, construiu chicotes de energia e atacou Tony no Grande Prêmio de Mônaco diante do mundo inteiro.",
+  "Nick Fury revelou a Tony a iniciativa Vingadores e os arquivos secretos do pai. Justin Hammer libertou Vanko para construir drones militares. Tony procura desesperadamente um novo elemento antes que o paládio o mate.",
+  "Tony sintetizou um novo elemento para o reator Arc. A Viúva Negra fez sua estreia. Vanko termina os drones e prepara o contra-ataque final durante a Stark Expo."
+];
+CONTENT.pt.n={"Il Soldato d'Inverno":"O Soldado Invernal","(voce)":"(voz)","(giovane)":"(jovem)","Il Mandarino":"O Mandarim","Ronan il Distruttore":"Ronan, o Acusador","Visione":"Visão","Zia May":"Tia May","Avvoltoio":"Abutre","L'Antico":"A Anciã","Ego il Pianeta Vivente":"Ego, o Planeta Vivo","Hela, dea della morte":"Hela, deusa da morte","Valchiria":"Valquíria","I Figli di Thanos":"Os Filhos de Thanos","Goose (il gatto)":"Goose (o gato)","L'Intelligenza Suprema Kree":"A Inteligência Suprema Kree","Odino":"Odin","Ciclope":"Ciclope","Tempesta":"Tempestade","Mystica":"Mística","Rospo":"Sapo","Rogue":"Vampira","Nightcrawler":"Noturno","Il Divoratore di Anime":"O Devorador de Almas","Cacciatrice":"Caçadora","Regina Ramonda":"Rainha Ramonda","Donna Invisibile":"Mulher Invisível","Torcia Umana":"Tocha Humana","La Cosa":"O Coisa","Il Darkhold":"O Darkhold","Iron Man":"Homem de Ferro","Captain America":"Capitão América","Black Widow":"Viúva Negra","Hawkeye":"Gavião Arqueiro","Spider-Man":"Homem-Aranha","Black Panther":"Pantera Negra","Doctor Strange":"Doutor Estranho","Ant-Man":"Homem-Formiga","Scarlet Witch":"Feiticeira Escarlate","War Machine":"Máquina de Combate","Star-Lord":"Senhor das Estrelas","Green Goblin":"Duende Verde","Mister Fantastic":"Senhor Fantástico"};
+Object.assign(CONTENT.es.n,{"Captain America":"Capitán América","Black Widow":"Viuda Negra","Hawkeye":"Ojo de Halcón","Green Goblin":"Duende Verde","Scarlet Witch":"Bruja Escarlata","War Machine":"Máquina de Guerra"});
+Object.assign(CONTENT.fr.n,{"Black Widow":"Veuve Noire","Hawkeye":"Œil de Faucon","Green Goblin":"Bouffon Vert","Scarlet Witch":"Sorcière Rouge","War Machine":"War Machine"});
+
 // ── STATE ──
 var films=FILMS.map(f=>({...f,status:"upcoming",stars:null,date:null,minute:null,postCreditSeen:false}));
 var currentOrder='release';
@@ -782,11 +1489,66 @@ function loadSave(){
 var save=loadSave();
 function persist(){
   try{localStorage.setItem(STORE_KEY,JSON.stringify(save));}
-  catch(e){showToast('⚠️ Impossibile salvare su questo dispositivo');}
+  catch(e){showToast(t('toast_nosave'));}
 }
+// ── LINGUA ──
+const LANG_NAMES={it:'Italiano',en:'English',es:'Español',fr:'Français',pt:'Português'};
+var lang=(()=>{
+  try{const s=localStorage.getItem('iw-lang');if(s&&I18N[s])return s;}catch(e){}
+  const b=(navigator.language||'it').slice(0,2).toLowerCase();
+  return I18N[b]?b:'it';
+})();
+function t(key,...a){
+  const v=I18N[lang]&&I18N[lang][key]!==undefined?I18N[lang][key]:I18N.it[key];
+  return typeof v==='function'?v(...a):v;
+}
+function tc(kind,id){
+  if(lang==='it')return undefined;
+  for(const L of [lang,'en']){const k=CONTENT[L]&&CONTENT[L][kind];if(k&&k[id]!==undefined)return k[id];}
+  return undefined;
+}
+function locName(s){
+  const m=lang!=='it'&&CONTENT[lang].n;
+  if(!m)return s;
+  for(const k in m)s=s.split(k).join(m[k]);
+  return s;
+}
+function localize(item){
+  if(lang==='it')return item;
+  const o=Object.assign({},item);
+  o.title=tc('t',item.id)||item.title;
+  const pc=tc('pc',item.id);if(pc)o.postCreditText=pc;
+  o.heroes=(item.heroes||[]).map(locName);
+  o.villains=(item.villains||[]).map(locName);
+  o.cast=(item.cast||[]).map(c=>({actor:c.actor,role:locName(c.role)}));
+  const eps=tc('ep',item.id);
+  if(item.episodes&&eps)o.episodes=item.episodes.map((e,i)=>({d:e.d,t:eps[i]?eps[i][0]:e.t,s:eps[i]?eps[i][1]:e.s}));
+  return o;
+}
+function summaryOf(id){return tc('s',id)||(SUMMARIES[id]&&SUMMARIES[id].full)||'';}
+function locGem(g){const x=g&&tc('gem',g.id);return x?Object.assign({},g,{name:x[0],powers:x[1],origin:x[2]}):g;}
+function locMv(m){const x=m&&tc('mv',m.id);return x?Object.assign({},m,{name:x[0],what:x[1],why:x[2]}):m;}
+function escAttr(s){return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function applyLang(){
+  document.documentElement.lang=lang;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{el.textContent=t(el.dataset.i18n);});
+  document.querySelectorAll('[data-i18n-html]').forEach(el=>{el.innerHTML=t(el.dataset.i18nHtml);});
+  document.querySelectorAll('[data-i18n-ph]').forEach(el=>{el.placeholder=t(el.dataset.i18nPh);});
+  document.getElementById('lang-select').value=lang;
+  document.getElementById('lang-name').textContent=LANG_NAMES[lang];
+}
+function setLang(l){
+  lang=l;
+  try{localStorage.setItem('iw-lang',l);}catch(e){}
+  activeFilter=null;
+  document.getElementById('filter-banner').classList.remove('show');
+  closeDetail();closeGem();
+  applySave();applyLang();renderAll();updateStats();
+}
+
 function applySave(){
-  films=FILMS.map(f=>Object.assign({},f,pickProgress(save.films[f.id]||{})));
-  doomState=DOOM_ITEMS.map(t=>doomDefaults(t,save.doomsday[t.id]));
+  films=FILMS.map(f=>Object.assign({},localize(f),pickProgress(save.films[f.id]||{})));
+  doomState=DOOM_ITEMS.map(it=>doomDefaults(localize(it),save.doomsday[it.id]));
 }
 
 function saveFilm(f){
@@ -803,8 +1565,8 @@ function loadScript(src){
   return new Promise((res,rej)=>{const s=document.createElement('script');s.src=src;s.onload=res;s.onerror=rej;document.head.appendChild(s);});
 }
 async function importLegacy(){
-  if(!confirm('Importare i progressi dal vecchio salvataggio condiviso?\n\nSostituiscono quelli salvati su questo telefono. Il vecchio salvataggio non viene modificato.'))return;
-  showToast('☁️ Importazione in corso…');
+  if(!confirm(t('confirm_legacy')))return;
+  showToast(t('toast_importing'));
   try{
     if(!window.firebase){
       await loadScript('https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js');
@@ -814,9 +1576,9 @@ async function importLegacy(){
     const db=firebase.database();
     const [fs,ds]=await Promise.all([db.ref('films').once('value'),db.ref('doomsday').once('value')]);
     const n=adoptSave(fs.val()||{},ds.val()||{});
-    showToast(`✓ Importati ${n} titoli`);
+    showToast(t('toast_imported',n));
   }catch(e){
-    showToast('⚠️ Importazione non riuscita: controlla le regole Firebase');
+    showToast(t('toast_import_fail'));
   }
 }
 
@@ -840,21 +1602,21 @@ function exportBackup(){
     const a=document.createElement('a');
     a.href=URL.createObjectURL(file);a.download=name;a.click();
     setTimeout(()=>URL.revokeObjectURL(a.href),1000);
-    done();showToast('💾 Backup scaricato');
+    done();showToast(t('toast_backup_dl'));
   }
 }
 function importBackup(input){
   const file=input.files[0];
   input.value='';
   if(!file)return;
-  file.text().then(t=>{
-    const b=JSON.parse(t);
+  file.text().then(txt=>{
+    const b=JSON.parse(txt);
     if(!b||b.app!=='infinitywatch'||!b.films||!b.doomsday)throw new Error('formato');
-    const when=b.savedAt?fmt(b.savedAt.slice(0,10)):'sconosciuta';
-    if(!confirm(`Ripristinare il backup del ${when}?\n\nSostituisce i progressi salvati su questo telefono.`))return;
+    const when=b.savedAt?fmt(b.savedAt.slice(0,10)):t('unknown_date');
+    if(!confirm(t('confirm_restore',when)))return;
     adoptSave(b.films,b.doomsday);
-    showToast('✓ Backup ripristinato');
-  }).catch(()=>showToast('⚠️ Questo file non è un backup valido'));
+    showToast(t('toast_restored'));
+  }).catch(()=>showToast(t('toast_bad_backup')));
 }
 
 function findItem(id){return films.find(x=>x.id===id)||doomState.find(x=>x.id===id);}
@@ -919,8 +1681,8 @@ function getSortedFilms(){
 function getSummaryHTML(f){
   if(f.status==='upcoming')return'';
   if(f.epSeen&&f.status!=='watched'){
-    const seen=f.episodes.map((e,i)=>f.epSeen[i]?`<p style="margin-bottom:8px"><strong style="color:var(--text)">Ep. ${i+1} · ${e.t}</strong><br>${e.s}</p>`:'').join('');
-    return`<div class="summary-box"><div class="summary-label">📖 Trama · episodi visti</div>${seen}<em style="color:var(--hint);font-size:11px">[il resto è ancora da scoprire]</em></div>`;
+    const seen=f.episodes.map((e,i)=>f.epSeen[i]?`<p style="margin-bottom:8px"><strong style="color:var(--text)">${t('ep_short')} ${i+1} · ${e.t}</strong><br>${e.s}</p>`:'').join('');
+    return`<div class="summary-box"><div class="summary-label">${t('sum_eps')}</div>${seen}<em style="color:var(--hint);font-size:11px">${t('sum_rest')}</em></div>`;
   }
   if(f.status==='in-progress'&&f.minute){
     const partial=PARTIAL_SUMMARIES[f.id];
@@ -928,15 +1690,15 @@ function getSummaryHTML(f){
     if(partial&&partial.default){text=partial.default(f.minute,f.duration);}
     else{
       const pct=Math.round((f.minute/f.duration)*100);
-      const full=SUMMARIES[f.id]?.full||'';
-      if(full){const words=full.split(' ');const cut=Math.max(20,Math.floor(words.length*(pct/100)*0.6));text=words.slice(0,cut).join(' ')+'… <em style="color:var(--hint);font-size:11px">[il resto è ancora da scoprire]</em>';}
-      else{text=`Hai visto il film fino al minuto ${f.minute} di ${f.duration}.`;}
+      const full=summaryOf(f.id);
+      if(full){const words=full.split(' ');const cut=Math.max(20,Math.floor(words.length*(pct/100)*0.6));text=words.slice(0,cut).join(' ')+`… <em style="color:var(--hint);font-size:11px">${t('sum_rest')}</em>`;}
+      else{text=t('sum_minute',f.minute,f.duration);}
     }
-    return`<div class="summary-box"><div class="summary-label">📖 Trama · fino al min ${f.minute}</div>${text}</div>`;
+    return`<div class="summary-box"><div class="summary-label">${t('sum_until',f.minute)}</div>${text}</div>`;
   }
   if(f.status==='watched'){
-    const s=SUMMARIES[f.id]?.full;
-    return s?`<div class="summary-box"><div class="summary-label">📖 Trama completa</div>${s}</div>`:'';
+    const s=summaryOf(f.id);
+    return s?`<div class="summary-box"><div class="summary-label">${t('sum_full')}</div>${s}</div>`:'';
   }
   return'';
 }
@@ -946,25 +1708,25 @@ function renderDoomList(){
   const c=document.getElementById('film-list');
   if(activeFilter){
     document.getElementById('filter-banner').classList.add('show');
-    document.getElementById('filter-label').textContent=`Filtro: ${activeFilter}`;
+    document.getElementById('filter-label').textContent=t('filter_label',activeFilter);
   }
   let html='',grp='';
   DOOM_ORDER.forEach(o=>{
     const f=findItem(o.id);
     if(!f)return;
-    if(o.group!==grp){grp=o.group;html+=`<div class="phase-header">${DOOM_GROUPS[grp]}</div>`;}
+    if(o.group!==grp){grp=o.group;html+=`<div class="phase-header">${t('grp_'+grp)}</div>`;}
     const cls=f.status==='watched'?'watched':f.status==='in-progress'?'in-progress':'locked';
     const dotCls=f.status==='watched'?'dot-watched':f.status==='in-progress'?'dot-progress':'dot-locked';
     let sub,pct=null;
     if(f.epSeen){
       const n=f.epSeen.filter(Boolean).length;
-      sub=f.status==='watched'?'Vista':f.status==='in-progress'?`${n}/${f.epSeen.length} episodi`:`Da vedere · ${f.epSeen.length} episodi`;
+      sub=f.status==='watched'?t('s_watched_series'):f.status==='in-progress'?t('s_eps',n,f.epSeen.length):t('s_todo_series',f.epSeen.length);
     } else {
       pct=f.minute?Math.round((f.minute/f.duration)*100):null;
-      sub=f.status==='watched'?'Visto':f.status==='in-progress'?`${f.minute}/${f.duration} min`:'Da vedere';
+      sub=f.status==='watched'?t('s_watched'):f.status==='in-progress'?`${f.minute}/${f.duration} min`:t('s_todo');
     }
     const dimmed=activeFilter&&!matchesFilter(f)?'opacity:0.3;':'';
-    const tags=(f.mcu===false?'<span class="tag tag-fox">Fuori MCU</span>':'')+(f.id<100?'<span class="tag tag-shared">♾️ InfinityWatch</span>':'');
+    const tags=(f.mcu===false?`<span class="tag tag-fox">${t('tag_fox')}</span>`:'')+(f.id<100?'<span class="tag tag-shared">♾️ InfinityWatch</span>':'');
     html+=`<div class="film-card ${cls}${f.mcu===false?' fox':''}" style="${dimmed}" onclick="openDetail(${f.id})">
       <div class="film-row">
         ${iconCell(f)}
@@ -999,22 +1761,20 @@ function updateDoomProgress(){
   const diff=done-expected;
 
   document.getElementById('cd-days').textContent=daysLeft;
-  document.getElementById('cd-label').innerHTML=daysLeft>0
-    ?`${daysLeft===1?'giorno':'giorni'} ad <strong>Avengers: Doomsday</strong><br>al cinema dal 16 dicembre 2026`
-    :`<strong>Avengers: Doomsday</strong> è al cinema! 🍿`;
-  document.getElementById('pace-text').textContent=`${watched} di ${total} titoli`;
+  document.getElementById('cd-label').innerHTML=daysLeft>0?t('cd_label',daysLeft):t('cd_out');
+  document.getElementById('pace-text').textContent=t('pace_text',watched,total);
   document.getElementById('pace-pct').textContent=`${Math.round(done/total*100)}%`;
   document.getElementById('pace-fill').style.width=(done/total*100)+'%';
   document.getElementById('pace-marker').style.left=(expected/total*100)+'%';
 
   const st=document.getElementById('pace-status');
-  if(done>=total){st.textContent='Tutto pronto per Doomsday! 🛡️';st.className='pace-ok';}
-  else if(diff>=1){const n=Math.floor(diff);st.textContent=`Avanti di ${n} ${n===1?'titolo':'titoli'} ✓`;st.className='pace-ok';}
-  else if(diff>-0.5){st.textContent='In pari con la tabella di marcia ✓';st.className='pace-ok';}
-  else{const n=Math.ceil(-diff-0.5);st.textContent=`Indietro di ${n} ${n===1?'titolo':'titoli'}`;st.className='pace-late';}
+  if(done>=total){st.textContent=t('pace_done');st.className='pace-ok';}
+  else if(diff>=1){st.textContent=t('pace_ahead',Math.floor(diff));st.className='pace-ok';}
+  else if(diff>-0.5){st.textContent=t('pace_even');st.className='pace-ok';}
+  else{st.textContent=t('pace_behind',Math.ceil(-diff-0.5));st.className='pace-late';}
   const remaining=total-done;
   document.getElementById('pace-rate').textContent=daysLeft>0&&remaining>0
-    ?`servono ${(remaining/daysLeft*7).toFixed(1)} titoli/settimana`:'';
+    ?t('pace_rate',(remaining/daysLeft*7).toFixed(1)):'';
 }
 
 function renderList(){
@@ -1026,18 +1786,18 @@ function renderList(){
   if(activeFilter){
     const banner=document.getElementById('filter-banner');
     banner.classList.add('show');
-    document.getElementById('filter-label').textContent=`Filtro: ${activeFilter}`;
+    document.getElementById('filter-label').textContent=t('filter_label',activeFilter);
   }
 
   sorted.forEach(f=>{
     if(f.phase!==curPhase&&currentOrder==='release'){
       curPhase=f.phase;
-      html+=`<div class="phase-header">⬡ Phase ${curPhase}</div>`;
+      html+=`<div class="phase-header">⬡ ${t('phase',curPhase)}</div>`;
     }
     const cls=f.status==='watched'?'watched':f.status==='in-progress'?'in-progress':'locked';
     const dotCls=f.status==='watched'?'dot-watched':f.status==='in-progress'?'dot-progress':'dot-locked';
     const pct=f.minute?Math.round((f.minute/f.duration)*100):null;
-    const sub=f.status==='watched'?'Visto':f.status==='in-progress'?`${f.minute}/${f.duration} min (${pct}%)`:'Da vedere';
+    const sub=f.status==='watched'?t('s_watched'):f.status==='in-progress'?`${f.minute}/${f.duration} min (${pct}%)`:t('s_todo');
     const dimmed=activeFilter&&f._filtered===false?'opacity:0.3;':'';
 
     html+=`<div class="film-card ${cls}" style="${dimmed}" onclick="openDetail(${f.id})">
@@ -1063,7 +1823,7 @@ function renderList(){
 function updateProgress(){
   const w=films.filter(f=>f.status==='watched').length;
   const pct=Math.round((w/films.length)*100);
-  document.getElementById('prog-text').textContent=`${w} di ${films.length} visti`;
+  document.getElementById('prog-text').textContent=t('progress',w,films.length);
   document.getElementById('prog-pct').textContent=`${pct}%`;
   document.getElementById('prog-fill').style.width=pct+'%';
 }
@@ -1073,15 +1833,15 @@ function openDetail(id){
   const f=findItem(id);
   const modal=document.getElementById('detail-modal');
   const svgIcon=heroMap[f.id]?`<div class="modal-film-icon">${heroMap[f.id]}</div>`:`<div class="modal-film-icon" style="font-size:30px">${f.icon}</div>`;
-  const heroTags=(f.heroes||[]).map(h=>`<span class="hero-tag" onclick="filterByChar('${h}',event)">${h}</span>`).join('');
-  const villainTags=(f.villains||[]).map(v=>`<span class="hero-tag villain-tag" onclick="filterByChar('${v}',event)">${v}</span>`).join('');
+  const heroTags=(f.heroes||[]).map(h=>`<span class="hero-tag" data-n="${escAttr(h)}" onclick="filterByChar(this.dataset.n,event)">${h}</span>`).join('');
+  const villainTags=(f.villains||[]).map(v=>`<span class="hero-tag villain-tag" data-n="${escAttr(v)}" onclick="filterByChar(this.dataset.n,event)">${v}</span>`).join('');
   const castHTML=(f.cast||[]).map(c=>`<div class="cast-item"><strong>${c.actor}</strong> · ${c.role}</div>`).join('');
   const summary=getSummaryHTML(f);
   const pcSeen=f.postCreditSeen;
 
   let editBtn='';
-  editBtn=`<button class="action-btn sm" onclick="openEdit(${f.id});closeDetail()" style="width:100%;margin-top:8px">✏️ Modifica progressi</button>`;
-  if(f.status==='upcoming')editBtn=`<button class="action-btn primary sm" onclick="markWatched(${f.id});closeDetail()" style="width:100%;margin-top:8px">✓ Segna come visto</button>`;
+  editBtn=`<button class="action-btn sm" onclick="openEdit(${f.id});closeDetail()" style="width:100%;margin-top:8px">${t('btn_edit')}</button>`;
+  if(f.status==='upcoming')editBtn=`<button class="action-btn primary sm" onclick="markWatched(${f.id});closeDetail()" style="width:100%;margin-top:8px">${t('btn_mark')}</button>`;
 
   modal.innerHTML=`
     <div class="modal-handle"></div>
@@ -1090,35 +1850,35 @@ function openDetail(id){
       <div class="modal-title">${f.title}</div>
       <div class="modal-meta-row">
         <span class="meta-chip">📅 ${f.year}</span>
-        ${f.epSeen?`<span class="meta-chip">📺 ${f.episodes.length} episodi · ~${f.duration} min</span>`:`<span class="meta-chip">⏱ ${f.duration} min</span>`}
+        ${f.epSeen?`<span class="meta-chip">${t('chip_eps',f.episodes.length,f.duration)}</span>`:`<span class="meta-chip">⏱ ${f.duration} min</span>`}
         <span class="meta-chip">🎬 ${f.director}</span>
-        ${f.mcu===false?'<span class="meta-chip" style="color:#e8c070;border-color:rgba(232,192,112,0.4)">Fuori MCU · Fox</span>':`<span class="meta-chip">Phase ${f.phase}</span>`}
+        ${f.mcu===false?`<span class="meta-chip" style="color:#e8c070;border-color:rgba(232,192,112,0.4)">${t('chip_fox')}</span>`:`<span class="meta-chip">${t('phase',f.phase)}</span>`}
       </div>
     </div>
     <div class="modal-body">
       ${summary?`<div class="modal-section">${summary}</div>`:''}
       ${f.epSeen?`<div class="modal-section">
-        <div class="modal-section-title">Episodi · tocca per segnare</div>
+        <div class="modal-section-title">${t('sec_eps')}</div>
         <div class="ep-list">${f.episodes.map((e,i)=>`<div class="ep-item ${f.epSeen[i]?'seen':''}" onclick="toggleEpisode(${f.id},${i})"><span class="ep-check">${f.epSeen[i]?'✓':''}</span><span class="ep-title">${i+1}. ${e.t}</span><span class="ep-dur">${e.d} min</span></div>`).join('')}</div>
       </div>`:''}
       <div class="modal-section">
-        <div class="modal-section-title">Cast principale</div>
+        <div class="modal-section-title">${t('sec_cast')}</div>
         <div class="cast-list">${castHTML}</div>
       </div>
       <div class="modal-section">
-        <div class="modal-section-title">Eroi presenti · tocca per filtrare</div>
+        <div class="modal-section-title">${t('sec_heroes')}</div>
         <div class="heroes-list">${heroTags}</div>
       </div>
-      ${villainTags?`<div class="modal-section"><div class="modal-section-title">Villain</div><div class="heroes-list">${villainTags}</div></div>`:''}
+      ${villainTags?`<div class="modal-section"><div class="modal-section-title">${t('sec_villains')}</div><div class="heroes-list">${villainTags}</div></div>`:''}
       ${f.status!=='upcoming'?`
       <div class="modal-section">
-        <div class="modal-section-title">🎬 Scena Post-Credit</div>
+        <div class="modal-section-title">${t('sec_pc')}</div>
         <div class="postcredit-box">
           <div class="postcredit-header">
-            <div class="postcredit-label">🎞️ ${pcSeen?'Vista!':'Non vista'}</div>
-            <button class="postcredit-btn ${pcSeen?'seen':''}" onclick="togglePostCredit(${f.id})">${pcSeen?'✓ Vista':'Segna come vista'}</button>
+            <div class="postcredit-label" id="pc-label">🎞️ ${pcSeen?t('pc_seen_lbl'):t('pc_unseen_lbl')}</div>
+            <button class="postcredit-btn ${pcSeen?'seen':''}" onclick="togglePostCredit(${f.id})">${pcSeen?t('pc_seen_btn'):t('pc_mark_btn')}</button>
           </div>
-          <div class="postcredit-text ${pcSeen?'visible':''}" id="pc-text-${f.id}">${f.postCreditText||'Nessuna scena post-credit.'}</div>
+          <div class="postcredit-text ${pcSeen?'visible':''}" id="pc-text-${f.id}">${f.postCreditText||t('pc_none')}</div>
         </div>
       </div>`:''}
       ${editBtn}
@@ -1135,9 +1895,11 @@ function togglePostCredit(id){
   // update UI without closing
   const btn=document.querySelector('.postcredit-btn');
   const text=document.getElementById(`pc-text-${id}`);
-  if(btn){btn.textContent=f.postCreditSeen?'✓ Vista':'Segna come vista';btn.classList.toggle('seen',f.postCreditSeen);}
+  if(btn){btn.textContent=f.postCreditSeen?t('pc_seen_btn'):t('pc_mark_btn');btn.classList.toggle('seen',f.postCreditSeen);}
   if(text){text.classList.toggle('visible',f.postCreditSeen);}
-  showToast(f.postCreditSeen?'🎬 Scena post-credit vista!':'Rimossa dai visti');
+  const lbl=document.getElementById('pc-label');
+  if(lbl)lbl.textContent=`🎞️ ${f.postCreditSeen?t('pc_seen_lbl'):t('pc_unseen_lbl')}`;
+  showToast(f.postCreditSeen?t('toast_pc_seen'):t('toast_pc_removed'));
 };
 
 function filterByChar(name,e){
@@ -1146,7 +1908,7 @@ function filterByChar(name,e){
   closeDetail();
   switchView('home');
   document.getElementById('filter-banner').classList.add('show');
-  document.getElementById('filter-label').textContent=`Filtro: ${name}`;
+  document.getElementById('filter-label').textContent=t('filter_label',name);
   renderList();
 };
 function clearFilter(){
@@ -1173,11 +1935,11 @@ function saveEdit(){
   const f=findItem(editingId);
   f.stars=tempStar||null;
   f.date=document.getElementById('edit-date').value||null;
-  if(f.epSeen){saveFilm(f);closeEdit();showToast('💾 Salvato');return;}
+  if(f.epSeen){saveFilm(f);closeEdit();showToast(t('toast_saved'));return;}
   const min=parseInt(document.getElementById('edit-min').value);
   if(min&&min>0){f.minute=min;f.status='in-progress';}
   else{f.minute=null;if(f.date)f.status='watched';}
-  saveFilm(f);closeEdit();showToast('💾 Salvato');
+  saveFilm(f);closeEdit();showToast(t('toast_saved'));
   // show completion badge if newly watched
   if(f.status==='watched'&&!f.minute)showCompletionFor(f.id);
 };
@@ -1186,7 +1948,7 @@ function showCompletionFor(id){
   // find card and flash
   setTimeout(()=>{
     renderList();
-    showToast('🎉 Film completato!');
+    showToast(t('toast_done'));
   },300);
 }
 
@@ -1194,7 +1956,7 @@ function markWatched(id){
   const f=findItem(id);
   f.status='watched';f.minute=null;
   if(f.epSeen)f.epSeen=f.epSeen.map(()=>true);
-  saveFilm(f);showToast('✓ Segnato come visto');
+  saveFilm(f);showToast(t('toast_marked'));
 };
 
 function toggleEpisode(id,i){
@@ -1204,7 +1966,7 @@ function toggleEpisode(id,i){
   if(f.status==='watched'&&!f.date)f.date=new Date().toISOString().slice(0,10);
   saveFilm(f);
   openDetail(id);
-  showToast(f.status==='watched'?'🎉 Stagione completata!':f.epSeen[i]?`✓ Episodio ${i+1} visto`:'Episodio rimosso dai visti');
+  showToast(f.status==='watched'?t('toast_season'):f.epSeen[i]?t('toast_ep',i+1):t('toast_ep_removed'));
 };
 
 // ── ORDER TOGGLE ──
@@ -1226,36 +1988,36 @@ function getUnlockedGems(){
 function renderMultiverse(){
   const isOpen=m=>{const f=findItem(m.unlockedBy);return f&&f.status==='watched';};
   const n=MULTIVERSE.filter(isOpen).length;
-  document.getElementById('gems-sub').innerHTML=`${n} di ${MULTIVERSE.length} concetti sbloccati<br><span style="color:var(--hint)">Ogni concetto si svela solo quando completi il titolo che lo introduce.</span>`;
+  document.getElementById('gems-sub').innerHTML=`${t('mv_count',n,MULTIVERSE.length)}<br><span style="color:var(--hint)">${t('mv_hint')}</span>`;
   const order=DOOM_ORDER.map(o=>o.id);
-  const sorted=[...MULTIVERSE].sort((a,b)=>order.indexOf(a.unlockedBy)-order.indexOf(b.unlockedBy));
+  const sorted=[...MULTIVERSE].sort((a,b)=>order.indexOf(a.unlockedBy)-order.indexOf(b.unlockedBy)).map(locMv);
   document.getElementById('gems-grid').innerHTML=sorted.map(m=>isOpen(m)?`
     <div class="gem-card" onclick="openConcept('${m.id}')">
       <div class="gem-dot" style="color:${m.color};background:${m.color}20">${m.emoji}</div>
       <div class="gem-name" style="color:${m.color}">${m.name}</div>
       <div class="gem-film">${findItem(m.unlockedBy).title}</div>
     </div>`:`
-    <div class="gem-card concept-locked" onclick="showToast('🔒 Guarda ${findItem(m.unlockedBy).title.replace(/'/g,'’')} per sbloccarlo')">
+    <div class="gem-card concept-locked" onclick="showToast(t('mv_toast',findItem(${m.unlockedBy}).title))">
       <div class="gem-dot">🔒</div>
       <div class="gem-name">???</div>
-      <div class="gem-film">Si sblocca con ${findItem(m.unlockedBy).title}</div>
+      <div class="gem-film">${t('mv_unlock_with',findItem(m.unlockedBy).title)}</div>
     </div>`).join('');
 }
 
 function openConcept(id){
-  const m=MULTIVERSE.find(x=>x.id===id);
+  const m=locMv(MULTIVERSE.find(x=>x.id===id));
   if(!m)return;
   document.getElementById('gem-modal').innerHTML=`
     <div class="modal-handle"></div>
     <div class="gem-modal-dot" style="color:${m.color};background:${m.color}20;font-size:36px">${m.emoji}</div>
     <div class="gem-modal-name" style="color:${m.color}">${m.name}</div>
-    <div class="gem-modal-film">Introdotto in<br><strong>${findItem(m.unlockedBy).title}</strong></div>
+    <div class="gem-modal-film">${t('mv_intro')}<br><strong>${findItem(m.unlockedBy).title}</strong></div>
     <div class="gem-modal-section">
-      <div class="gem-modal-label">Cos'è</div>
+      <div class="gem-modal-label">${t('mv_what')}</div>
       <div class="gem-modal-text">${m.what}</div>
     </div>
     <div class="gem-modal-section">
-      <div class="gem-modal-label">Perché conta</div>
+      <div class="gem-modal-label">${t('mv_why')}</div>
       <div class="gem-modal-text">${m.why}</div>
     </div>`;
   document.getElementById('gem-overlay').classList.add('open');
@@ -1263,15 +2025,15 @@ function openConcept(id){
 
 function renderGems(){
   if(mode==='doom'){renderMultiverse();return;}
-  const unlocked=getUnlockedGems();
+  const unlocked=getUnlockedGems().map(locGem);
   const grid=document.getElementById('gems-grid');
   const sub=document.getElementById('gems-sub');
   if(unlocked.length===0){
     sub.innerHTML='';
-    grid.innerHTML=`<div class="gems-empty" style="grid-column:1/-1">Le gemme dell\'Infinito si sbloccano man mano che completi i film.<br><br>Continua a guardare per scoprire i segreti dell\'universo Marvel! 🌌</div>`;
+    grid.innerHTML=`<div class="gems-empty" style="grid-column:1/-1">${t('gems_empty')}</div>`;
     return;
   }
-  sub.textContent=`${unlocked.length} di 6 gemme scoperte`;
+  sub.textContent=t('gems_count',unlocked.length);
   grid.innerHTML=unlocked.map(g=>`
     <div class="gem-card" onclick="openGem('${g.id}')">
       <div class="gem-dot" style="background:${g.color}20;box-shadow:0 0 12px ${g.glow}">${g.emoji}</div>
@@ -1281,19 +2043,19 @@ function renderGems(){
 }
 
 function openGem(id){
-  const g=GEMS.find(x=>x.id===id);
+  const g=locGem(GEMS.find(x=>x.id===id));
   if(!g)return;
   document.getElementById('gem-modal').innerHTML=`
     <div class="modal-handle"></div>
     <div class="gem-modal-dot" style="background:${g.color}20;box-shadow:0 0 20px ${g.glow};font-size:36px">${g.emoji}</div>
     <div class="gem-modal-name" style="color:${g.color}">${g.name}</div>
-    <div class="gem-modal-film">Apparsa per la prima volta in<br><strong>${g.film}</strong></div>
+    <div class="gem-modal-film">${t('gem_first')}<br><strong>${g.film}</strong></div>
     <div class="gem-modal-section">
-      <div class="gem-modal-label">Poteri</div>
+      <div class="gem-modal-label">${t('gem_powers')}</div>
       <div class="gem-modal-text">${g.powers}</div>
     </div>
     <div class="gem-modal-section">
-      <div class="gem-modal-label">Origine nel MCU</div>
+      <div class="gem-modal-label">${t('gem_origin')}</div>
       <div class="gem-modal-text">${g.origin}</div>
     </div>`;
   document.getElementById('gem-overlay').classList.add('open');
@@ -1308,11 +2070,11 @@ function updateStats(){
   const avg=rated.length?(rated.reduce((a,f)=>a+f.stars,0)/rated.length).toFixed(1):'—';
   const best=rated.length?rated.reduce((a,b)=>a.stars>b.stars?a:b):null;
   const phases=[...new Set(L.filter(f=>f.status!=='upcoming'&&f.phase).map(f=>f.phase))];
-  document.getElementById('s-last-backup').textContent=save.lastBackup?`Ultimo backup: ${fmt(save.lastBackup.slice(0,10))}`:'Nessun backup ancora';
+  document.getElementById('s-last-backup').textContent=save.lastBackup?t('backup_last',fmt(save.lastBackup.slice(0,10))):t('backup_none');
   document.getElementById('s-watched').textContent=w.length;
   document.getElementById('s-remain').textContent=L.length-w.length;
   document.getElementById('s-avg').textContent=rated.length?`⭐ ${avg}`:'—';
-  document.getElementById('s-phase').textContent=phases.length?`Phase ${Math.max(...phases)}`:'—';
+  document.getElementById('s-phase').textContent=phases.length?t('phase',Math.max(...phases)):'—';
   document.getElementById('s-best').textContent=best?`${best.title} (${best.stars}★)`:'—';
   document.getElementById('s-ratings-list').innerHTML=rated.length?rated.map(f=>`${f.title} — ${starsHTML(f.stars)}`).join('<br>'):'—';
 }
@@ -1337,6 +2099,7 @@ function showToast(msg){
 };
 
 applySave();
+applyLang();
 applyMode();
 renderAll();
 </script>
